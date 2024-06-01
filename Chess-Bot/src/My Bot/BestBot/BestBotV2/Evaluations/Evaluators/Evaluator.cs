@@ -28,7 +28,7 @@ internal class Evaluator
         var (stateEvaluation, isGameEnded) = EvaluateBoardState();
         if (isGameEnded) return (stateEvaluation, true);
 
-        float boardMaterial = EvaluatePieceListsMaterial(_board.GetAllPieceLists());
+        float boardMaterial = EvaluateBoardMaterial(_board) + EvaluateBoardPositioning(_board);
         return (boardMaterial, false);
     }
 

@@ -16,11 +16,11 @@ internal static class MaterialEvaluator
         return materialScore;
     }
 
-    internal static float EvaluatePieceListsMaterial(PieceList[] allPieceLists)
+    internal static float EvaluateBoardMaterial(Board board)
     {
         float evaluation = 0f;
 
-        foreach (PieceList pieceList in allPieceLists)
+        foreach (PieceList pieceList in board.GetAllPieceLists())
         {
             float value = GetPieceValue(pieceList.TypeOfPieceInList);
             int count = pieceList.Count;
