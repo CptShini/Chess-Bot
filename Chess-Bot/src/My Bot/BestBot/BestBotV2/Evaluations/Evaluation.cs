@@ -24,15 +24,6 @@ internal struct Evaluation
         (Current, GameHasEnded) = _evaluator.EvaluateBoard();
     }
 
-    internal float EvaluateMove(Move move, Func<float> evaluationFunction)
-    {
-        MakeMove(move);
-        float eval = evaluationFunction();
-        UndoMove(move);
-
-        return eval;
-    }
-
     internal void MakeMove(Move move)
     {
         _board.MakeMove(move);

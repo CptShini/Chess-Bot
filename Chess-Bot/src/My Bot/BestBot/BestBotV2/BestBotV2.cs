@@ -124,7 +124,9 @@ public class BestBotV2 : IChessBot
         {
             if (_cts.Token.IsCancellationRequested) break;
 
-            float eval = _evaluation.EvaluateMove(move, EvaluateMove);
+            _evaluation.MakeMove(move);
+            float eval = EvaluateMove();
+            _evaluation.UndoMove(move);
 
             if (_evaluation.IsMax ? eval > beta : eval < alpha) return (eval, Move.NullMove);
 
