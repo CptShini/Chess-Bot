@@ -116,7 +116,7 @@ public class BestBotV2 : IChessBot
             if (_cts.Token.IsCancellationRequested) break;
 
             _evaluation.MakeMove(move);
-            float eval = EvaluateMove(depthReached, () => _evaluation.Current, () => UpdateAlphaBeta(board, ref alpha, ref beta, bestEval), () => EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1);
+            float eval = EvaluateMove(depthReached, () => EvaluateTrades(board), () => UpdateAlphaBeta(board, ref alpha, ref beta, bestEval), () => EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1);
             _evaluation.UndoMove(move);
 
             if (board.IsWhiteToMove ? eval > beta : eval < alpha) return (eval, Move.NullMove);
@@ -150,12 +150,14 @@ public class BestBotV2 : IChessBot
         else beta = Math.Min(beta, bestEval);
     }
 
-    /*float EvaluateTrades(Board board, float alpha, float beta)
+    float EvaluateTrades(Board board, float alpha = int.MinValue, float beta = int.MaxValue)
     {
-        float bestEval = _evaluation.Current;
-        if (_evaluation.IsMax ? bestEval > beta : bestEval < alpha) return bestEval;
-
         Move[] captureMoves = board.GetLegalMoves(true);
+        if (captureMoves.Length == 0) return _evaluation.Current;
+
+        alpha = beta = _evaluation.Current;
+
+        bool isMax = board.IsWhiteToMove;
         foreach (Move captureMove in captureMoves.GuessOrder(board))
         {
             if (_cts.Token.IsCancellationRequested) break;
@@ -164,13 +166,12 @@ public class BestBotV2 : IChessBot
             float eval = EvaluateTrades(board, alpha, beta);
             _evaluation.UndoMove(captureMove);
 
-            if (_evaluation.IsMax ? eval > beta : eval < alpha) return eval;
+            if (isMax && eval > alpha) alpha = eval;
+            if (!isMax && eval < beta) beta = eval;
 
-            bool newMoveIsBetter = _evaluation.IsMax ? eval > bestEval : eval < bestEval;
-            bool newMoveIsEqual = eval == bestEval && _rnd.Next(2) == 0;
-            if (newMoveIsBetter || newMoveIsEqual) bestEval = eval;
+            if (isMax ? eval > beta : eval < alpha) return eval;
         }
 
-        return bestEval;
-    }*/
+        return isMax ? alpha : beta;
+    }
 }
