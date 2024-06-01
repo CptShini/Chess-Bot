@@ -35,7 +35,7 @@ internal class Evaluator
     private (float, bool) EvaluateBoardState()
     {
         bool isCheckmate = _board.IsInCheckmate();
-        if (isCheckmate) return (-CheckmateValue * Perspective, true);
+        if (isCheckmate) return (CheckmateValue * Perspective, true);
 
         bool isDraw = _board.IsDraw();
         if (isDraw) return (DrawValue, true);
