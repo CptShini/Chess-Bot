@@ -8,9 +8,9 @@ namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal static class GuessEvaluator
 {
-    internal static IOrderedEnumerable<Move> GuessOrder(this IEnumerable<Move> moves, Board board) => moves.OrderByDescending(move => GuessEvaluateMove(board, move));
+    internal static IOrderedEnumerable<Move> GuessOrder(this IEnumerable<Move> moves, Board board) => moves.OrderByDescending(move => move.GuessEvaluate(board));
 
-    private static float GuessEvaluateMove(Board board, Move move)
+    private static float GuessEvaluate(this Move move, Board board)
     {
         float evaluationGuess = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, !board.IsWhiteToMove);
 
