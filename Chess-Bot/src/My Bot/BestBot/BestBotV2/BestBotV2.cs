@@ -40,7 +40,7 @@ public class BestBotV2 : IChessBot
                 Counting and evaluating how many pieces are defending and attacking given squares? (Probably useless)
             Valueboards
                 More fine-tuning
-                More pieces with valueboards?
+                More pieces with valueboards? (King)
                 Progression Coefficient
 
     */
@@ -112,60 +112,6 @@ public class BestBotV2 : IChessBot
         return (bestEval, bestMove, (depth - 1) / 2);
     }
 
-    (float, Move) EvaluateMoves(Board board, int maxDepth)
-    {
-        float bestEval = 0f;
-        Move bestMove = Move.NullMove;
-
-        Move[] legalMoves = board.GetLegalMoves();
-        foreach (Move move in legalMoves)
-        {
-            if (_cts.Token.IsCancellationRequested) break;
-
-            _evaluation.MakeMove(move);
-            float eval = EvaluateBoard(board, maxDepth);
-            Console.WriteLine($"{move} | {eval:0.00}");
-            _evaluation.UndoMove(move);
-
-            bool noBestMove = bestMove == Move.NullMove;
-            bool newMoveIsBetter = board.IsWhiteToMove ? eval > bestEval : eval < bestEval;
-            bool newMoveIsEqual = eval == bestEval && _rnd.Next(2) == 0;
-
-            if (newMoveIsBetter || noBestMove || newMoveIsEqual)
-            {
-                bestMove = move;
-                bestEval = eval;
-            }
-        }
-
-        Console.WriteLine();
-
-        return (bestEval, bestMove);
-    }
-
-    float EvaluateBoard(Board board, int depth, float alpha = int.MinValue, float beta = int.MaxValue)
-    {
-        bool depthReached = depth == 0;
-        if (depthReached) return EvaluateTrades(board);
-
-        Move[] legalMoves = board.GetLegalMoves();
-        IEnumerable<Move> moves = depthReached ? legalMoves : legalMoves.GuessOrderMoves(board);
-        foreach (Move move in moves)
-        {
-            if (_cts.Token.IsCancellationRequested) break;
-
-            _evaluation.MakeMove(move);
-            float moveEvaluation = -EvaluateBoard(board, depth - 1, -beta, -alpha);
-            Console.WriteLine($"{move} | Depth: {depth} | Eval: {moveEvaluation:0.00}");
-            _evaluation.UndoMove(move);
-
-            if (moveEvaluation >= beta) return beta;
-            alpha = Math.Max(moveEvaluation, alpha);
-        }
-
-        return alpha;
-    }
-
     (float, Move) EvaluateMoves(Board board, int maxDepth, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)
     {
         float bestEval = 0f;
@@ -173,7 +119,7 @@ public class BestBotV2 : IChessBot
         bool depthReached = depth == maxDepth;
 
         Move[] legalMoves = board.GetLegalMoves();
-        IEnumerable<Move> moves = depthReached ? legalMoves : legalMoves.GuessOrderMoves(board);
+        IEnumerable<Move> moves = depthReached ? legalMoves : legalMoves.GuessOrder(board);
         foreach (Move move in moves)
         {
             if (_cts.Token.IsCancellationRequested) break;
@@ -222,7 +168,7 @@ public class BestBotV2 : IChessBot
         float bestEval = _evaluation.Current;
 
         Move[] captureMoves = board.GetLegalMoves(true);
-        foreach (Move captureMove in captureMoves.GuessOrderMoves(board))
+        foreach (Move captureMove in captureMoves.GuessOrder(board))
         {
             /*float eval = _evaluation.EvaluateMove(captureMove, () => EvaluateTrades(board));
 
