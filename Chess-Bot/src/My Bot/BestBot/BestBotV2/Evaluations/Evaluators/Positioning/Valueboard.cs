@@ -10,7 +10,8 @@ internal static class Valueboard
     {
         { 
             PieceType.Pawn,
-            new float[]
+            CreateValueboard(Pawn, 0.4f)
+            /*new float[]
             {
                 0,  0,  0,  0,  0,  0,  0,  0,
                40, 40, 40, 40, 40, 40, 40, 40,
@@ -20,10 +21,11 @@ internal static class Valueboard
                 4, -4, -8,  0,  0, -8, -4,  4,
                 4,  8,  8,-16,-16,  8,  8,  4,
                 0,  0,  0,  0,  0,  0,  0,  0
-            }
+            }*/
         },
         {
             PieceType.Knight,
+            //CreateValueboard(Knight, 0.2f)
             new float[]
             {
                 -40,-32,-24,-24,-24,-24,-32,-40,
@@ -102,15 +104,6 @@ internal static class Valueboard
             -50,-30,-30,-30,-30,-30,-30,-50
         }
         */
-    };
-
-    //Weight Piece Value Boards
-    internal static readonly float[] PawnValueboard = CreateValueboard(Pawn, 0.25f);
-    internal static readonly float[] KnightValueboard = CreateValueboard(Knight, 0.2f);
-
-    internal static readonly Dictionary<PieceType, float[]> PieceTypeToValueboard = new() {
-        { PieceType.Pawn, PawnValueboard },
-        { PieceType.Knight, KnightValueboard }
     };
 
     //Piece Value Boards
