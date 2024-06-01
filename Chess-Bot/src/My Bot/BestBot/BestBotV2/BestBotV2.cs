@@ -28,8 +28,6 @@ public class BestBotV2 : IChessBot
         Base entire time algorithm off some endgame/progression coefficient
         Algorithm for determining whether or not calculating an extra layer would take too long
     Evaluations
-        Improve move guess evaluation
-            Also including positioning?
         Evaluate King Safety
         Initial board evaluation, evaluating postioning as well
         Positioning
@@ -40,7 +38,7 @@ public class BestBotV2 : IChessBot
                 Counting and evaluating how many pieces are defending and attacking given squares? (Probably useless)
             Valueboards
                 More fine-tuning
-                More pieces with valueboards? (King, Queen, Rook)
+                More pieces with valueboards? (King)
                 Progression Coefficient (Early vs Late)
 
     */
