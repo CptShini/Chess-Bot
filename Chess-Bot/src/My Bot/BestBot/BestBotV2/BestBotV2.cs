@@ -105,7 +105,7 @@ public class BestBotV2 : IChessBot
 
     (float, Move) EvaluateMoves(Board board, int maxDepth, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)
     {
-        float bestEval = 0f;
+        float bestEval = board.IsWhiteToMove ? int.MinValue : int.MaxValue;
         Move bestMove = Move.NullMove;
         bool depthReached = depth == maxDepth;
 
@@ -116,60 +116,61 @@ public class BestBotV2 : IChessBot
             if (_cts.Token.IsCancellationRequested) break;
 
             _evaluation.MakeMove(move);
-            float eval = EvaluateMove();
+            float eval = EvaluateMove(depthReached, () => _evaluation.Current, () => UpdateAlphaBeta(board, ref alpha, ref beta, bestEval), () => EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1);
             _evaluation.UndoMove(move);
 
-            if (_evaluation.IsMax ? eval > beta : eval < alpha) return (eval, Move.NullMove);
+            if (board.IsWhiteToMove ? eval > beta : eval < alpha) return (eval, Move.NullMove);
 
-            UpdateBestMove(eval, move);
-        }
-
-        return (bestEval, bestMove);
-
-        float EvaluateMove()
-        {
-            if (_evaluation.GameHasEnded) return _evaluation.Current;
-
-            bool searchFinished = depthReached;
-            if (searchFinished) return EvaluateTrades(board);
-
-            if (bestMove != Move.NullMove)
-            {
-                if (!_evaluation.IsMax) alpha = Math.Max(alpha, bestEval);
-                else beta = Math.Min(beta, bestEval);
-            }
-
-            return EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1;
-        }
-
-        void UpdateBestMove(float eval, Move move)
-        {
-            bool noBestMove = bestMove == Move.NullMove;
-            bool newMoveIsBetter = _evaluation.IsMax ? eval > bestEval : eval < bestEval;
+            bool newMoveIsBetter = board.IsWhiteToMove ? eval > bestEval : eval < bestEval;
             bool newMoveIsEqual = eval == bestEval && _rnd.Next(2) == 0;
 
-            if (newMoveIsBetter || noBestMove || newMoveIsEqual)
+            if (newMoveIsBetter || newMoveIsEqual)
             {
                 bestMove = move;
                 bestEval = eval;
             }
         }
+
+        return (bestEval, bestMove);
     }
 
-    float EvaluateTrades(Board board)
+    float EvaluateMove(bool depthReached, Func<float> atDepthEvaluationFunction, Action alphaBetaUpdater, Func<float> recursiveEvaluationFunction)
+    {
+        if (_evaluation.GameHasEnded) return _evaluation.Current;
+        if (depthReached) return atDepthEvaluationFunction();
+
+        alphaBetaUpdater();
+
+        return recursiveEvaluationFunction();
+    }
+
+    void UpdateAlphaBeta(Board board, ref float alpha, ref float beta, float bestEval)
+    {
+        if (!board.IsWhiteToMove) alpha = Math.Max(alpha, bestEval);
+        else beta = Math.Min(beta, bestEval);
+    }
+
+    /*float EvaluateTrades(Board board, float alpha, float beta)
     {
         float bestEval = _evaluation.Current;
+        if (_evaluation.IsMax ? bestEval > beta : bestEval < alpha) return bestEval;
 
         Move[] captureMoves = board.GetLegalMoves(true);
         foreach (Move captureMove in captureMoves.GuessOrder(board))
         {
-            /*float eval = _evaluation.EvaluateMove(captureMove, () => EvaluateTrades(board));
+            if (_cts.Token.IsCancellationRequested) break;
 
-            bool newMoveIsBetter = board.IsWhiteToMove ? eval > bestEval : eval < bestEval;
+            _evaluation.MakeMove(captureMove);
+            float eval = EvaluateTrades(board, alpha, beta);
+            _evaluation.UndoMove(captureMove);
+
+            if (_evaluation.IsMax ? eval > beta : eval < alpha) return eval;
+
+            bool newMoveIsBetter = _evaluation.IsMax ? eval > bestEval : eval < bestEval;
             bool newMoveIsEqual = eval == bestEval && _rnd.Next(2) == 0;
-            if (newMoveIsBetter || newMoveIsEqual) bestEval = eval;*/
+            if (newMoveIsBetter || newMoveIsEqual) bestEval = eval;
         }
 
         return bestEval;
-    }
+    }*/
 }

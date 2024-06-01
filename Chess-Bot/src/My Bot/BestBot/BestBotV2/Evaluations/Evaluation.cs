@@ -1,6 +1,5 @@
 ﻿using Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 using ChessChallenge.API;
-using System;
 using System.Collections.Generic;
 
 namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations;
@@ -9,7 +8,6 @@ internal struct Evaluation
 {
     internal float Current { get; private set; }
     internal bool GameHasEnded { get; private set; }
-    internal bool IsMax => _board.IsWhiteToMove;
 
     private readonly Board _board;
     private readonly Evaluator _evaluator;
