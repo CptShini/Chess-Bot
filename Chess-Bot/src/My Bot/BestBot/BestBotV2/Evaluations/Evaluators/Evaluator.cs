@@ -4,37 +4,42 @@ using ChessChallenge.API;
 
 namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
-internal static class Evaluator
+internal class Evaluator
 {
     private const float CheckmateValue = 100f;
     private const float DrawValue = 0f;
 
-    internal static (float, bool) EvaluateMove(Board board, Move move)
-    {
-        bool whiteMadeMove = !board.IsWhiteToMove;
+    private readonly Board _board;
+    private int Perspective => _board.IsWhiteToMove ? -1 : 1;
 
-        var (stateEvaluation, gameHasEnded) = EvaluateBoardState(board);
+    internal Evaluator(Board board) => _board = board;
+
+    internal (float, bool) EvaluateMove(Move move)
+    {
+        var (stateEvaluation, gameHasEnded) = EvaluateBoardState();
         if (gameHasEnded) return (stateEvaluation, true);
 
-        float moveEvaluation = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, whiteMadeMove);
-        return (moveEvaluation.FlipSign(whiteMadeMove), false);
+        float moveEvaluation = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, !_board.IsWhiteToMove);
+        return (moveEvaluation * Perspective, false);
     }
 
-    internal static (float, bool) EvaluateBoard(Board board)
+    internal (float, bool) EvaluateBoard()
     {
-        var (stateEvaluation, isGameEnded) = EvaluateBoardState(board);
+        var (stateEvaluation, isGameEnded) = EvaluateBoardState();
         if (isGameEnded) return (stateEvaluation, true);
 
-        float boardMaterial = EvaluatePieceListsMaterial(board.GetAllPieceLists());
+        float boardMaterial = EvaluatePieceListsMaterial(_board.GetAllPieceLists());
         return (boardMaterial, false);
     }
 
-    private static (float, bool) EvaluateBoardState(Board board)
+    private (float, bool) EvaluateBoardState()
     {
-        return board.IsInCheckmate()
-            ? (CheckmateValue.FlipSign(!board.IsWhiteToMove), true)
-            : board.IsDraw() ? (DrawValue, true) : (0f, false);
-    }
+        bool isCheckmate = _board.IsInCheckmate();
+        if (isCheckmate) return (-CheckmateValue * Perspective, true);
 
-    private static float FlipSign(this float value, bool whiteMadeMove) => whiteMadeMove ? value : -value;
+        bool isDraw = _board.IsDraw();
+        if (isDraw) return (DrawValue, true);
+
+        return (0f, false);
+    }
 }

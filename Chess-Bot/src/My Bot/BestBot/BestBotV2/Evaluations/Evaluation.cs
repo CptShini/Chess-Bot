@@ -12,14 +12,16 @@ internal struct Evaluation
     internal bool IsMax => _board.IsWhiteToMove;
 
     private readonly Board _board;
+    private readonly Evaluator _evaluator;
     private readonly Stack<float> _moveEvaluationsChanges;
 
     internal Evaluation(Board board)
     {
         _board = board;
+        _evaluator = new Evaluator(board);
         _moveEvaluationsChanges = new Stack<float>();
 
-        (Current, GameHasEnded) = Evaluator.EvaluateBoard(board);
+        (Current, GameHasEnded) = _evaluator.EvaluateBoard();
     }
 
     internal float EvaluateMove(Move move, Func<float> evaluationFunction)
@@ -35,7 +37,7 @@ internal struct Evaluation
     {
         _board.MakeMove(move);
 
-        (float evalChange, GameHasEnded) = Evaluator.EvaluateMove(_board, move);
+        (float evalChange, GameHasEnded) = _evaluator.EvaluateMove(move);
         if (GameHasEnded) evalChange -= Current;
 
         Current += evalChange;
