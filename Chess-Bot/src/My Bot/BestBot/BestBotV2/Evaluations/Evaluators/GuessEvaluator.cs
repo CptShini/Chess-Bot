@@ -7,7 +7,7 @@ namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal static class GuessEvaluator
 {
-    internal static IOrderedEnumerable<Move> GuessOrderMoves(this IEnumerable<Move> moves, Board board) => moves.OrderByDescending(move => GuessEvaluateMove(board, move));
+    internal static IOrderedEnumerable<Move> GuessOrder(this IEnumerable<Move> moves, Board board) => moves.OrderByDescending(move => GuessEvaluateMove(board, move));
 
     private static float GuessEvaluateMove(Board board, Move move)
     {
