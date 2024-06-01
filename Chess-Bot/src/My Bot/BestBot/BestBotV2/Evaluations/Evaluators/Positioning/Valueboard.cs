@@ -1,4 +1,5 @@
 ﻿using ChessChallenge.API;
+using System;
 using System.Collections.Generic;
 
 namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Positioning;
@@ -49,7 +50,7 @@ internal static class Valueboard
                 -20,-10,-10,-10,-10,-10,-10,-20
             }
         },
-        /*{
+        {
             PieceType.Rook,
             new float[]
             {
@@ -62,8 +63,8 @@ internal static class Valueboard
                -5,  0,  0,  0,  0,  0,  0, -5,
                 0,  0,  0,  5,  5,  0,  0,  0
             }
-        },*/
-        /*{
+        },
+        {
             PieceType.Queen,
             new float[]
             {
@@ -76,9 +77,9 @@ internal static class Valueboard
                 -10,  0,  5,  0,  0,  0,  0,-10,
                 -20,-10,-10, -5, -5,-10,-10,-20
             }
-        }*/
+        }
         /*
-         * new float[] // King Middle Game
+         * new float[] // King Early-Middle Game
         {
             -30,-40,-40,-50,-50,-40,-40,-30,
             -30,-40,-40,-50,-50,-40,-40,-30,
@@ -102,4 +103,41 @@ internal static class Valueboard
         }
         */
     };
+
+    //Weight Piece Value Boards
+    internal static readonly float[] PawnValueboard = CreateValueboard(Pawn, 0.25f);
+    internal static readonly float[] KnightValueboard = CreateValueboard(Knight, 0.2f);
+
+    internal static readonly Dictionary<PieceType, float[]> PieceTypeToValueboard = new() {
+        { PieceType.Pawn, PawnValueboard },
+        { PieceType.Knight, KnightValueboard }
+    };
+
+    //Piece Value Boards
+    private static float Pawn(int x, int y) => Front(y);
+    private static float Knight(int x, int y) => Center(x, y) + PunishEdges(x, y) / 2f;
+
+    // Position Formulas
+    private static float Front(int y) => y / 7f;
+    private static float Back(int y) => -Front(y);
+    private static float Center(int i) => (3.5f - Math.Abs(i - 3.5f)) / 3f;
+    private static float Center(int x, int y) => (Center(x) + Center(y)) / 2f;
+    private static float PunishEdges(int i) => i is > 0 and < 7 ? 0f : -1f;
+    private static float PunishEdges(int x, int y) => (PunishEdges(x) + PunishEdges(y)) / 2f;
+
+    private static float[] CreateValueboard(Func<int, int, float> valueboardFunc, float weight)
+    {
+        float[] valueboard = new float[64];
+
+        for (int y = 0; y < 8; y++)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                int index = y * 8 + x;
+                valueboard[index] = valueboardFunc(x, y) * weight;
+            }
+        }
+
+        return valueboard;
+    }
 }
