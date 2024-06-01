@@ -40,8 +40,8 @@ public class BestBotV2 : IChessBot
                 Counting and evaluating how many pieces are defending and attacking given squares? (Probably useless)
             Valueboards
                 More fine-tuning
-                More pieces with valueboards? (King)
-                Progression Coefficient
+                More pieces with valueboards? (King, Queen, Rook)
+                Progression Coefficient (Early vs Late)
 
     */
 
@@ -56,13 +56,6 @@ public class BestBotV2 : IChessBot
     {
         _cts = new CancellationTokenSource();
         _evaluation = new(board);
-
-        //EvaluateMoves(board, 0);
-        //EvaluateMoves(board, 1);
-        //EvaluateMoves(board, 2);
-        //EvaluateMoves(board, 3);
-        //EvaluateMoves(board, 4);
-        //EvaluateMoves(board, 5);
 
         return GetMove(board, timer);
     }
