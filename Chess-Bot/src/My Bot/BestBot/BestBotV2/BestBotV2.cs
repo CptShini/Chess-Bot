@@ -94,7 +94,7 @@ public class BestBotV2 : IChessBot
     (float, Move, int) IterativeDeepning(Board board)
     {
         float bestEval = 0f;
-        Move bestMove = Move.NullMove;
+        Move bestMove = board.GetLegalMoves()[0];
 
         int depth = 1;
         for (; ; depth += 2)
