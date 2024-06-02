@@ -11,13 +11,13 @@ internal struct Evaluation
 
     private readonly Board _board;
     private readonly Evaluator _evaluator;
-    private readonly Stack<float> _moveEvaluationsChanges;
+    private readonly Stack<float> _moveEvaluationChanges;
 
     internal Evaluation(Board board)
     {
         _board = board;
         _evaluator = new Evaluator(board);
-        _moveEvaluationsChanges = new Stack<float>();
+        _moveEvaluationChanges = new Stack<float>();
 
         (Current, GameHasEnded) = _evaluator.EvaluateBoard();
     }
@@ -30,14 +30,14 @@ internal struct Evaluation
         if (GameHasEnded) evalChange -= Current;
 
         Current += evalChange;
-        _moveEvaluationsChanges.Push(evalChange);
+        _moveEvaluationChanges.Push(evalChange);
     }
 
     internal void UndoMove(Move move)
     {
         _board.UndoMove(move);
 
-        Current -= _moveEvaluationsChanges.Pop();
+        Current -= _moveEvaluationChanges.Pop();
         GameHasEnded = false;
     }
 }
