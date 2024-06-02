@@ -1,5 +1,5 @@
-﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Material.MaterialEvaluator;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Positioning.PositionEvaluator;
+﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
+using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
 using ChessChallenge.API;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ internal static class GuessEvaluator
 
     private static float GuessEvaluate(this Move move, Board board)
     {
-        float evaluationGuess = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, !board.IsWhiteToMove);
+        float evaluationGuess = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, board);
 
         float movingPieceValue = GetPieceValue(move.MovePieceType);
         bool targetSquareAttacked = board.SquareIsAttackedByOpponent(move.TargetSquare);

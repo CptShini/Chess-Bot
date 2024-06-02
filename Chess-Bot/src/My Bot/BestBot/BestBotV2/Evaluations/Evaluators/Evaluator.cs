@@ -1,5 +1,5 @@
-﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Material.MaterialEvaluator;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Positioning.PositionEvaluator;
+﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
+using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
 using ChessChallenge.API;
 
 namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
@@ -19,7 +19,7 @@ internal class Evaluator
         var (stateEvaluation, gameHasEnded) = EvaluateBoardState();
         if (gameHasEnded) return (stateEvaluation, true);
 
-        float moveEvaluation = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, !_board.IsWhiteToMove);
+        float moveEvaluation = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board);
         return (moveEvaluation * Perspective, false);
     }
 
@@ -28,7 +28,7 @@ internal class Evaluator
         var (stateEvaluation, isGameEnded) = EvaluateBoardState();
         if (isGameEnded) return (stateEvaluation, true);
 
-        float boardMaterial = EvaluateBoardMaterial(_board);// + EvaluateBoardPositioning(_board);
+        float boardMaterial = EvaluateBoardMaterial(_board) + EvaluateBoardPositioning(_board);
         return (boardMaterial, false);
     }
 
