@@ -14,12 +14,14 @@ public class BestBotV2 : IChessBot
     /*
     TODO:
 
-    Random stuff
+    Priority Stuff
+        Transposition Tables for speed
+        Do some performance profiling (it's probably the trade evaluation method)
+        Potentially remove checkmate/draw check in trade evaluation method
+    Random Stuff
         Memory optimization using GetLegalMovesNonAlloc()
         Move ordering by remembering best moves from previous search
         Count number of attackers and defenders on each piece, maybe on depth reached, we continuing searching using a trade-search method
-        Better endgame play :/
-        Never recalculate already evaluated positions
         Make EvaluateMoves() only work with the evaluation, and not the bestmove (basically just separate the two)
             Switch to using only alpha and beta
     Think-time
@@ -29,18 +31,12 @@ public class BestBotV2 : IChessBot
         Algorithm for determining whether or not calculating an extra layer would take too long
     Evaluations
         Evaluate King Safety
-        Initial board evaluation, evaluating postioning as well
         Positioning
             Reward developing pieces
                 Moving them from initial position
                 Not moving the same piece several times in a row (twice?)
             Attacking/Defending
                 Counting and evaluating how many pieces are defending and attacking given squares? (Probably useless)
-            Valueboards
-                More fine-tuning
-                More pieces with valueboards? (King)
-                Progression Coefficient (Early vs Late)
-
     */
 
     private readonly Random _rnd = new();
