@@ -1,10 +1,10 @@
 ﻿using ChessChallenge.API;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal static class MaterialEvaluator
 {
-    private static readonly float[] _pieceValues = { 0f, 1f, 3.2f, 3.3f, 5f, 9f, 100f };
+    private static readonly float[] PieceValues = { 0f, 1f, 3.2f, 3.3f, 5f, 9f, 100f };
 
     internal static float EvaluateMoveMaterial(Move move)
     {
@@ -33,5 +33,5 @@ internal static class MaterialEvaluator
         return evaluation;
     }
 
-    internal static float GetPieceValue(PieceType pieceType) => _pieceValues[(int)pieceType];
+    internal static float GetPieceValue(PieceType pieceType) => PieceValues[(int)pieceType];
 }

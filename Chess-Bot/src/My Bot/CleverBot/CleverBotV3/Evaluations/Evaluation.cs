@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CleverBot.CleverBotV3.Evaluations;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Evaluations;
 
 internal class Evaluation : IComparable<Evaluation>
 {

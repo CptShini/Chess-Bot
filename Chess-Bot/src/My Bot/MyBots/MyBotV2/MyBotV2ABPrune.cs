@@ -1,9 +1,9 @@
-﻿using ChessChallenge.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChessChallenge.API;
 
-namespace MyBots.MyBotV2;
+namespace Chess_Challenge.My_Bot.MyBots.MyBotV2;
 
 public class MyBotV2ABPrune : IChessBot
 {
@@ -108,7 +108,8 @@ public class MyBotV2ABPrune : IChessBot
             Piece piece = board.GetPiece(square);
 
             float pieceVal = EvaluatePieceMaterial(piece);
-            if (piece.IsWhite) white += pieceVal; else black += pieceVal;
+            if (piece.IsWhite) white += pieceVal;
+            else black += pieceVal;
         }
 
         float val = white - black;

@@ -1,7 +1,7 @@
 ﻿using ChessChallenge.API;
-using static CleverBot.CleverBotV2.Evaluation.Valueboard;
+using static Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Evaluation.Valueboard;
 
-namespace CleverBot.CleverBotV2.Evaluation;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Evaluation;
 
 internal static class Evaluator
 {
@@ -23,7 +23,8 @@ internal static class Evaluator
 
     #region Move
 
-    private static float EvaluateMove(Move move, bool white) => (EvaluateMaterial(move) + EvaluatePosition(move, white)).SideFlip(white);
+    private static float EvaluateMove(Move move, bool white) =>
+        (EvaluateMaterial(move) + EvaluatePosition(move, white)).SideFlip(white);
 
     #region Material
 
@@ -67,7 +68,8 @@ internal static class Evaluator
         };
     }
 
-    private static float EvaluateMovePosition(this float[] valueBoard, Move move) => valueBoard[move.TargetSquare.Index] - valueBoard[move.StartSquare.Index];
+    private static float EvaluateMovePosition(this float[] valueBoard, Move move) =>
+        valueBoard[move.TargetSquare.Index] - valueBoard[move.StartSquare.Index];
 
     #endregion
 

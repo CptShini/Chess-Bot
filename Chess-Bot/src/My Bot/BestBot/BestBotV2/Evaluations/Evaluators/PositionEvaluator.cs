@@ -1,6 +1,8 @@
-﻿using ChessChallenge.API;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards;
+using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards.Valueboards;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal static class PositionEvaluator
 {
@@ -21,7 +23,7 @@ internal static class PositionEvaluator
 
         int start = move.StartSquare.PerspectiveIndex(!board.IsWhiteToMove);
         int target = move.TargetSquare.PerspectiveIndex(!board.IsWhiteToMove);
-
+        
         float startPositionValue = EvaluatePiecePositioning(board, pieceType, start);
         float targetPositionValue = EvaluatePiecePositioning(board, pieceType, target);
 
@@ -34,7 +36,7 @@ internal static class PositionEvaluator
 
         for (int i = 0; i < 64; i++)
         {
-            Square iSquare = new Square(i);
+            Square iSquare = new(i);
             Piece iPiece = board.GetPiece(iSquare);
 
             bool whitePiece = iPiece.IsWhite;
@@ -50,7 +52,7 @@ internal static class PositionEvaluator
 
     private static float EvaluatePiecePositioning(Board board, PieceType pieceType, int positionIndex)
     {
-        bool pieceTypeHasValueboard = Valueboards.Valueboards.PieceValueboards.TryGetValue(pieceType, out var valueBoard);
+        bool pieceTypeHasValueboard = PieceValueboards.TryGetValue(pieceType, out var valueBoard);
         if (!pieceTypeHasValueboard) return 0f;
 
         float endgameFactor = EndgameEvaluator.EndgameFactor(board);

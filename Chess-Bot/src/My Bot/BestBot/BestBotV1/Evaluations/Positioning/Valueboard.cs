@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Positioning;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Positioning;
 
 internal static class Valueboard
 {

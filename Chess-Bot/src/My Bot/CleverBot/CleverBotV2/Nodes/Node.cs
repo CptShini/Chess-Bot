@@ -1,10 +1,10 @@
-﻿using ChessChallenge.API;
-using CleverBot.CleverBotV2.Evaluation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ChessChallenge.API;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Evaluation;
 
-namespace CleverBot.CleverBotV2.Nodes;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Nodes;
 
 internal class Node
 {

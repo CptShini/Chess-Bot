@@ -1,9 +1,9 @@
-﻿using ChessChallenge.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChessChallenge.API;
 
-namespace MyBots;
+namespace Chess_Challenge.My_Bot.MyBots;
 
 public class MyBotDaniel : IChessBot
 {
@@ -11,6 +11,7 @@ public class MyBotDaniel : IChessBot
     static readonly float[] PieceValues = new float[] { 0, 1, 3, 3, 5, 9, 100 };
     readonly Random rand = new Random();
     Evaluation evaluation;
+
     public Move Think(Board board, Timer timer)
     {
         evaluation = new(board);
@@ -41,6 +42,7 @@ public class MyBotDaniel : IChessBot
                 bestMove = move;
             }
         }
+
         if (bestMove != null) return (best, (Move)bestMove);
         else throw new Exception("No available moves");
 
@@ -48,14 +50,17 @@ public class MyBotDaniel : IChessBot
         {
             if (depth == MaxDepth || evaluation.GameHasEnded) return evaluation.Current;
             if (bestMove == null) return MinMax(board, depth, alpha, beta).Item1;
-            return isMax ? MinMax(board, depth, Math.Max(alpha, best), beta).Item1 : MinMax(board, depth, alpha, Math.Min(beta, best)).Item1;
+            return isMax
+                ? MinMax(board, depth, Math.Max(alpha, best), beta).Item1
+                : MinMax(board, depth, alpha, Math.Min(beta, best)).Item1;
         }
     }
 
     static float EvaluateMaterial(Board board)
     {
         if (board.IsDraw()) return 0;
-        if (board.IsInCheckmate()) return board.IsWhiteToMove ? -PieceValues[(int)PieceType.King] : PieceValues[(int)PieceType.King];
+        if (board.IsInCheckmate())
+            return board.IsWhiteToMove ? -PieceValues[(int)PieceType.King] : PieceValues[(int)PieceType.King];
 
         float material = 0;
         foreach (var pieceList in board.GetAllPieceLists())
@@ -63,6 +68,7 @@ public class MyBotDaniel : IChessBot
             float pieceTypeValue = PieceValues[(int)pieceList.TypeOfPieceInList];
             material += (pieceList.IsWhitePieceList ? pieceTypeValue : -pieceTypeValue) * pieceList.Count;
         }
+
         return material;
     }
 
@@ -121,16 +127,26 @@ public class MyBotDaniel : IChessBot
                 GameHasEnded = true;
                 return -eval;
             }
+
             if (board.IsInCheckmate())
             {
                 GameHasEnded = true;
                 return -eval + (white ? PieceValues[(int)PieceType.King] : -PieceValues[(int)PieceType.King]);
             }
+
             float postionalScore = 0f;
             float materialScore = 0f;
-            if (move.MovePieceType == PieceType.Knight) postionalScore += (white ? 1 : -1) * (KnightValueBoard[move.TargetSquare.Index] - KnightValueBoard[move.StartSquare.Index]);
-            if (move.MovePieceType == PieceType.Pawn) postionalScore += (white ? 1 : -1) * (PawnValueBoard[move.TargetSquare.Index] - PawnValueBoard[move.StartSquare.Index]);
-            if (move.MovePieceType == PieceType.Bishop) postionalScore += (white ? 1 : -1) * (BishopValueBoard[move.TargetSquare.Index] - BishopValueBoard[move.StartSquare.Index]);
+            if (move.MovePieceType == PieceType.Knight)
+                postionalScore += (white ? 1 : -1) *
+                                  (KnightValueBoard[move.TargetSquare.Index] -
+                                   KnightValueBoard[move.StartSquare.Index]);
+            if (move.MovePieceType == PieceType.Pawn)
+                postionalScore += (white ? 1 : -1) *
+                                  (PawnValueBoard[move.TargetSquare.Index] - PawnValueBoard[move.StartSquare.Index]);
+            if (move.MovePieceType == PieceType.Bishop)
+                postionalScore += (white ? 1 : -1) *
+                                  (BishopValueBoard[move.TargetSquare.Index] -
+                                   BishopValueBoard[move.StartSquare.Index]);
             if (move.IsPromotion) materialScore += (white ? 1 : -1) * (PieceValues[(int)move.PromotionPieceType] - 1);
             if (move.IsCastles) postionalScore += white ? 0.5f : -0.5f;
             materialScore += (white ? 1 : -1) * PieceValues[(int)move.CapturePieceType];
@@ -154,6 +170,7 @@ public class MyBotDaniel : IChessBot
                     valueBoard[i * 8 + j] = boardValueFunc(i, j);
                 }
             }
+
             return valueBoard;
         }
     }

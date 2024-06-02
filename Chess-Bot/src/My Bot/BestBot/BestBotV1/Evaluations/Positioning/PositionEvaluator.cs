@@ -1,12 +1,13 @@
 ﻿using ChessChallenge.API;
 using System.Collections.Generic;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Positioning.Valueboard;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Positioning.Valueboard;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Positioning;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Positioning;
 
 internal static class PositionEvaluator
 {
-    private static readonly Dictionary<PieceType, float[]> _pieceTypeToValueboard = new() {
+    private static readonly Dictionary<PieceType, float[]> _pieceTypeToValueboard = new()
+    {
         { PieceType.Pawn, PawnValueboard },
         { PieceType.Knight, KnightValueboard },
         { PieceType.King, KingValueboard }

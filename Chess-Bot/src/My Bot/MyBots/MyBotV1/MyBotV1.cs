@@ -1,9 +1,9 @@
-﻿using ChessChallenge.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChessChallenge.API;
 
-namespace MyBots.MyBotV1;
+namespace Chess_Challenge.My_Bot.MyBots.MyBotV1;
 
 public class MyBotV1 : IChessBot
 {
@@ -54,6 +54,7 @@ public class MyBotV1 : IChessBot
             ScoredMove scoredMove = new ScoredMove(legalMove, moveScore);
             scoredMoves.Add(scoredMove);
         }
+
         return scoredMoves;
     }
 
@@ -89,7 +90,8 @@ public class MyBotV1 : IChessBot
             Piece piece = board.GetPiece(square);
 
             float pieceVal = EvaluatePieceMaterial(piece);
-            if (piece.IsWhite) white += pieceVal; else black += pieceVal;
+            if (piece.IsWhite) white += pieceVal;
+            else black += pieceVal;
         }
 
         float val = white - black;

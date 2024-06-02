@@ -1,6 +1,6 @@
 ﻿using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV1;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV1;
 
 internal static class Evaluator
 {

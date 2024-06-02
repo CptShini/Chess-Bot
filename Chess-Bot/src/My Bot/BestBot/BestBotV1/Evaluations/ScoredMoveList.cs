@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations;
 
 internal class ScoredMoveList
 {
@@ -48,7 +48,8 @@ internal class ScoredMoveList
         return PickRandom(_moves);
     }
 
-    internal Dictionary<Move, float> GetMoves() => ScoredMoves.OrderBy(scoredMove => (_whiteToMove ? -1 : 1) * scoredMove.Value).ToDictionary(x => x.Key, y => y.Value);
+    internal Dictionary<Move, float> GetMoves() => ScoredMoves
+        .OrderBy(scoredMove => (_whiteToMove ? -1 : 1) * scoredMove.Value).ToDictionary(x => x.Key, y => y.Value);
 
     public override string ToString()
     {

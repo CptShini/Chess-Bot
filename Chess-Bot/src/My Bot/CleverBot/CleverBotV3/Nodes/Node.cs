@@ -1,11 +1,11 @@
-﻿using ChessChallenge.API;
-using CleverBot.CleverBotV3.Evaluations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Evaluations;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV3.Nodes;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Nodes;
 
 internal class Node
 {
@@ -107,24 +107,28 @@ internal class Node
     public string ToString(int topN = -1, int maxDepth = -1, int depth = 0)
     {
         StringBuilder sb = new();
-        if (depth == 0) sb.AppendLine($"PlyCount: {PlyCount} | {(White ? "White" : "Black")} to move | {Evaluation.ToString()}");
+        if (depth == 0)
+            sb.AppendLine($"PlyCount: {PlyCount} | {(White ? "White" : "Black")} to move | {Evaluation.ToString()}");
 
         if (!IsLeaf && !IsTerminal && (maxDepth == -1 || depth < maxDepth))
         {
-            var orderedConnections = Connections.OrderBy(con => White ? -con.Value.Evaluation.Score : con.Value.Evaluation.Score);
+            var orderedConnections =
+                Connections.OrderBy(con => White ? -con.Value.Evaluation.Score : con.Value.Evaluation.Score);
             if (depth == 0)
             {
                 foreach (var conn in topN == -1 ? orderedConnections : orderedConnections.Take(topN))
                 {
                     sb.Append($"    {conn.Value.Evaluation.ToString()}  \t | ");
-                    sb.Append($"{conn.Key.StartSquare.Name}{conn.Key.TargetSquare.Name} {conn.Value.ToString(topN, maxDepth, depth + 1)}");
+                    sb.Append(
+                        $"{conn.Key.StartSquare.Name}{conn.Key.TargetSquare.Name} {conn.Value.ToString(topN, maxDepth, depth + 1)}");
                     sb.AppendLine();
                 }
             }
             else
             {
                 var conn = orderedConnections.First();
-                sb.Append($"{conn.Key.StartSquare.Name}{conn.Key.TargetSquare.Name} {conn.Value.ToString(topN, maxDepth, depth + 1)}");
+                sb.Append(
+                    $"{conn.Key.StartSquare.Name}{conn.Key.TargetSquare.Name} {conn.Value.ToString(topN, maxDepth, depth + 1)}");
             }
         }
 

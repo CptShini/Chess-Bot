@@ -1,11 +1,11 @@
-﻿using Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations;
-using ChessChallenge.API;
-using System;
-using System.Threading.Tasks;
+﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations;
+using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1;
 
 public class BestBotV1 : IChessBot
 {
@@ -57,7 +57,7 @@ public class BestBotV1 : IChessBot
         Move bestMove = Move.NullMove;
 
         int depth = 0;
-        for (; ; depth++)
+        for (;; depth++)
         {
             (float eval, Move move) = EvaluateMoves(board, depth, ct);
 
@@ -74,7 +74,8 @@ public class BestBotV1 : IChessBot
         return (bestEval, bestMove, depth);
     }
 
-    (float, Move) EvaluateMoves(Board board, int maxDepth, CancellationToken ct, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)
+    (float, Move) EvaluateMoves(Board board, int maxDepth, CancellationToken ct, int depth = 0,
+        float alpha = int.MinValue, float beta = int.MaxValue)
     {
         float bestEval = 0f;
         Move bestMove = Move.NullMove;
@@ -92,7 +93,8 @@ public class BestBotV1 : IChessBot
 
             if (isMax ? eval > beta : eval < alpha) return (eval, Move.NullMove);
 
-            if ((isMax ? eval > bestEval : eval < bestEval) || bestMove == Move.NullMove || eval == bestEval && _rnd.Next(2) == 0)
+            if ((isMax ? eval > bestEval : eval < bestEval) || bestMove == Move.NullMove ||
+                eval == bestEval && _rnd.Next(2) == 0)
             {
                 bestMove = move;
                 bestEval = eval;

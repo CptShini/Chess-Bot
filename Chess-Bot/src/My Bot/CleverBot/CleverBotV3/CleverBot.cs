@@ -1,7 +1,7 @@
-﻿using ChessChallenge.API;
-using CleverBot.CleverBotV3.Nodes;
+﻿using Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Nodes;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV3;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3;
 
 public class CleverBot : IChessBot
 {
@@ -10,7 +10,7 @@ public class CleverBot : IChessBot
     /* TODO:
      * --- V3 ---
      * Time controlled search depth
-     *      
+     *
      * --- V4 ---
      * Alpha-Beta pruning search
      */

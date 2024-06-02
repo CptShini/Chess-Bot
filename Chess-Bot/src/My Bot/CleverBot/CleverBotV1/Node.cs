@@ -1,9 +1,9 @@
-﻿using ChessChallenge.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV1;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV1;
 
 internal class Node
 {
@@ -40,7 +40,7 @@ internal class Node
         {
             board.MakeMove(move);
 
-            float moveScore = Evaluator.EvaluateBoard(board);
+            float moveScore = Chess_Challenge.My_Bot.CleverBot.CleverBotV1.Evaluator.EvaluateBoard(board);
             Node node = new Node(PlyCount + 1, !White, moveScore);
             Connections.Add(move, node);
 
@@ -67,9 +67,7 @@ internal class Node
 
     private void Evaluate()
     {
-        Evaluation = White ?
-            Connections.Values.Max(n => n.Evaluation) :
-            Connections.Values.Min(n => n.Evaluation);
+        Evaluation = White ? Connections.Values.Max(n => n.Evaluation) : Connections.Values.Min(n => n.Evaluation);
     }
 
     #endregion

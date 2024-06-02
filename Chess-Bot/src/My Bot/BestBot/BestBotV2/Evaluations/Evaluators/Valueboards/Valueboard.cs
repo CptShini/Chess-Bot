@@ -1,15 +1,10 @@
 ﻿using System.Text;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards;
 
 internal class Valueboard
 {
     private readonly float[] _earlyGameValueboard, _lateGameValueboard;
-
-    internal Valueboard(WeightedValueboard weightedValueboard)
-    {
-        _lateGameValueboard = _earlyGameValueboard = ConvertWeightedValueboard(weightedValueboard);
-    }
 
     internal Valueboard(WeightedValueboard earlyValueboard, WeightedValueboard lateValueboard)
     {

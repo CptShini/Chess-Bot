@@ -1,8 +1,8 @@
-﻿using ChessChallenge.API;
-using CleverBot.CleverBotV2.ScoredMoves;
-using System;
+﻿using System;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV2.ScoredMoves;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV2.Nodes;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Nodes;
 
 internal class NodeTree
 {

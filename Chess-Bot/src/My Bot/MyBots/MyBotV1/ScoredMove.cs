@@ -1,6 +1,6 @@
 ﻿using ChessChallenge.API;
 
-namespace MyBots.MyBotV1;
+namespace Chess_Challenge.My_Bot.MyBots.MyBotV1;
 
 public struct ScoredMove
 {

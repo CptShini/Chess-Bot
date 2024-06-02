@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyBots.MyBotV3;
+namespace Chess_Challenge.My_Bot.MyBots.MyBotV3;
 
 internal struct ScoredMoveList
 {

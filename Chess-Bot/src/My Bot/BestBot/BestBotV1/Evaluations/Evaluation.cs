@@ -1,7 +1,7 @@
-﻿using ChessChallenge.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ChessChallenge.API;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations;
 
 internal struct Evaluation
 {

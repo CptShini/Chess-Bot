@@ -1,10 +1,10 @@
-﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
-using ChessChallenge.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal static class GuessEvaluator
 {

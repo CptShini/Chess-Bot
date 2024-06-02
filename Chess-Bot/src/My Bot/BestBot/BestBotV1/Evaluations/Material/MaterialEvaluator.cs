@@ -1,6 +1,6 @@
 ﻿using ChessChallenge.API;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Material;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Material;
 
 internal static class MaterialEvaluator
 {

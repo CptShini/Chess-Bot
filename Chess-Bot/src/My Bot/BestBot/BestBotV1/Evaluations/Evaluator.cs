@@ -1,8 +1,8 @@
-﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Material.MaterialEvaluator;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations.Positioning.PositionEvaluator;
+﻿using static Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Material.MaterialEvaluator;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations.Positioning.PositionEvaluator;
 using ChessChallenge.API;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV1.Evaluations;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations;
 
 internal static class Evaluator
 {
@@ -33,7 +33,9 @@ internal static class Evaluator
     {
         return board.IsInCheckmate()
             ? (CheckmateValue.FlipSign(!board.IsWhiteToMove), true)
-            : board.IsDraw() ? (DrawValue, true) : (0f, false);
+            : board.IsDraw()
+                ? (DrawValue, true)
+                : (0f, false);
     }
 
     private static float FlipSign(this float value, bool whiteMadeMove) => whiteMadeMove ? value : -value;

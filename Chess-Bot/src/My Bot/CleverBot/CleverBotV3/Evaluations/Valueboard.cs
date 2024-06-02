@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CleverBot.CleverBotV3.Evaluations;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Evaluations;
 
 internal static class Valueboard
 {

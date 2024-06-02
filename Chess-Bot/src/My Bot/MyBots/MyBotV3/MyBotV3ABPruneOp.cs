@@ -1,8 +1,8 @@
-﻿using ChessChallenge.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ChessChallenge.API;
 
-namespace MyBots.MyBotV3;
+namespace Chess_Challenge.My_Bot.MyBots.MyBotV3;
 
 public class MyBotV3ABPruneOp : IChessBot
 {
@@ -22,11 +22,14 @@ public class MyBotV3ABPruneOp : IChessBot
         return scoredMoves.GetMove(board.IsWhiteToMove);
     }
 
-    ScoredMoveList EvaluateBoardMoves(Board board, int depth = 0, float alpha = float.MinValue, float beta = float.MaxValue)
+    ScoredMoveList EvaluateBoardMoves(Board board, int depth = 0, float alpha = float.MinValue,
+        float beta = float.MaxValue)
     {
         ScoredMoveList scoredMoves = new();
 
-        IEnumerable<Move> orderedLegalMoves = depth < _maxDepth ? board.GetLegalMoves().OrderByDescending(m => MoveScoreGuess(board, m)) : board.GetLegalMoves();
+        IEnumerable<Move> orderedLegalMoves = depth < _maxDepth
+            ? board.GetLegalMoves().OrderByDescending(m => MoveScoreGuess(board, m))
+            : board.GetLegalMoves();
         foreach (Move legalMove in orderedLegalMoves)
         {
             board.MakeMove(legalMove);

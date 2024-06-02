@@ -1,8 +1,8 @@
-﻿using ChessChallenge.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV2.ScoredMoves;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.ScoredMoves;
 
 internal struct ScoredMoveList
 {

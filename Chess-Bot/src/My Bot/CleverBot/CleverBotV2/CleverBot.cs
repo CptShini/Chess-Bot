@@ -1,7 +1,7 @@
-﻿using ChessChallenge.API;
-using CleverBot.CleverBotV2.Nodes;
+﻿using Chess_Challenge.My_Bot.CleverBot.CleverBotV2.Nodes;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV2;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2;
 
 public class CleverBot : IChessBot
 {
@@ -12,7 +12,7 @@ public class CleverBot : IChessBot
      * Time controlled search depth
      *      Diagnostics showing how deep it's thinking
      *          Evaluation depth (number which describes from how far down, said evaluation, comes from)
-     *      
+     *
      * --- V4 ---
      * Alpha-Beta pruning search
      */

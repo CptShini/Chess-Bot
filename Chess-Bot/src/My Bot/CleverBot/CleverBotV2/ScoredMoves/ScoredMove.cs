@@ -1,6 +1,6 @@
 ﻿using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV2.ScoredMoves;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.ScoredMoves;
 
 internal struct ScoredMove
 {

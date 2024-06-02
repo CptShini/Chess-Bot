@@ -1,13 +1,13 @@
-﻿using Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations;
-using ChessChallenge.API;
-using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Timer = ChessChallenge.API.Timer;
+﻿using System;
 using System.Collections.Generic;
-using Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+using System.Threading;
+using System.Threading.Tasks;
+using Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations;
+using Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+using ChessChallenge.API;
+using Timer = ChessChallenge.API.Timer;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2;
 
 public class BestBotV2 : IChessBot
 {
@@ -16,8 +16,12 @@ public class BestBotV2 : IChessBot
 
     Priority Stuff
         Transposition Tables for speed
+            Evaluate actual speed/performance impact
         Do some performance profiling (it's probably the trade evaluation method)
+            Find something better than the in-built profiler
         Potentially remove checkmate/draw check in trade evaluation method
+            Evaluate actual speed/performance impact
+        Figure out how to set up specific board position and how to run several games at once
     Random Stuff
         Memory optimization using GetLegalMovesNonAlloc()
         Move ordering by remembering best moves from previous search
@@ -39,7 +43,6 @@ public class BestBotV2 : IChessBot
                 Counting and evaluating how many pieces are defending and attacking given squares? (Probably useless)
     */
 
-    private readonly Random _rnd = new();
     private Evaluation _evaluation;
     private CancellationTokenSource _cts;
 
@@ -48,16 +51,16 @@ public class BestBotV2 : IChessBot
 
     public Move Think(Board board, Timer timer)
     {
-        _cts = new CancellationTokenSource();
+        _cts = new();
         _evaluation = new(board);
 
         return GetMove(board, timer);
     }
 
-    Move GetMove(Board board, Timer timer)
+    private Move GetMove(Board board, Timer timer)
     {
-        Task<(float eval, Move move, int moveDepth)> task = Task.Run(() => IterativeDeepning(board));
-        
+        Task<(float eval, Move move, int moveDepth)> task = Task.Run(() => IterativeDeepening(board));
+
         TimeSpan thinkTime = CalculateThinkTime(timer);
         if (!task.Wait(thinkTime)) _cts.Cancel();
 
@@ -66,7 +69,7 @@ public class BestBotV2 : IChessBot
         return task.Result.move;
     }
 
-    static TimeSpan CalculateThinkTime(Timer timer)
+    private static TimeSpan CalculateThinkTime(Timer timer)
     {
         int startTime = timer.GameStartTimeMilliseconds;
         int turnCountFraction = startTime / ExpectedTurnCount;
@@ -78,15 +81,15 @@ public class BestBotV2 : IChessBot
         return TimeSpan.FromMilliseconds(timeThisTurn);
     }
 
-    (float, Move, int) IterativeDeepning(Board board)
+    private (float, Move, int) IterativeDeepening(Board board)
     {
         float bestEval = 0f;
         Move bestMove = board.GetLegalMoves()[0];
 
         int depth = 1;
-        for (; ; depth += 2)
+        for (;; depth += 2)
         {
-            (float eval, Move move) = EvaluateMoves(board, depth, 0);
+            (float eval, Move move) = EvaluateMoves(board, depth);
 
             if (_cts.Token.IsCancellationRequested) break;
 
@@ -99,7 +102,7 @@ public class BestBotV2 : IChessBot
         return (bestEval, bestMove, (depth - 1) / 2);
     }
 
-    (float, Move) EvaluateMoves(Board board, int maxDepth, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)
+    private (float, Move) EvaluateMoves(Board board, int maxDepth, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)
     {
         float bestEval = board.IsWhiteToMove ? int.MinValue : int.MaxValue;
         Move bestMove = Move.NullMove;
@@ -112,25 +115,26 @@ public class BestBotV2 : IChessBot
             if (_cts.Token.IsCancellationRequested) break;
 
             _evaluation.MakeMove(move);
-            float eval = EvaluateMove(depthReached, () => EvaluateTrades(board), () => UpdateAlphaBeta(board, ref alpha, ref beta, bestEval), () => EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1);
+            float eval = EvaluateMove(depthReached, AtDepthEvaluationFunction, AlphaBetaUpdater, RecursiveEvaluationFunction);
             _evaluation.UndoMove(move);
 
             if (board.IsWhiteToMove ? eval > beta : eval < alpha) return (eval, Move.NullMove);
 
             bool newMoveIsBetter = board.IsWhiteToMove ? eval > bestEval : eval < bestEval;
-            bool newMoveIsEqual = eval == bestEval && _rnd.Next(2) == 0;
-
-            if (newMoveIsBetter || newMoveIsEqual)
-            {
-                bestMove = move;
-                bestEval = eval;
-            }
+            if (!newMoveIsBetter) continue;
+            
+            bestMove = move;
+            bestEval = eval;
         }
 
         return (bestEval, bestMove);
+        
+        float AtDepthEvaluationFunction() => EvaluateTrades(board);
+        void AlphaBetaUpdater() => UpdateAlphaBeta(board, ref alpha, ref beta, bestEval);
+        float RecursiveEvaluationFunction() => EvaluateMoves(board, maxDepth, depth + 1, alpha, beta).Item1;
     }
 
-    float EvaluateMove(bool depthReached, Func<float> atDepthEvaluationFunction, Action alphaBetaUpdater, Func<float> recursiveEvaluationFunction)
+    private float EvaluateMove(bool depthReached, Func<float> atDepthEvaluationFunction, Action alphaBetaUpdater, Func<float> recursiveEvaluationFunction)
     {
         if (_evaluation.GameHasEnded) return _evaluation.Current;
         if (depthReached) return atDepthEvaluationFunction();
@@ -140,30 +144,37 @@ public class BestBotV2 : IChessBot
         return recursiveEvaluationFunction();
     }
 
-    void UpdateAlphaBeta(Board board, ref float alpha, ref float beta, float bestEval)
+    private static void UpdateAlphaBeta(Board board, ref float alpha, ref float beta, float bestEval)
     {
         if (!board.IsWhiteToMove) alpha = Math.Max(alpha, bestEval);
         else beta = Math.Min(beta, bestEval);
     }
 
-    float EvaluateTrades(Board board, float alpha = int.MinValue, float beta = int.MaxValue)
+    private float EvaluateTrades(Board board, float alpha = int.MinValue, float beta = int.MaxValue)
     {
         Move[] captureMoves = board.GetLegalMoves(true);
-        if (captureMoves.Length == 0) return _evaluation.Current;
+        if (captureMoves.Length == 0 || _evaluation.GameHasEnded) return _evaluation.Current;
 
         alpha = beta = _evaluation.Current;
 
         bool isMax = board.IsWhiteToMove;
-        foreach (Move captureMove in captureMoves.GuessOrder(board))
+        foreach (Move captureMove in captureMoves)
         {
             if (_cts.Token.IsCancellationRequested) break;
 
-            _evaluation.MakeMove(captureMove);
+            _evaluation.MakeMove(captureMove, true);
             float eval = EvaluateTrades(board, alpha, beta);
             _evaluation.UndoMove(captureMove);
 
-            if (isMax && eval > alpha) alpha = eval;
-            if (!isMax && eval < beta) beta = eval;
+            switch (isMax)
+            {
+                case true when eval > alpha:
+                    alpha = eval;
+                    break;
+                case false when eval < beta:
+                    beta = eval;
+                    break;
+            }
 
             if (isMax ? eval > beta : eval < alpha) return eval;
         }

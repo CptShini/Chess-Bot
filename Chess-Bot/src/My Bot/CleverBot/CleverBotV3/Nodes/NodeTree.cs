@@ -1,8 +1,8 @@
-﻿using ChessChallenge.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ChessChallenge.API;
 
-namespace CleverBot.CleverBotV3.Nodes;
+namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3.Nodes;
 
 internal class NodeTree
 {
@@ -30,7 +30,9 @@ internal class NodeTree
         KeyValuePair<Move, Node> bestConnection = new KeyValuePair<Move, Node>(Move.NullMove, null);
         foreach (var connection in _root.Connections)
         {
-            int comparer = bestConnection.Value == null ? 1 : connection.Value.Evaluation.CompareTo(bestConnection.Value.Evaluation);
+            int comparer = bestConnection.Value == null
+                ? 1
+                : connection.Value.Evaluation.CompareTo(bestConnection.Value.Evaluation);
 
             if (comparer is 1)
             {

@@ -1,8 +1,8 @@
-﻿using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
-using static Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.PositionEvaluator;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.MaterialEvaluator;
 
-namespace Chess_Challenge.src.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
 
 internal class Evaluator
 {
@@ -19,9 +19,11 @@ internal class Evaluator
         var (stateEvaluation, gameHasEnded) = EvaluateBoardState();
         if (gameHasEnded) return (stateEvaluation, true);
 
-        float moveEvaluation = EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board);
-        return (moveEvaluation * Perspective, false);
+        float moveEvaluation = EvaluateOnlyMove(move);
+        return (moveEvaluation, false);
     }
+
+    internal float EvaluateOnlyMove(Move move) => (EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board)) * Perspective;
 
     internal (float, bool) EvaluateBoard()
     {
@@ -38,8 +40,6 @@ internal class Evaluator
         if (isCheckmate) return (CheckmateValue * Perspective, true);
 
         bool isDraw = _board.IsDraw();
-        if (isDraw) return (DrawValue, true);
-
-        return (0f, false);
+        return isDraw ? (DrawValue, true) : (0f, false);
     }
 }
