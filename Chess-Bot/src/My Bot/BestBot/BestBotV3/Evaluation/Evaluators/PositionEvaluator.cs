@@ -20,8 +20,9 @@ internal static class PositionEvaluator
     {
         PieceType pieceType = move.MovePieceType;
 
-        int start = move.StartSquare.PerspectiveIndex(!board.IsWhiteToMove);
-        int target = move.TargetSquare.PerspectiveIndex(!board.IsWhiteToMove);
+        bool isWhiteToMove = board.IsWhiteToMove;
+        int start = move.StartSquare.PerspectiveIndex(!isWhiteToMove);
+        int target = move.TargetSquare.PerspectiveIndex(!isWhiteToMove);
         
         int startPositionValue = EvaluatePiecePositioning(board, pieceType, start);
         int targetPositionValue = EvaluatePiecePositioning(board, pieceType, target);

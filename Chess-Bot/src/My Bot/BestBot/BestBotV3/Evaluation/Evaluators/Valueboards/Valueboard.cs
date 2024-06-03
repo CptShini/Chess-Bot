@@ -21,14 +21,7 @@ internal class Valueboard
         return valueboard;
     }
 
-    internal int GetValueAt(float endgameFactor, int positionIndex)
-    {
-        float earlyValue = _earlyGameValueboard[positionIndex];
-        float lateValue = _lateGameValueboard[positionIndex];
-        int valueAt = (int)Lerp(earlyValue, lateValue, endgameFactor);
-
-        return valueAt;
-    }
+    internal int GetValueAt(float endgameFactor, int positionIndex) => (int)Lerp(_earlyGameValueboard[positionIndex], _lateGameValueboard[positionIndex], endgameFactor);
 
     private static float Lerp(float a, float b, float f) => a * (1f - f) + b * f;
 }
