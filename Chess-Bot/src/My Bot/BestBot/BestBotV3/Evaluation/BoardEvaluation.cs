@@ -25,7 +25,7 @@ internal struct BoardEvaluation
         _depth = 0;
     }
 
-    internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(_board.GetLegalMoves(), out endEvaluation);
+    internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(Array.Empty<Move>(), out endEvaluation);
     private bool GameHasEnded(Move[] legalMoves, out int endEvaluation)
     {
         endEvaluation = 0;
