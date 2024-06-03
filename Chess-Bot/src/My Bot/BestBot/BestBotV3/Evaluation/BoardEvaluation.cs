@@ -8,6 +8,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation;
 internal struct BoardEvaluation
 {
     private int _currentEvaluation;
+    private int _depth;
     
     internal int Current => _currentEvaluation * Perspective;
     private int Perspective => _board.IsWhiteToMove ? 1 : -1;
@@ -21,6 +22,7 @@ internal struct BoardEvaluation
         _moveEvaluationChanges = new();
 
         _currentEvaluation = Evaluator.EvaluateBoard(board);
+        _depth = 0;
     }
 
     internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(_board.GetLegalMoves(), out endEvaluation);
@@ -32,6 +34,10 @@ internal struct BoardEvaluation
         if (!noLegalMoves) return false;
         
         endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
+
+        bool isCheckmate = endEvaluation != 0;
+        if (isCheckmate) endEvaluation += _depth / 2;
+        
         return gameHasEnded;
     }
     
@@ -63,6 +69,7 @@ internal struct BoardEvaluation
     private void MakeMove(Move move)
     {
         _board.MakeMove(move);
+        _depth++;
 
         int evalChange = Evaluator.EvaluateMove(move, _board) * -Perspective;
         _currentEvaluation += evalChange;
@@ -73,6 +80,7 @@ internal struct BoardEvaluation
     private void UndoMove(Move move)
     {
         _board.UndoMove(move);
+        _depth--;
 
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }
