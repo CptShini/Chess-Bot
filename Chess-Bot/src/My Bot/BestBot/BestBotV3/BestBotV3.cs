@@ -14,8 +14,11 @@ public class BestBotV3 : IChessBot
         Non-bot Stuff:
             Running several games at once?
         Features:
+            Endgame play:
+                King to King distance
+                Enemy king near edges
             Transposition Table
-            Move ordering
+            Move ordering (from Iterative Deepening)
         Improvements:
             Memory optimization using GetLegalMovesNonAlloc()
             Think-Time:
@@ -25,6 +28,7 @@ public class BestBotV3 : IChessBot
                 Algorithm for determining/just precalculating whether or not searching an extra layer would take too long
         Problems/Bugs:
             Professional repetition enjoyer
+            Still potentially some checkmate/draw bugs?
             Promoting pawns to stuff other than queens?
                 Probably caused when it'll be checkmate either way?
     */
@@ -41,7 +45,7 @@ public class BestBotV3 : IChessBot
     {
         _cts = new();
         _boardEvaluation = new(board);
-        
+
         return GetMove(board, timer);
     }
 
