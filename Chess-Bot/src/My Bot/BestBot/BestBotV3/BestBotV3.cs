@@ -87,7 +87,7 @@ public class BestBotV3 : IChessBot
             if (bestEvaluation >= 9000) break;
         }
 
-        return (bestEvaluation, bestMove, depth);
+        return (bestEvaluation, bestMove, depth - 1);
     }
     
     private (int, Move) SearchForBestMove(Board board, int maxDepth)
