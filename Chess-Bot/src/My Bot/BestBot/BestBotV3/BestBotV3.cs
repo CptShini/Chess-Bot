@@ -104,7 +104,7 @@ public class BestBotV3 : IChessBot
             
             bool newMoveIsBetter = moveEvaluation > bestEvaluation;
             bool sameMoveButFunnier = moveEvaluation == bestEvaluation && Random.Next(2) == 0;
-            if (!(newMoveIsBetter || sameMoveButFunnier)) continue; // WHAT IF WE FIND A MATE IN 1 AND A MATE IN 2... HOW THE FUCK DO I TELL THEM APART
+            if (!(newMoveIsBetter || sameMoveButFunnier)) continue;
             
             bestEvaluation = moveEvaluation;
             bestMove = move;
@@ -120,8 +120,6 @@ public class BestBotV3 : IChessBot
             bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
             return gameHasEnded ? endEvaluation : SearchAllCaptures(alpha, beta);
         }
-        
-        //Console.WriteLine($"Depth: {depth} | Alpha: {alpha} | Beta: {beta}");
 
         if (_cts.Token.IsCancellationRequested) return alpha;
         
