@@ -84,7 +84,7 @@ public class BestBotV3 : IChessBot
             bestEvaluation = eval;
             bestMove = move;
 
-            if (bestEvaluation >= 10000) break;
+            if (bestEvaluation >= 9000) break;
         }
 
         return (bestEvaluation, bestMove, depth);
