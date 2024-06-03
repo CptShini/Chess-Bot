@@ -23,12 +23,10 @@ public class BestBotV3 : IChessBot
                 Potentially factor in enemy remaining time?
                 Base entire time algorithm off some endgame/progression coefficient
                 Algorithm for determining/just precalculating whether or not searching an extra layer would take too long
-            Evaluation:
-                King Safety
-                Rewarding Development of pieces
         Problems/Bugs:
-            M1 vs M2
             Professional repetition enjoyer
+            Promoting pawns to stuff other than queens?
+                Probably caused when it'll be checkmate either way?
     */
 
     private static readonly Random Random = new();
