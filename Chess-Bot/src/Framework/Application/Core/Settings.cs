@@ -1,11 +1,13 @@
-﻿using Chess_Challenge.src.My_Bot.BestBot.BestBotV1;
-using Chess_Challenge.src.My_Bot.BestBot.BestBotV2;
-using ChessChallenge.API;
-using ChessChallenge.Example;
-using CleverBot.CleverBotV3;
-using MyBots;
-using MyBots.MyBotV3;
+﻿using ChessChallenge.API;
 using System.Numerics;
+using Chess_Challenge.My_Bot.BestBot.BestBotV1;
+using Chess_Challenge.My_Bot.BestBot.BestBotV2;
+using Chess_Challenge.My_Bot.BestBot.BestBotV3;
+using Chess_Challenge.My_Bot.MyBots;
+using Chess_Challenge.My_Bot.MyBots.MyBotV1;
+using Chess_Challenge.My_Bot.MyBots.MyBotV2;
+using Chess_Challenge.My_Bot.MyBots.MyBotV3;
+using ChessChallenge.Example;
 
 namespace ChessChallenge.Application
 {
@@ -13,11 +15,11 @@ namespace ChessChallenge.Application
     {
         public const string Version = "1.20";
 
-        public static readonly IChessBot MyBot = new BestBotV2();
-        public static readonly IChessBot OpponentBot = new MyBotV3ABPruneOp();
+        public static readonly IChessBot MyBot = new BestBotV3();
+        public static readonly IChessBot OpponentBot = new BestBotV2();
 
         // Game settings
-        public const int GameDurationMilliseconds = 60 * 1000;
+        public const int GameDurationMilliseconds = 300 * 1000;
         public const int IncrementMilliseconds = 0 * 1000;
         public const float MinMoveDelay = 0;
         public static readonly bool RunBotsOnSeparateThread = true;
