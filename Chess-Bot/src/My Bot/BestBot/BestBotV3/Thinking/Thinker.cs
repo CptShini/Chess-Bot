@@ -11,7 +11,6 @@ internal class Thinker
     private const int ExpectedTurnCount = 40;
     private const int MinimumTurnCount = 100;
     private const int SpeedUpTime = 2;
-    private const int ComplexityCoefficient = 8;
     
     private readonly long _minimumThinkTime;
     private readonly long _maximumThinkTime;
@@ -39,7 +38,7 @@ internal class Thinker
         {
             long thinkTimeEstimate = GetThinkTimeEstimate(timeTaken);
             if (EstimatedTimeTooSlow(thinkTimeEstimate)) break;
-
+            
             try
             {
                 currentBest = Think(depth, thinkTimeEstimate, out timeTaken);
@@ -53,7 +52,7 @@ internal class Thinker
 
     private long GetThinkTimeEstimate(long previousThinkTime = 0)
     {
-        long estimateThinkTime = previousThinkTime * ComplexityCoefficient;
+        long estimateThinkTime = previousThinkTime * 7 + 30;
         return Math.Max(_minimumThinkTime, estimateThinkTime);
     }
     
