@@ -24,27 +24,10 @@ internal struct BoardEvaluation
         _currentEvaluation = Evaluator.EvaluateBoard(board);
         _depth = 0;
     }
-
-    internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(Array.Empty<Move>(), out endEvaluation);
-    private bool GameHasEnded(Move[] legalMoves, out int endEvaluation)
-    {
-        endEvaluation = 0;
-        
-        bool noLegalMoves = legalMoves.Length == 0;
-        if (!noLegalMoves) return false;
-        
-        endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
-
-        bool isCheckmate = endEvaluation != 0;
-        if (isCheckmate) endEvaluation += _depth / 2;
-        
-        return gameHasEnded;
-    }
     
     internal int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool capturesOnly = false)
     {
-        Move[] moves = _board.GetLegalMoves(capturesOnly);
-        
+        Move[] moves = GetMoves(capturesOnly);
         if (!capturesOnly && GameHasEnded(moves, out int endEvaluation)) return endEvaluation;
 
         moves.GuessOrder();
@@ -58,6 +41,24 @@ internal struct BoardEvaluation
         return alpha;
     }
 
+    internal Move[] GetMoves(bool capturesOnly = false) => _board.GetLegalMoves(capturesOnly);
+    
+    internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(Array.Empty<Move>(), out endEvaluation);
+    private bool GameHasEnded(Move[] legalMoves, out int endEvaluation)
+    {
+        endEvaluation = 0;
+        
+        bool noLegalMoves = legalMoves.Length == 0;
+        if (!noLegalMoves) return false;
+        
+        endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
+
+        bool isCheckmate = endEvaluation != 0;
+        if (isCheckmate) endEvaluation += _depth;
+        
+        return gameHasEnded;
+    }
+    
     internal int EvaluateMove(Move move, Func<int> evaluationFunction)
     {
         MakeMove(move);
