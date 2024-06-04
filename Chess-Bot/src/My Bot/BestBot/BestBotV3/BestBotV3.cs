@@ -14,7 +14,7 @@ public class BestBotV3 : IChessBot
         Non-bot Stuff:
             Running several games at once?
         Features:
-            Endgame play:
+            Endgame play, (How to evaluate?):
                 King to King distance
                 Enemy king near edges
             Transposition Table
@@ -45,7 +45,7 @@ public class BestBotV3 : IChessBot
     {
         _cts = new();
         _boardEvaluation = new(board);
-
+        
         return GetMove(board, timer);
     }
 
