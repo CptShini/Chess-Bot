@@ -102,7 +102,7 @@ public class BestBotV3 : IChessBot
         Move[] legalMoves = board.GetLegalMoves();
         foreach (Move move in legalMoves)
         {
-            int moveEvaluation = _boardEvaluation.EvaluateMove(move, () => -Search(maxDepth));
+            int moveEvaluation = _boardEvaluation.EvaluateMove(move, EvaluationFunction);
             
             if (_cts.Token.IsCancellationRequested) break;
             
@@ -115,6 +115,8 @@ public class BestBotV3 : IChessBot
         }
         
         return (bestEvaluation, bestMove);
+        
+        int EvaluationFunction() => -Search(maxDepth);
     }
 
     private int Search(int depth, int alpha = -999999, int beta = 999999)
@@ -126,8 +128,10 @@ public class BestBotV3 : IChessBot
         }
 
         if (_cts.Token.IsCancellationRequested) return alpha;
-        
-        return _boardEvaluation.AlphaBetaEvaluateMoves(() => -Search(depth - 1, -beta, -alpha), ref alpha, beta);
+
+        return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta);
+
+        int EvaluationFunction() => -Search(depth - 1, -beta, -alpha);
     }
 
     private int SearchAllCaptures(int alpha, int beta)
@@ -138,7 +142,9 @@ public class BestBotV3 : IChessBot
         if (evaluationCurrent > alpha) alpha = evaluationCurrent;
 
         if (_cts.Token.IsCancellationRequested) return alpha;
-        
-        return _boardEvaluation.AlphaBetaEvaluateMoves(() => -SearchAllCaptures(-beta, -alpha), ref alpha, beta, true);
+
+        return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta, true);
+
+        int EvaluationFunction() => -SearchAllCaptures(-beta, -alpha);
     }
 }
