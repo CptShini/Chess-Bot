@@ -27,9 +27,9 @@ internal struct BoardEvaluation
     
     internal int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool capturesOnly = false)
     {
-        Move[] moves = GetMoves(capturesOnly);
-        if (!capturesOnly && GameHasEnded(moves, out int endEvaluation)) return endEvaluation;
+        if (!capturesOnly && GameHasEnded(out int endEvaluation)) return endEvaluation;
 
+        Move[] moves = GetMoves(capturesOnly);
         moves.GuessOrder();
         foreach (Move move in moves)
         {
@@ -43,14 +43,8 @@ internal struct BoardEvaluation
 
     internal Move[] GetMoves(bool capturesOnly = false) => _board.GetLegalMoves(capturesOnly);
     
-    internal bool GameHasEnded(out int endEvaluation) => GameHasEnded(Array.Empty<Move>(), out endEvaluation);
-    private bool GameHasEnded(Move[] legalMoves, out int endEvaluation)
+    internal bool GameHasEnded(out int endEvaluation)
     {
-        endEvaluation = 0;
-        
-        bool noLegalMoves = legalMoves.Length == 0;
-        if (!noLegalMoves) return false;
-        
         endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
 
         bool isCheckmate = endEvaluation != 0;
