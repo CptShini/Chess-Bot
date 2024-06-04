@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
+using static System.Array;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation.Evaluators.MaterialEvaluator;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation.Evaluators;
 
 internal static class GuessEvaluator
 {
-    internal static IOrderedEnumerable<Move> GuessOrder(this IEnumerable<Move> moves) => moves.OrderByDescending(move => move.GuessEvaluate());
-
+    internal static void GuessOrder(this Move[] moves) => Sort(moves, (a, b) => b.GuessEvaluate().CompareTo(a.GuessEvaluate()));
+    
     private static int GuessEvaluate(this Move move)
     {
         int evaluationGuess = 0;

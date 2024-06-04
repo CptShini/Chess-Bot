@@ -46,8 +46,9 @@ internal struct BoardEvaluation
         Move[] moves = _board.GetLegalMoves(capturesOnly);
         
         if (!capturesOnly && GameHasEnded(moves, out int endEvaluation)) return endEvaluation;
-        
-        foreach (Move move in moves.GuessOrder())
+
+        moves.GuessOrder();
+        foreach (Move move in moves)
         {
             int evaluation = EvaluateMove(move, evaluationFunction);
             if (evaluation >= beta) return beta;
