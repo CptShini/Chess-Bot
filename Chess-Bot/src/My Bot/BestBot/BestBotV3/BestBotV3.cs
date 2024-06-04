@@ -15,8 +15,6 @@ public class BestBotV3 : IChessBot
                 King to King distance
                 Enemy king near edges
             Transposition Table
-        Problems/Bugs:
-            Potential checkmate/draw bug (Professional repetition enjoyer)
     */
 
     private Thinker _thinker;
