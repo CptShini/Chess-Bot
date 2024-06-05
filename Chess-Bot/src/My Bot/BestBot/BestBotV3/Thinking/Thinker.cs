@@ -8,7 +8,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV3.Thinking;
 internal class Thinker
 {
     private const int ExpectedTurnCount = 40;
-    private const int SpeedUpTime = 2;
     
     private readonly long _maximumThinkTime;
     private readonly Searcher _searcher;
@@ -19,9 +18,7 @@ internal class Thinker
         _searcher = new(board);
         _timer = timer;
         
-        int turnCountTime = timer.GameStartTimeMilliseconds / ExpectedTurnCount;
-        int emergencyTime = (int)(timer.MillisecondsRemaining / (ExpectedTurnCount / (float)SpeedUpTime));
-        _maximumThinkTime = Math.Min(turnCountTime, emergencyTime);
+        _maximumThinkTime = timer.MillisecondsRemaining / ExpectedTurnCount;
     }
 
     internal ScoredMove IterativeDeepening()
