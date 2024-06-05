@@ -4,7 +4,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation.Evaluators;
 
 internal static class EndgameEvaluator
 {
-    internal static float EndgameFactor(Board board) => (16 - board.CountEnemyPieces()) * 0.06667f;
+    internal static float EndgameFactor(Board board) => (16 - board.CountEnemyPieces()) / 15f;
 
     private static ulong CountEnemyPieces(this Board board) => (board.IsWhiteToMove ? board.BlackPiecesBitboard : board.WhitePiecesBitboard).HammingWeight();
 
