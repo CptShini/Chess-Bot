@@ -10,19 +10,18 @@ public class BestBotV3 : IChessBot
 {
     /*
     TODO:
-        Features:
-            Endgame play, (How to evaluate?):
-                King to King distance
-                Enemy king near edges
-            Transposition Table
+        Endgame play, (How to evaluate?):
+            King to King distance
+            Enemy king near edges
+        Transposition Table
     */
 
     private Thinker _thinker;
-    
+
     public Move Think(Board board, Timer timer)
     {
         _thinker = new(board, timer);
-
+        
         ScoredMove scoredMove = _thinker.IterativeDeepening();
         Console.WriteLine(scoredMove);
         
