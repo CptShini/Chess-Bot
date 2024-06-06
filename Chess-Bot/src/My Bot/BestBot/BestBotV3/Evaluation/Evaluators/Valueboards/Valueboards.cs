@@ -27,7 +27,7 @@ internal static class Valueboards
                 ),
                 new(
                     CreateValueboard(Pawn),
-                    2f,
+                    1f,
                     false
                 )
             )
