@@ -34,8 +34,12 @@ internal struct BoardEvaluation
         foreach (Move move in moves)
         {
             int evaluation = EvaluateMove(move, evaluationFunction);
-            if (evaluation >= beta) return beta;
-            if (evaluation > alpha) alpha = evaluation;
+            
+            if (FailHigh(evaluation, beta)) return beta; // Prune
+            if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+            // PV-node
+            alpha = evaluation;
         }
 
         return alpha;
@@ -80,4 +84,7 @@ internal struct BoardEvaluation
 
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }
+
+    private static bool FailHigh(int evaluation, int beta) => evaluation >= beta; // Cut-node
+    private static bool FailLow(int evaluation, int alpha) => evaluation <= alpha; // All-node
 }
