@@ -7,7 +7,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators;
 internal static class Evaluator
 {
     private const int CheckmateValue = -10000;
-    private const int DrawValue = 100;
+    private const int DrawValue = 0;
 
     internal static int EvaluateMove(Move move, Board board) => EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, board);
     
