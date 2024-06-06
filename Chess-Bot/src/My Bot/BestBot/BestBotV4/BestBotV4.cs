@@ -14,7 +14,6 @@ public class BestBotV4 : IChessBot
             King to King distance
             Enemy king near edges
         Transposition Table
-        Omega high depth/repetition bug?
     */
 
     private Thinker _thinker;
