@@ -50,6 +50,9 @@
         <Compile Update="src\My Bot\BestBot\BestBotV3\BestBotV3.cs">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
+        <Compile Update="src\My Bot\BestBot\BestBotV4\BestBotV4.cs">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
