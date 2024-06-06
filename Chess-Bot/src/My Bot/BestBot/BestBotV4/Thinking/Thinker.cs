@@ -6,6 +6,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Thinking;
 
 internal class Thinker
 {
+    private const int DepthHardLimit = 64;
     private const int ExpectedTurnCount = 40;
     
     private readonly long _maximumThinkTime;
@@ -24,7 +25,7 @@ internal class Thinker
     {
         ScoredMove currentBest = Think(0, out long timeTaken);
         
-        for (int depth = 1; ; depth++)
+        for (int depth = 1; depth < DepthHardLimit; depth++)
         {
             long thinkTimeEstimate = GetThinkTimeEstimate(timeTaken);
             if (TimeToStopThinking(thinkTimeEstimate)) break;
