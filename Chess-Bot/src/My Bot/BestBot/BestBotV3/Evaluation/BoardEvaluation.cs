@@ -47,7 +47,7 @@ internal struct BoardEvaluation
     {
         endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
 
-        bool isCheckmate = endEvaluation != 0;
+        bool isCheckmate = endEvaluation == -10000;
         if (isCheckmate) endEvaluation += _depth;
         
         return gameHasEnded;
