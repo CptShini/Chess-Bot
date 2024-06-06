@@ -2,6 +2,7 @@
 using System.Numerics;
 using Chess_Challenge.My_Bot.BestBot.BestBotV2;
 using Chess_Challenge.My_Bot.BestBot.BestBotV3;
+using Chess_Challenge.My_Bot.BestBot.BestBotV4;
 
 namespace ChessChallenge.Application
 {
@@ -9,8 +10,8 @@ namespace ChessChallenge.Application
     {
         public const string Version = "1.20";
 
-        public static readonly IChessBot MyBot = new BestBotV3();
-        public static readonly IChessBot OpponentBot = new BestBotV2();
+        public static readonly IChessBot MyBot = new BestBotV4();
+        public static readonly IChessBot OpponentBot = new BestBotV3();
 
         // Game settings
         public const int GameDurationMilliseconds = 60 * 1000;

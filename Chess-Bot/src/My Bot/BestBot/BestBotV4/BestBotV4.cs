@@ -1,12 +1,12 @@
 ﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation;
-using Chess_Challenge.My_Bot.BestBot.BestBotV3.Thinking;
+using Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation;
+using Chess_Challenge.My_Bot.BestBot.BestBotV4.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV3;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV4;
 
-public class BestBotV3 : IChessBot
+public class BestBotV4 : IChessBot
 {
     /*
     TODO:
@@ -24,7 +24,7 @@ public class BestBotV3 : IChessBot
         _thinker = new(board, timer);
         
         ScoredMove scoredMove = _thinker.IterativeDeepening();
-        //Console.WriteLine(scoredMove);
+        Console.WriteLine(scoredMove);
         
         return scoredMove.Move;
     }
