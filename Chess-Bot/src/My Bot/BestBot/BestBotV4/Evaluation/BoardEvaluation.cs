@@ -25,12 +25,9 @@ internal struct BoardEvaluation
         _depth = 0;
     }
     
-    internal int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool capturesOnly = false)
+    internal int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool isQuiescent = false)
     {
-        if (!capturesOnly && GameHasEnded(out int endEvaluation)) return endEvaluation;
-
-        Move[] moves = GetMoves(capturesOnly);
-        moves.GuessOrder();
+        Move[] moves = GetMoves(isQuiescent);
         foreach (Move move in moves)
         {
             int evaluation = EvaluateMove(move, evaluationFunction);
@@ -45,7 +42,12 @@ internal struct BoardEvaluation
         return alpha;
     }
 
-    internal Move[] GetMoves(bool capturesOnly = false) => _board.GetLegalMoves(capturesOnly);
+    internal Move[] GetMoves(bool isQuiescent = false)
+    {
+        Move[] moves = _board.GetLegalMoves(isQuiescent);
+        moves.GuessOrder();
+        return moves;
+    }
     
     internal bool GameHasEnded(out int endEvaluation)
     {
