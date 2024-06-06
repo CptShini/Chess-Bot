@@ -30,16 +30,18 @@ internal class Searcher
 
     private int Search(int depth, int alpha = -999999, int beta = 999999)
     {
-        bool depthReached = depth == 0;
-        if (!depthReached) return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta);
-        
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
-        return gameHasEnded ? endEvaluation : SearchAllCaptures(alpha, beta);
+        if (gameHasEnded) return endEvaluation;
+        
+        bool depthReached = depth == 0;
+        if (depthReached) return QuiescentSearch(alpha, beta);
+
+        return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta);
 
         int EvaluationFunction() => -Search(depth - 1, -beta, -alpha);
     }
 
-    private int SearchAllCaptures(int alpha, int beta)
+    private int QuiescentSearch(int alpha, int beta)
     {
         int evaluationCurrent = _boardEvaluation.Current;
         if (evaluationCurrent >= beta) return beta;
@@ -47,6 +49,6 @@ internal class Searcher
 
         return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta, true);
 
-        int EvaluationFunction() => -SearchAllCaptures(-beta, -alpha);
+        int EvaluationFunction() => -QuiescentSearch(-beta, -alpha);
     }
 }
