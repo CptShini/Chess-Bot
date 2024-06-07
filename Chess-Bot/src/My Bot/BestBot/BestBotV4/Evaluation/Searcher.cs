@@ -9,7 +9,7 @@ internal class Searcher
 
     internal Searcher(Board board) => _boardEvaluation = new(board);
 
-    internal int Search(ref Line line, int depth, int alpha, int beta)
+    internal int Search(ref Line line, int depth, int alpha = -999999, int beta = 999999)
     {
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
