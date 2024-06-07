@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation;
@@ -13,45 +11,42 @@ internal class Searcher
     
     internal ScoredMove SearchForBestMove(int maxDepth)
     {
-        List<ScoredMove> scoredMoves = new();
+        Line line = new();
+        int evaluation = Search(ref line, maxDepth);
 
-        Move[] legalMoves = _boardEvaluation.GetMoves();
-        foreach (Move move in legalMoves)
-        {
-            int moveEvaluation = EvaluateMove(move, EvaluationFunction);
-            
-            ScoredMove scoredMove = new(move, moveEvaluation, maxDepth);
-            scoredMoves.Add(scoredMove);
-        }
-        
-        return scoredMoves.Max();
-        
-        int EvaluationFunction() => -Search(maxDepth);
+        return new(line, evaluation);
     }
 
-    private int Search(int depth, int alpha = -999999, int beta = 999999)
+    private int Search(ref Line line, int depth, int alpha = -999999, int beta = 999999)
     {
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
         
         bool depthReached = depth == 0;
-        if (depthReached) return QuiescentSearch(alpha, beta);
+        if (depthReached)
+        {
+            line.Depth = 0;
+            return QuiescentSearch(alpha, beta);
+        }
 
+        Line newLine = new();
+        
         Move[] moves = _boardEvaluation.GetMoves();
         foreach (Move move in moves)
         {
-            int evaluation = EvaluateMove(move, EvaluationFunction);
+            int evaluation = EvaluateMove(move, () => -Search(ref newLine, depth - 1, -beta, -alpha));
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
             if (FailLow(evaluation, alpha)) continue; // Ignore
             
             // PV-node
             alpha = evaluation;
+            line.Moves[0] = move;
+            Array.Copy(newLine.Moves, 0, line.Moves, 1, newLine.Depth);
+            line.Depth = newLine.Depth + 1;
         }
 
         return alpha;
-
-        int EvaluationFunction() => -Search(depth - 1, -beta, -alpha);
     }
 
     private int QuiescentSearch(int alpha, int beta)
@@ -63,7 +58,7 @@ internal class Searcher
         Move[] moves = _boardEvaluation.GetMoves(true);
         foreach (Move move in moves)
         {
-            int evaluation = EvaluateMove(move, EvaluationFunction);
+            int evaluation = EvaluateMove(move, () => -QuiescentSearch(-beta, -alpha));
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
             if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -73,8 +68,6 @@ internal class Searcher
         }
 
         return alpha;
-        
-        int EvaluationFunction() => -QuiescentSearch(-beta, -alpha);
     }
 
     private int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool isQuiescent = false)
