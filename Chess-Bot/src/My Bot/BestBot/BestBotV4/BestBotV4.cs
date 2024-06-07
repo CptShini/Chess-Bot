@@ -10,9 +10,6 @@ public class BestBotV4 : IChessBot
 {
     /*
     TODO:
-        Endgame play, (How to evaluate?):
-            King to King distance
-            Enemy king near edges
         PVS
         Iterative Deepening
             Think-time limit

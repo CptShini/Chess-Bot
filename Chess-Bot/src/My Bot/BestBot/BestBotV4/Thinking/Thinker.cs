@@ -9,7 +9,7 @@ internal class Thinker
     private const int Infinity = 999999;
     
     private const int DepthHardLimit = 64;
-    private const int ExpectedTurnCount = 40;
+    private const int ExpectedTurnCount = 30;
     
     private readonly long _maximumThinkTime;
     private readonly Searcher _searcher;
