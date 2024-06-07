@@ -1,19 +1,33 @@
-﻿using ChessChallenge.API;
+﻿using System;
+using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators.Valueboards.Valueboards;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators;
 
 internal static class PositionEvaluator
 {
+    private static readonly Random Random = new();
     private const int Castle = 50;
 
     internal static int EvaluateMovePositioning(Move move, Board board)
     {
-        int positioning = move.EvaluateMoveValueboard(board);
+        int positioning = move.EvaluateMoveValueboard(board) + board.EvaluateEarlyGameRandomness();
 
         if (move.IsCastles) positioning += Castle;
 
         return positioning;
+    }
+
+    private static int EvaluateEarlyGameRandomness(this Board board)
+    {
+        const int extent = 4;
+        
+        int ply = board.PlyCount;
+        if (ply > extent) return 0;
+
+        const int strength = 10;
+        int randomness = (extent - ply) * strength;
+        return Random.Next(-randomness, randomness + 1);
     }
 
     private static int EvaluateMoveValueboard(this Move move, Board board)
