@@ -6,6 +6,8 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Thinking;
 
 internal class Thinker
 {
+    private const int Infinity = 999999;
+    
     private const int DepthHardLimit = 64;
     private const int ExpectedTurnCount = 40;
     
@@ -23,14 +25,17 @@ internal class Thinker
 
     internal ScoredMove IterativeDeepening()
     {
-        ScoredMove currentBest = Think(0, out long timeTaken);
+        int alpha = -Infinity;
+        int beta = Infinity;
+        
+        ScoredMove currentBest = Think(0, alpha, beta, out long timeTaken);
         
         for (int depth = 1; depth < DepthHardLimit; depth++)
         {
             long thinkTimeEstimate = GetThinkTimeEstimate(timeTaken);
             if (TimeToStopThinking(thinkTimeEstimate)) break;
 
-            currentBest = Think(depth, out timeTaken);
+            currentBest = Think(depth, alpha, beta, out timeTaken);
             if (currentBest.IsCheckmate) break;
         }
         
@@ -45,10 +50,14 @@ internal class Thinker
         return estimatedEndTime > _maximumThinkTime;
     }
 
-    private ScoredMove Think(int maxDepth, out long timeTaken)
+    private ScoredMove Think(int maxDepth, int alpha, int beta, out long timeTaken)
     {
         Stopwatch s = Stopwatch.StartNew();
-        ScoredMove result = _searcher.SearchForBestMove(maxDepth);
+        
+        Line line = new();
+        int evaluation = _searcher.Search(ref line, maxDepth, alpha, beta);
+        ScoredMove result = new(line, evaluation);
+        
         timeTaken = s.ElapsedMilliseconds;
         
         return result;

@@ -8,16 +8,8 @@ internal class Searcher
     private BoardEvaluation _boardEvaluation;
 
     internal Searcher(Board board) => _boardEvaluation = new(board);
-    
-    internal ScoredMove SearchForBestMove(int maxDepth)
-    {
-        Line line = new();
-        int evaluation = Search(ref line, maxDepth);
 
-        return new(line, evaluation);
-    }
-
-    private int Search(ref Line line, int depth, int alpha = -999999, int beta = 999999)
+    internal int Search(ref Line line, int depth, int alpha, int beta)
     {
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
@@ -30,7 +22,9 @@ internal class Searcher
         Move[] moves = _boardEvaluation.GetMoves();
         foreach (Move move in moves)
         {
-            int evaluation = EvaluateMove(move, () => -Search(ref newLine, depth - 1, -beta, -alpha));
+            _boardEvaluation.MakeMove(move);
+            int evaluation = -Search(ref newLine, depth - 1, -beta, -alpha);
+            _boardEvaluation.UndoMove(move);
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
             if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -59,7 +53,9 @@ internal class Searcher
         Move[] moves = _boardEvaluation.GetMoves(true);
         foreach (Move move in moves)
         {
-            int evaluation = EvaluateMove(move, () => -QuiescentSearch(-beta, -alpha));
+            _boardEvaluation.MakeMove(move);
+            int evaluation = -QuiescentSearch(-beta, -alpha);
+            _boardEvaluation.UndoMove(move);
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
             if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -76,7 +72,9 @@ internal class Searcher
         Move[] moves = _boardEvaluation.GetMoves(isQuiescent);
         foreach (Move move in moves)
         {
-            int evaluation = EvaluateMove(move, evaluationFunction);
+            _boardEvaluation.MakeMove(move);
+            int evaluation = evaluationFunction();
+            _boardEvaluation.UndoMove(move);
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
             if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -87,15 +85,6 @@ internal class Searcher
         }
 
         return alpha;
-    }
-
-    private int EvaluateMove(Move move, Func<int> evaluationFunction)
-    {
-        _boardEvaluation.MakeMove(move);
-        int evaluation = evaluationFunction.Invoke();
-        _boardEvaluation.UndoMove(move);
-
-        return evaluation;
     }
     
     private static bool FailHigh(int evaluation, int beta) => evaluation >= beta; // Cut-node
