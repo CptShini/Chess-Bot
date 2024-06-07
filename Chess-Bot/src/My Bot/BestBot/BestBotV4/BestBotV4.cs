@@ -15,7 +15,6 @@ public class BestBotV4 : IChessBot
         
         PVS
         Iterative Deepening
-            Think-time limit
             Move Ordering
             Aspiration Windows
         Transposition Table
