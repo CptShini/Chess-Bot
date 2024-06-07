@@ -70,7 +70,7 @@ internal class Searcher
         return alpha;
     }
 
-    private int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool isQuiescent = false)
+    private int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, Action<Move>? actionOnPvNodeFound, ref int alpha, int beta, bool isQuiescent = false)
     {
         Move[] moves = _boardEvaluation.GetMoves(isQuiescent);
         foreach (Move move in moves)
@@ -82,6 +82,7 @@ internal class Searcher
             
             // PV-node
             alpha = evaluation;
+            actionOnPvNodeFound?.Invoke(move);
         }
 
         return alpha;
