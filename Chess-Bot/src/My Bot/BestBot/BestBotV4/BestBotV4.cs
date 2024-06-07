@@ -14,6 +14,7 @@ public class BestBotV4 : IChessBot
             King to King distance
             Enemy king near edges
         Transposition Table
+        Move Ordering from Iterative Deepening
     */
 
     private Thinker _thinker;
