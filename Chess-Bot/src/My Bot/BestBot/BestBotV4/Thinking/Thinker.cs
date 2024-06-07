@@ -29,10 +29,9 @@ internal class Thinker
         int beta = Infinity;
         
         ScoredMove currentBest = Think(0, alpha, beta, out long timeTaken);
-        
         for (int depth = 1; depth < DepthHardLimit; depth++)
         {
-            long thinkTimeEstimate = GetThinkTimeEstimate(timeTaken);
+            long thinkTimeEstimate = (long)GetThinkTimeEstimate(depth, timeTaken);
             if (TimeToStopThinking(thinkTimeEstimate)) break;
 
             currentBest = Think(depth, alpha, beta, out timeTaken);
@@ -41,15 +40,7 @@ internal class Thinker
         
         return currentBest;
     }
-
-    private static long GetThinkTimeEstimate(long previousThinkTime = 0) => (long)(previousThinkTime * 7.2741f + 48.113f);
-
-    private bool TimeToStopThinking(long thinkTimeEstimate)
-    {
-        long estimatedEndTime = _timer.MillisecondsElapsedThisTurn + thinkTimeEstimate;
-        return estimatedEndTime > _maximumThinkTime;
-    }
-
+    
     private ScoredMove Think(int maxDepth, int alpha, int beta, out long timeTaken)
     {
         Stopwatch s = Stopwatch.StartNew();
@@ -61,5 +52,27 @@ internal class Thinker
         timeTaken = s.ElapsedMilliseconds;
         
         return result;
+    }
+    
+    private bool TimeToStopThinking(long thinkTimeEstimate)
+    {
+        long estimatedEndTime = _timer.MillisecondsElapsedThisTurn + thinkTimeEstimate;
+        return estimatedEndTime > _maximumThinkTime;
+    }
+    
+    private static float GetThinkTimeEstimate(int depth, long previousThinkTime = 0)
+    {
+        return depth switch
+        {
+            0 => previousThinkTime + 10f,
+            1 => previousThinkTime * 0.9902f + 0.0196f,
+            2 => previousThinkTime * 0.7300f + 5.5400f,
+            3 => previousThinkTime * 0.9394f + 12.532f,
+            4 => previousThinkTime * 4.3539f + 19.885f,
+            5 => previousThinkTime * 7.5979f + 23.850f,
+            6 => previousThinkTime * 6.2155f + 414.05f,
+            7 => previousThinkTime * 6.7331f - 91.745f,
+            _ => previousThinkTime * 7f
+        };
     }
 }
