@@ -42,7 +42,7 @@ internal class Thinker
         return currentBest;
     }
 
-    private static long GetThinkTimeEstimate(long previousThinkTime = 0) => previousThinkTime * 7 + 30;
+    private static long GetThinkTimeEstimate(long previousThinkTime = 0) => (long)(previousThinkTime * 7.2741f + 48.113f);
 
     private bool TimeToStopThinking(long thinkTimeEstimate)
     {
