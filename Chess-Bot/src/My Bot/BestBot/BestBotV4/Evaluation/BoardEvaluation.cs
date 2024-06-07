@@ -6,6 +6,9 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation;
 
 internal struct BoardEvaluation
 {
+    private const int CheckmateValue = -10000;
+    private const int ContemptValue = 50;
+    
     private int _currentEvaluation;
     private int _depth;
     
@@ -33,12 +36,19 @@ internal struct BoardEvaluation
     
     internal bool GameHasEnded(out int endEvaluation)
     {
-        endEvaluation = Evaluator.EvaluateBoardState(_board, out bool gameHasEnded);
-
-        bool isCheckmate = endEvaluation == -10000;
-        if (isCheckmate) endEvaluation += _depth;
-        
-        return gameHasEnded;
+        int boardState = Evaluator.EvaluateBoardState(_board);
+        switch (boardState)
+        {
+            case 1:
+                endEvaluation = (int)((1f - EndgameEvaluator.EndgameFactor(_board)) * ContemptValue);
+                return true;
+            case 2:
+                endEvaluation = CheckmateValue + _depth;
+                return true;
+            default:
+                endEvaluation = 0;
+                return false;
+        }
     }
     
     internal void MakeMove(Move move)

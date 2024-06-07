@@ -6,24 +6,16 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators;
 
 internal static class Evaluator
 {
-    private const int CheckmateValue = -10000;
-    private const int DrawValue = 0;
-
     internal static int EvaluateMove(Move move, Board board) => EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, board);
     
     internal static int EvaluateBoard(Board board) => EvaluateBoardMaterial(board) + EvaluateBoardPositioning(board);
 
-    internal static int EvaluateBoardState(Board board, out bool gameHasEnded)
+    internal static int EvaluateBoardState(Board board)
     {
-        gameHasEnded = true;
-        
         bool isCheckmate = board.IsInCheckmate();
-        if (isCheckmate) return CheckmateValue;
+        if (isCheckmate) return 2;
 
         bool isDraw = board.IsDraw();
-        if (isDraw) return DrawValue;
-
-        gameHasEnded = false;
-        return 0;
+        return isDraw ? 1 : 0;
     }
 }
