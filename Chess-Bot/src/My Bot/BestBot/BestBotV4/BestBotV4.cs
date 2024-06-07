@@ -10,6 +10,9 @@ public class BestBotV4 : IChessBot
 {
     /*
     TODO:
+        King Safety
+        Too monotone
+        
         PVS
         Iterative Deepening
             Think-time limit
