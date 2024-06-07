@@ -13,8 +13,12 @@ public class BestBotV4 : IChessBot
         Endgame play, (How to evaluate?):
             King to King distance
             Enemy king near edges
+        PVS
+        Iterative Deepening
+            Task time limit
+            Move Ordering
+            Aspiration Windows
         Transposition Table
-        Move Ordering from Iterative Deepening
     */
 
     private Thinker _thinker;
