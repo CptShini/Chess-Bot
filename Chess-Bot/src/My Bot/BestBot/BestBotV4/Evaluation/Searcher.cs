@@ -23,11 +23,7 @@ internal class Searcher
         if (gameHasEnded) return endEvaluation;
         
         bool depthReached = depth == 0;
-        if (depthReached)
-        {
-            line.Depth = 0;
-            return QuiescentSearch(alpha, beta);
-        }
+        if (depthReached) return QuiescentSearch(alpha, beta);
 
         Line newLine = new();
         
