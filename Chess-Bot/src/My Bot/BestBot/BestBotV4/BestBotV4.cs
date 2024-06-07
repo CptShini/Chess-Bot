@@ -15,7 +15,7 @@ public class BestBotV4 : IChessBot
             Enemy king near edges
         PVS
         Iterative Deepening
-            Task time limit
+            Think-time limit
             Move Ordering
             Aspiration Windows
         Transposition Table
