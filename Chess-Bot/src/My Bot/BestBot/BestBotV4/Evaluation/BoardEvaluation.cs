@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators;
 using ChessChallenge.API;
 
@@ -24,23 +23,6 @@ internal struct BoardEvaluation
         _currentEvaluation = Evaluator.EvaluateBoard(board);
         _depth = 0;
     }
-    
-    internal int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool isQuiescent = false)
-    {
-        Move[] moves = GetMoves(isQuiescent);
-        foreach (Move move in moves)
-        {
-            int evaluation = EvaluateMove(move, evaluationFunction);
-            
-            if (FailHigh(evaluation, beta)) return beta; // Prune
-            if (FailLow(evaluation, alpha)) continue; // Ignore
-            
-            // PV-node
-            alpha = evaluation;
-        }
-
-        return alpha;
-    }
 
     internal Move[] GetMoves(bool isQuiescent = false)
     {
@@ -59,16 +41,7 @@ internal struct BoardEvaluation
         return gameHasEnded;
     }
     
-    internal int EvaluateMove(Move move, Func<int> evaluationFunction)
-    {
-        MakeMove(move);
-        int evaluation = evaluationFunction.Invoke();
-        UndoMove(move);
-
-        return evaluation;
-    }
-    
-    private void MakeMove(Move move)
+    internal void MakeMove(Move move)
     {
         _board.MakeMove(move);
         _depth++;
@@ -79,14 +52,12 @@ internal struct BoardEvaluation
         _moveEvaluationChanges.Push(evalChange);
     }
 
-    private void UndoMove(Move move)
+    internal void UndoMove(Move move)
     {
         _board.UndoMove(move);
         _depth--;
 
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }
-
-    private static bool FailHigh(int evaluation, int beta) => evaluation >= beta; // Cut-node
-    private static bool FailLow(int evaluation, int alpha) => evaluation <= alpha; // All-node
+    
 }

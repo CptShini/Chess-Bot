@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChessChallenge.API;
 
@@ -17,7 +18,7 @@ internal class Searcher
         Move[] legalMoves = _boardEvaluation.GetMoves();
         foreach (Move move in legalMoves)
         {
-            int moveEvaluation = _boardEvaluation.EvaluateMove(move, EvaluationFunction);
+            int moveEvaluation = EvaluateMove(move, EvaluationFunction);
             
             ScoredMove scoredMove = new(move, moveEvaluation, maxDepth);
             scoredMoves.Add(scoredMove);
@@ -36,7 +37,19 @@ internal class Searcher
         bool depthReached = depth == 0;
         if (depthReached) return QuiescentSearch(alpha, beta);
 
-        return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta);
+        Move[] moves = _boardEvaluation.GetMoves();
+        foreach (Move move in moves)
+        {
+            int evaluation = EvaluateMove(move, EvaluationFunction);
+            
+            if (FailHigh(evaluation, beta)) return beta; // Prune
+            if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+            // PV-node
+            alpha = evaluation;
+        }
+
+        return alpha;
 
         int EvaluationFunction() => -Search(depth - 1, -beta, -alpha);
     }
@@ -44,11 +57,52 @@ internal class Searcher
     private int QuiescentSearch(int alpha, int beta)
     {
         int evaluationCurrent = _boardEvaluation.Current;
-        if (evaluationCurrent >= beta) return beta;
-        if (evaluationCurrent > alpha) alpha = evaluationCurrent;
+        if (FailHigh(evaluationCurrent, beta)) return beta; // Prune
+        if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
 
-        return _boardEvaluation.AlphaBetaEvaluateMoves(EvaluationFunction, ref alpha, beta, true);
+        Move[] moves = _boardEvaluation.GetMoves(true);
+        foreach (Move move in moves)
+        {
+            int evaluation = EvaluateMove(move, EvaluationFunction);
+            
+            if (FailHigh(evaluation, beta)) return beta; // Prune
+            if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+            // PV-node
+            alpha = evaluation;
+        }
 
+        return alpha;
+        
         int EvaluationFunction() => -QuiescentSearch(-beta, -alpha);
     }
+
+    private int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, ref int alpha, int beta, bool isQuiescent = false)
+    {
+        Move[] moves = _boardEvaluation.GetMoves(isQuiescent);
+        foreach (Move move in moves)
+        {
+            int evaluation = EvaluateMove(move, evaluationFunction);
+            
+            if (FailHigh(evaluation, beta)) return beta; // Prune
+            if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+            // PV-node
+            alpha = evaluation;
+        }
+
+        return alpha;
+    }
+
+    private int EvaluateMove(Move move, Func<int> evaluationFunction)
+    {
+        _boardEvaluation.MakeMove(move);
+        int evaluation = evaluationFunction.Invoke();
+        _boardEvaluation.UndoMove(move);
+
+        return evaluation;
+    }
+    
+    private static bool FailHigh(int evaluation, int beta) => evaluation >= beta; // Cut-node
+    private static bool FailLow(int evaluation, int alpha) => evaluation <= alpha; // All-node
 }
