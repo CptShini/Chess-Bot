@@ -8,7 +8,7 @@ internal class Thinker
 {
     private const int Infinity = 999999;
     
-    private const int DepthHardLimit = 64;
+    private const int DepthHardLimit = 32;
     private const int ExpectedTurnCount = 30;
     
     private readonly long _maximumThinkTime;
