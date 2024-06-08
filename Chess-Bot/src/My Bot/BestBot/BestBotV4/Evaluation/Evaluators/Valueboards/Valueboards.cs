@@ -23,7 +23,7 @@ internal static class Valueboards
                         5, 10, 10, -20, -20, 10, 10, 5,
                         0, 0, 0, 0, 0, 0, 0, 0
                     },
-                    1f
+                    1.2f
                 ),
                 new(
                     CreateValueboard(Pawn),
@@ -179,7 +179,7 @@ internal static class Valueboards
                         20, 20, 0, 0, 0, 0, 20, 20,
                         20, 30, 10, 0, 0, 10, 30, 20
                     },
-                    1f
+                    1.2f
                 ),
                 new(
                     new float[]
@@ -193,7 +193,7 @@ internal static class Valueboards
                         -30, -30, 0, 0, 0, 0, -30, -30,
                         -50, -30, -30, -30, -30, -30, -30, -50
                     },
-                    2f
+                    0.8f
                 )
             )
         }

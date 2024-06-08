@@ -10,8 +10,6 @@ public class BestBotV4 : IChessBot
 {
     /*
     TODO:
-        King Safety
-        
         PVS
         Iterative Deepening
             Move Ordering
