@@ -25,8 +25,8 @@ internal static class PositionEvaluator
         int ply = board.PlyCount;
         if (ply > extent) return 0;
 
-        const int strength = 10;
-        int randomness = (extent - ply) * strength;
+        const int strength = 50;
+        int randomness = (int)((1f - (float)ply / extent) * strength);
         return Random.Next(-randomness, randomness + 1);
     }
 
