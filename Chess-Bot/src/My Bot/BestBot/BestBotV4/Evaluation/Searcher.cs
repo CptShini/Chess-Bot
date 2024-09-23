@@ -18,23 +18,13 @@ internal class Searcher
         if (depthReached) return QuiescentSearch(alpha, beta);
 
         Line newLine = new();
-        
-        Move[] moves = _boardEvaluation.GetMoves();
-        foreach (Move move in moves)
-        {
-            _boardEvaluation.MakeMove(move);
-            int evaluation = -Search(newLine, depth - 1, -beta, -alpha);
-            _boardEvaluation.UndoMove(move);
-            
-            if (FailHigh(evaluation, beta)) return beta; // Prune
-            if (FailLow(evaluation, alpha)) continue; // Ignore
-            
-            // PV-node
-            alpha = evaluation;
-            UpdateLine(move);
-        }
 
-        return alpha;
+        return AlphaBetaEvaluateMoves(
+            (a, b) => Search(newLine, depth - 1, a, b),
+            UpdateLine,
+            alpha,
+            beta
+        );
 
         void UpdateLine(Move move)
         {
@@ -50,30 +40,22 @@ internal class Searcher
         if (FailHigh(evaluationCurrent, beta)) return beta; // Prune
         if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
 
-        Move[] moves = _boardEvaluation.GetMoves(true);
-        foreach (Move move in moves)
-        {
-            _boardEvaluation.MakeMove(move);
-            int evaluation = -QuiescentSearch(-beta, -alpha);
-            _boardEvaluation.UndoMove(move);
-            
-            if (FailHigh(evaluation, beta)) return beta; // Prune
-            if (FailLow(evaluation, alpha)) continue; // Ignore
-            
-            // PV-node
-            alpha = evaluation;
-        }
-
-        return alpha;
+        return AlphaBetaEvaluateMoves(
+            QuiescentSearch,
+            null,
+            alpha,
+            beta,
+            true
+        );
     }
 
-    private int AlphaBetaEvaluateMoves(Func<int> evaluationFunction, Action<Move>? actionOnPvNodeFound, ref int alpha, int beta, bool isQuiescent = false)
+    private int AlphaBetaEvaluateMoves(Func<int, int, int> evaluationFunction, Action<Move>? actionOnPvNodeFound, int alpha, int beta, bool isQuiescent = false)
     {
         Move[] moves = _boardEvaluation.GetMoves(isQuiescent);
         foreach (Move move in moves)
         {
             _boardEvaluation.MakeMove(move);
-            int evaluation = evaluationFunction();
+            int evaluation = -evaluationFunction(-beta, -alpha);
             _boardEvaluation.UndoMove(move);
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
