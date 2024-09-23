@@ -9,7 +9,7 @@ internal class Searcher
 
     internal Searcher(Board board) => _boardEvaluation = new(board);
 
-    internal int Search(ref Line line, int depth, int alpha = -999999, int beta = 999999)
+    internal int Search(Line line, int depth, int alpha = -999999, int beta = 999999)
     {
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
@@ -23,7 +23,7 @@ internal class Searcher
         foreach (Move move in moves)
         {
             _boardEvaluation.MakeMove(move);
-            int evaluation = -Search(ref newLine, depth - 1, -beta, -alpha);
+            int evaluation = -Search(newLine, depth - 1, -beta, -alpha);
             _boardEvaluation.UndoMove(move);
             
             if (FailHigh(evaluation, beta)) return beta; // Prune
@@ -31,12 +31,12 @@ internal class Searcher
             
             // PV-node
             alpha = evaluation;
-            UpdateLine(ref line, move);
+            UpdateLine(move);
         }
 
         return alpha;
 
-        void UpdateLine(ref Line line, Move move)
+        void UpdateLine(Move move)
         {
             line.Moves[0] = move;
             Array.Copy(newLine.Moves, 0, line.Moves, 1, newLine.Depth);

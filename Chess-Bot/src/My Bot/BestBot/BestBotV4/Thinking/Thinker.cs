@@ -44,7 +44,7 @@ internal class Thinker
         Stopwatch s = Stopwatch.StartNew();
         
         Line line = new();
-        int evaluation = _searcher.Search(ref line, maxDepth, alpha, beta);
+        int evaluation = _searcher.Search(line, maxDepth, alpha, beta);
         ScoredMove thoughtProduct = new(line, evaluation);
         
         timeTaken = s.ElapsedTicks;

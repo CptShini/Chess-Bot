@@ -3,7 +3,7 @@ using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation;
 
-internal struct Line
+internal class Line
 {
     internal int Depth;              // Number of moves in the line.
     internal readonly Move[] Moves;  // The line.
