@@ -24,7 +24,7 @@ public class BestBotV4 : IChessBot
         _thinker = new(board, timer);
         
         ScoredMove scoredMove = _thinker.IterativeDeepening();
-        Console.WriteLine(scoredMove);
+        //Console.WriteLine(scoredMove);
         
         return scoredMove.Move;
     }
