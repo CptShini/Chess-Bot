@@ -5,15 +5,9 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
 internal class Line
 {
-    internal int Depth;              // Number of moves in the line.
-    internal readonly Move[] Moves;  // The line.
+    internal int Depth = 0;              // Number of moves in the line.
+    internal readonly Move[] Moves = new Move[32];  // The line.
 
-    public Line()
-    {
-        Depth = 0;
-        Moves = new Move[32];
-    }
-    
     public override string ToString()
     {
         StringBuilder sb = new(GetMoveName(Moves[0]));
