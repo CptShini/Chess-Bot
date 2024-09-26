@@ -7,7 +7,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation.Evaluators;
 internal class Evaluator
 {
     private const int CheckmateValue = -10000;
-    private const int ContemptValue = 50;
+    private const int ContemptValue = -50;
 
     internal const int DrawState = 0;
     internal const int CheckmateState = 1;
@@ -33,7 +33,7 @@ internal class Evaluator
         if (isDraw)
         {
             float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
-            int drawValue = (int)(earlyGameFactor * ContemptValue);
+            int drawValue = (int)(earlyGameFactor * -ContemptValue);
             endEvaluation = drawValue;
             return DrawState;
         }
