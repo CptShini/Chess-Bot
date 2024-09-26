@@ -29,13 +29,13 @@
         <Compile Update="src\My Bot\BestBot\BestBotV1\BestBotV1.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
-        <Compile Update="src\My Bot\CleverBot\CleverBotV3\CleverBot.cs">
+        <Compile Update="src\My Bot\CleverBot\CleverBotV3\CleverBotV3.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
-        <Compile Update="src\My Bot\CleverBot\CleverBotV2\CleverBot.cs">
+        <Compile Update="src\My Bot\CleverBot\CleverBotV2\CleverBotV2.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
-        <Compile Update="src\My Bot\CleverBot\CleverBotV1\CleverBot.cs">
+        <Compile Update="src\My Bot\CleverBot\CleverBotV1\CleverBotV1.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
         <Compile Update="src\My Bot\MyBot.cs">

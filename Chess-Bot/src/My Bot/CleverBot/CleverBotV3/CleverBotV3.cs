@@ -3,7 +3,7 @@ using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV3;
 
-public class CleverBot : IChessBot
+public class CleverBotV3 : IChessBot
 {
     private NodeTree _nodeTree;
 
@@ -16,7 +16,8 @@ public class CleverBot : IChessBot
      */
     public Move Think(Board board, Timer timer)
     {
-        _nodeTree ??= new NodeTree(board, -1);
+        bool newGameStarted = timer.MillisecondsRemaining == timer.GameStartTimeMilliseconds;
+        if (newGameStarted) _nodeTree = new(board);
         //_nodeTree.Think(board, timer);
 
         _nodeTree.Update(board);

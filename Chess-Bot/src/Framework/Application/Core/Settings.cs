@@ -1,8 +1,18 @@
 ﻿using ChessChallenge.API;
 using System.Numerics;
+using Chess_Challenge.My_Bot.BestBot.BestBotV1;
 using Chess_Challenge.My_Bot.BestBot.BestBotV2;
 using Chess_Challenge.My_Bot.BestBot.BestBotV3;
 using Chess_Challenge.My_Bot.BestBot.BestBotV4;
+using Chess_Challenge.My_Bot.MyBots;
+using Chess_Challenge.My_Bot.MyBots.MyBotV1;
+using Chess_Challenge.My_Bot.MyBots.MyBotV2;
+using Chess_Challenge.My_Bot.MyBots.MyBotV3;
+using Chess_Challenge.My_Bot.CleverBot;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV1;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV2;
+using Chess_Challenge.My_Bot.CleverBot.CleverBotV3;
+using ChessChallenge.Example;
 
 namespace ChessChallenge.Application
 {

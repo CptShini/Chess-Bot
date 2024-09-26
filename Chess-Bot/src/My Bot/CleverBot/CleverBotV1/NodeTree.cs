@@ -13,7 +13,7 @@ internal class NodeTree
         _root = new Node(board.PlyCount, board.IsWhiteToMove);
         _plyCountOffset = board.PlyCount - board.GameMoveHistory.Length;
 
-        Grow(board);
+        Grow(board, 2);
     }
 
     internal Move GetMove()
@@ -26,7 +26,7 @@ internal class NodeTree
         }
 
         Move move = moveList.GetMove(_root.White);
-        Console.WriteLine($"{move} | Eval: {moveList.GetEval(_root.White)}");
+        //Console.WriteLine($"{move} | Eval: {moveList.GetEval(_root.White)}");
 
         return move;
     }
@@ -41,10 +41,10 @@ internal class NodeTree
             _root = _root.Connections[move];
         }
 
-        Grow(board);
+        Grow(board, 2);
     }
 
-    private void Grow(Board board, int n = 2)
+    private void Grow(Board board, int n)
     {
         for (int i = 0; i < n; i++) _root.Grow(board);
     }

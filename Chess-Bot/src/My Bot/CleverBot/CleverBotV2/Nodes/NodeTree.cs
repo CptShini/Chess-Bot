@@ -14,7 +14,7 @@ internal class NodeTree
         _movesMade = board.GameMoveHistory.Length;
 
         _root = new Node(board.PlyCount, board.IsWhiteToMove);
-        Grow(board);
+        Grow(board, 2);
     }
 
     internal ScoredMove GetMove()
@@ -27,7 +27,7 @@ internal class NodeTree
         }
 
         ScoredMove move = moveList.Move;
-        Console.WriteLine(move);
+        //Console.WriteLine(move);
 
         return move;
     }
@@ -40,10 +40,10 @@ internal class NodeTree
             _root = _root.Connections[move];
         }
 
-        Grow(board);
+        Grow(board, 2);
     }
 
-    private void Grow(Board board, int n = 2)
+    private void Grow(Board board, int n)
     {
         for (int i = 0; i < n; i++) _root.Grow(board);
     }
