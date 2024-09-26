@@ -1,7 +1,7 @@
 ﻿using System;
 using ChessChallenge.API;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV4.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
 internal class TranspositionTable
 {

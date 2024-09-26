@@ -4,6 +4,7 @@ using Chess_Challenge.My_Bot.BestBot.BestBotV1;
 using Chess_Challenge.My_Bot.BestBot.BestBotV2;
 using Chess_Challenge.My_Bot.BestBot.BestBotV3;
 using Chess_Challenge.My_Bot.BestBot.BestBotV4;
+using Chess_Challenge.My_Bot.BestBot.BestBotV5;
 using Chess_Challenge.My_Bot.MyBots;
 using Chess_Challenge.My_Bot.MyBots.MyBotV1;
 using Chess_Challenge.My_Bot.MyBots.MyBotV2;
@@ -20,11 +21,11 @@ namespace ChessChallenge.Application
     {
         public const string Version = "1.20";
 
-        public static readonly IChessBot MyBot = new BestBotV4();
-        public static readonly IChessBot OpponentBot = new BestBotV3();
+        public static readonly IChessBot MyBot = new BestBotV5();
+        public static readonly IChessBot OpponentBot = new BestBotV4();
 
         // Game settings
-        public const int GameDurationMilliseconds = 60 * 1000;
+        public const int GameDurationMilliseconds = 5 * 1000;
         public const int IncrementMilliseconds = 0 * 1000;
         public const float MinMoveDelay = 0;
         public static readonly bool RunBotsOnSeparateThread = true;
