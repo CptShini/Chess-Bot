@@ -21,17 +21,10 @@ internal class Searcher
 
         return AlphaBetaEvaluateMoves(
             (a, b) => Search(newLine, depth - 1, a, b),
-            UpdateLine,
+            move => line.UpdatePVLine(move, newLine),
             alpha,
             beta
         );
-
-        void UpdateLine(Move move)
-        {
-            line.Moves[0] = move;
-            Array.Copy(newLine.Moves, 0, line.Moves, 1, newLine.Depth);
-            line.Depth = newLine.Depth + 1;
-        }
     }
 
     private int QuiescentSearch(int alpha, int beta)
