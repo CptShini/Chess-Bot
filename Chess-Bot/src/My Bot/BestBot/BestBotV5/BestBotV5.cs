@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
 using ChessChallenge.API;
@@ -26,6 +27,7 @@ public class BestBotV5 : IChessBot
         ScoredMove scoredMove = _thinker.IterativeDeepening();
         Console.WriteLine(scoredMove);
         
+        if (scoredMove.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining);
         return scoredMove.Move;
     }
 }
