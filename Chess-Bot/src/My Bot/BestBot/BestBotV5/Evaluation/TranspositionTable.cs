@@ -58,12 +58,7 @@ internal class TranspositionTable
 
     internal float GetStorageFullness()
     {
-        int filledEntries = 0;
-        foreach (TranspositionEntry entry in _table)
-        {
-            if (entry.Key != 0) filledEntries++;
-        }
-        
+        int filledEntries = _table.Count(e => e.Key != 0);
         return (float)filledEntries / _tableSize;
     }
 }
