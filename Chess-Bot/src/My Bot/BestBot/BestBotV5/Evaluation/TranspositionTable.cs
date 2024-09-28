@@ -57,4 +57,14 @@ internal class TranspositionTable
         _table[Index] = entry;
     }
 
+    internal float GetStorageFullness()
+    {
+        int filledEntries = 0;
+        foreach (TranspositionEntry entry in _table)
+        {
+            if (entry.Key != 0) filledEntries++;
+        }
+        
+        return (float)filledEntries / _tableSize;
+    }
 }
