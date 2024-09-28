@@ -5,6 +5,7 @@ internal class ThinkTimeEstimator
     private const int MaxDepth = 32;
     private const int TableLength = 8;
     private const float DefaultBranchFactor = 6f;
+    private const float MaxDepthDefaultBranchFactor = 2f;
     
     private readonly float[,] _branchingTable;
     private readonly int[] _branchingTableIndexers;
@@ -27,7 +28,7 @@ internal class ThinkTimeEstimator
 
     internal float GetAverageBranchFactor(int depth)
     {
-        if (depth >= MaxDepth) return DefaultBranchFactor;
+        if (depth >= MaxDepth) return MaxDepthDefaultBranchFactor;
         
         float branchFactorSum = 0f;
 
