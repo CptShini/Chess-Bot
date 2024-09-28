@@ -49,7 +49,7 @@ internal class ThinkTimeEstimator
     {
         string result = "";
 
-        for (int i = 0; i < MaxDepth; i++)
+        for (int i = 1; i < MaxDepth; i++)
         {
             if (GetAverageBranchFactor(i) == 0f) continue;
             result += ToString(i);
