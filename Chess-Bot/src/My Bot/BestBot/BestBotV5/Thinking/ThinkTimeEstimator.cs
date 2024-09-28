@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
+﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
 
 internal class ThinkTimeEstimator
 {
-    private const int MaxDepth = 32;
+    private const int MaxDepth = 64;
     private const int TableLength = 8;
+    private const float DefaultBranchFactor = 7f;
     
     private readonly float[,] _branchingTable;
     private readonly int[] _branchingTableIndexers;
@@ -18,7 +17,7 @@ internal class ThinkTimeEstimator
 
     internal void AddBranch(int depth, float branchFactor)
     {
-        if (depth >= MaxDepth) throw new ArgumentOutOfRangeException($"Depth ({depth}) is greater than the maximum ({MaxDepth}).");
+        if (depth >= MaxDepth) return;
         
         int index = _branchingTableIndexers[depth]++;
         if (index == TableLength - 1) _branchingTableIndexers[depth] = 0;
@@ -28,6 +27,8 @@ internal class ThinkTimeEstimator
 
     internal float GetAverageBranchFactor(int depth)
     {
+        if (depth >= MaxDepth) return DefaultBranchFactor;
+        
         float branchFactorSum = 0f;
 
         int n = 0;
@@ -39,8 +40,8 @@ internal class ThinkTimeEstimator
             branchFactorSum += branchFactor;
             n++;
         }
-        
-        return branchFactorSum / (n == 0 ? 1 : n);
+
+        return n == 0 ? DefaultBranchFactor : branchFactorSum / n;
     }
 
     public override string ToString()

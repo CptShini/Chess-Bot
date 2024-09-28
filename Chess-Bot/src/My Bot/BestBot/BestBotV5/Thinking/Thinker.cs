@@ -9,7 +9,7 @@ internal class Thinker
     private const int Infinity = 999999;
     
     private const int DepthHardLimit = 100;
-    private const int ExpectedTurnCount = 40;
+    private const int ExpectedTurnCount = 30;
     
     private readonly long _maximumThinkTime;
     private static ThinkTimeEstimator _thinkTimeEstimator;
@@ -68,8 +68,6 @@ internal class Thinker
     private static long GetThinkTimeEstimate(int depth, long previousThinkTime = 0)
     {
         float branchFactor = _thinkTimeEstimator.GetAverageBranchFactor(depth);
-        if (branchFactor == 0f) branchFactor = 7f;
-            
         return (long)(previousThinkTime * branchFactor);
     }
 }
