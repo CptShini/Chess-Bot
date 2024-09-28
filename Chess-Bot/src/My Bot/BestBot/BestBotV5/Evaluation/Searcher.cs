@@ -1,18 +1,19 @@
-﻿using ChessChallenge.API;
+﻿using System;
+using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
 internal class Searcher
 {
     private BoardEvaluation _boardEvaluation;
-    private readonly TranspositionTable _transpositionTable;
+    private static readonly TranspositionTable _transpositionTable = new(16);
     
     internal Move BestMove { get; private set; }
 
     internal Searcher(Board board)
     {
         _boardEvaluation = new(board);
-        _transpositionTable = new(board, 1);
+        _transpositionTable.Initialize(board);
         BestMove = Move.NullMove;
     }
 

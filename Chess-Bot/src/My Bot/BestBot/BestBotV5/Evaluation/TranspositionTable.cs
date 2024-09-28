@@ -1,4 +1,5 @@
-﻿using ChessChallenge.API;
+﻿using System.Linq;
+using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
@@ -9,17 +10,15 @@ internal class TranspositionTable
     internal const int FlagAlpha = 1;
     internal const int FlagBeta = 2;
 
-    private readonly Board _board;
+    private Board _board;
     
     private readonly ulong _tableSize;
     private readonly TranspositionEntry[] _table;
     
     private const bool _enabled = true;
 
-    public TranspositionTable(Board board, int sizeMb)
+    internal TranspositionTable(int sizeMb)
     {
-        _board = board;
-
         int ttEntrySizeBytes = System.Runtime.InteropServices.Marshal.SizeOf<TranspositionEntry>();
         int desiredTableSizeInBytes = sizeMb * 1024 * 1024;
         int numEntries = desiredTableSizeInBytes / ttEntrySizeBytes;
@@ -28,6 +27,17 @@ internal class TranspositionTable
         _table = new TranspositionEntry[numEntries];
     }
 
+    internal void Initialize(Board board)
+    {
+        _board = board;
+        for (int i = 0; i < (int)_tableSize; i++)
+        {
+            if (_table[i].Key == 0) continue;
+            
+            _table[i] = new();
+        }
+    }
+    
     private ulong Index => _board.ZobristKey % _tableSize;
 
     internal int LookupEvaluation(int depth, int alpha, int beta)
