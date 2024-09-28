@@ -1,4 +1,6 @@
-﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
+﻿using System;
+
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
 
 internal class ThinkTimeEstimator
 {
@@ -54,10 +56,15 @@ internal class ThinkTimeEstimator
     {
         string result = "";
 
+        float prevBranchFactor = -1f;
         for (int i = 1; i < MaxDepth; i++)
         {
-            if (GetAverageBranchFactor(i) == 0f) continue;
+            float branchFactor = GetAverageBranchFactor(i);
+            
+            if (Math.Abs(branchFactor - prevBranchFactor) < 0.001f) break;
             result += ToString(i);
+
+            prevBranchFactor = branchFactor;
         }
         
         return result;
