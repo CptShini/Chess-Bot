@@ -13,7 +13,7 @@ internal class Searcher
     internal Searcher(Board board)
     {
         _boardEvaluation = new(board);
-        _transpositionTable = new(board, 16);
+        _transpositionTable = new(board, 1);
         BestMove = Move.NullMove;
     }
 
