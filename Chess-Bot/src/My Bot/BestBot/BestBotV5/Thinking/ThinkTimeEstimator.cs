@@ -26,7 +26,7 @@ internal class ThinkTimeEstimator
         _branchingTable[depth, index] = branchFactor;
     }
 
-    internal float GetBranchFactor(int depth)
+    internal float GetAverageBranchFactor(int depth)
     {
         float branchFactorSum = 0f;
 
@@ -40,7 +40,7 @@ internal class ThinkTimeEstimator
             n++;
         }
         
-        return branchFactorSum / (n <= 0 ? 1 : n);
+        return branchFactorSum / (n == 0 ? 1 : n);
     }
 
     public override string ToString()
@@ -49,7 +49,7 @@ internal class ThinkTimeEstimator
 
         for (int i = 0; i < MaxDepth; i++)
         {
-            if (GetBranchFactor(i) == 0f) continue;
+            if (GetAverageBranchFactor(i) == 0f) continue;
             result += ToString(i);
         }
         
@@ -58,7 +58,7 @@ internal class ThinkTimeEstimator
 
     private string ToString(int depth)
     {
-        string result = $"{depth} | {GetBranchFactor(depth):0.00} | ";
+        string result = $"{depth} | {GetAverageBranchFactor(depth):0.00} | ";
 
         for (int i = 0; i < TableLength; i++)
         {
