@@ -12,7 +12,6 @@ public class BestBotV5 : IChessBot
     /*
     TODO:
         Aspiration Windows
-        Better move ordering
     */
 
     private Thinker _thinker;
@@ -24,11 +23,7 @@ public class BestBotV5 : IChessBot
         ScoredMove scoredMove = _thinker.IterativeDeepening();
         Console.WriteLine(scoredMove);
 
-        if (scoredMove.Move != Move.NullMove) return scoredMove.Move;
-        
-        Console.WriteLine("Nah, it's gg");
-        Thread.Sleep(timer.MillisecondsRemaining);
-        
-        return Move.NullMove;
+        if (scoredMove.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining);
+        return scoredMove.Move;
     }
 }
