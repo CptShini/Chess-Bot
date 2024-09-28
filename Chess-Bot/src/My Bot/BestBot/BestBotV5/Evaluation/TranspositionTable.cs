@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
@@ -66,11 +65,5 @@ internal class TranspositionTable
         
         TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move);
         _table[Index] = entry;
-    }
-
-    internal float GetStorageFullness()
-    {
-        int filledEntries = _table.Count(e => e.Key != 0);
-        return (float)filledEntries / _tableSize;
     }
 }
