@@ -27,9 +27,9 @@ internal struct BoardEvaluation
         _depth = 0;
     }
 
-    internal Move[] GetMoves(bool isQuiescent = false)
+    internal Move[] GetMoves(bool capturesOnly = false)
     {
-        Move[] moves = _board.GetLegalMoves(isQuiescent);
+        Move[] moves = _board.GetLegalMoves(capturesOnly);
         moves.GuessOrder();
         return moves;
     }
