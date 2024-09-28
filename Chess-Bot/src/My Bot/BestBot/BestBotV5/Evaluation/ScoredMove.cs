@@ -5,18 +5,17 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
 internal readonly struct ScoredMove
 {
-    internal Move Move => _line[0];
+    internal readonly Move Move;
     internal readonly bool IsCheckmate;
-
-    private readonly Line _line;
+    
     private readonly int _evaluation;
     private readonly int _depth;
     
-    internal ScoredMove(Line line, int evaluation)
+    internal ScoredMove(Move move, int evaluation, int depth)
     {
-        _line = line;
+        Move = move;
         _evaluation = evaluation;
-        _depth = line.Depth;
+        _depth = depth;
         
         IsCheckmate = Math.Abs(evaluation) > 9000;
         if (!IsCheckmate) return;

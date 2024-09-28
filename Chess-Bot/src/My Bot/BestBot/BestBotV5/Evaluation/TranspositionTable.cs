@@ -10,11 +10,12 @@ internal class TranspositionTable
     internal const int FlagAlpha = 1;
     internal const int FlagBeta = 2;
 
-    private readonly TranspositionEntry[] _entries;
-
-    private readonly ulong _count;
-    private readonly bool _enabled = true;
     private readonly Board _board;
+    
+    private readonly ulong _tableSize;
+    private readonly TranspositionEntry[] _table;
+    
+    private const bool _enabled = true;
 
     public TranspositionTable(Board board, int sizeMb)
     {
@@ -24,17 +25,17 @@ internal class TranspositionTable
         int desiredTableSizeInBytes = sizeMb * 1024 * 1024;
         int numEntries = desiredTableSizeInBytes / ttEntrySizeBytes;
 
-        _count = (ulong)numEntries;
-        _entries = new TranspositionEntry[numEntries];
+        _tableSize = (ulong)numEntries;
+        _table = new TranspositionEntry[numEntries];
     }
 
-    private ulong Index => _board.ZobristKey % _count;
+    private ulong Index => _board.ZobristKey % _tableSize;
 
     internal int LookupEvaluation(int depth, int alpha, int beta)
     {
         if (!_enabled) return LookupFailed;
         
-        TranspositionEntry entry = _entries[Index];
+        TranspositionEntry entry = _table[Index];
         
         if (entry.Key != _board.ZobristKey) return LookupFailed;
         if (entry.Depth < depth) return LookupFailed;
@@ -52,9 +53,8 @@ internal class TranspositionTable
     {
         if (!_enabled) return;
         
-        TranspositionEntry entry = new(_board.ZobristKey, val, Move.NullMove, depth, flags);
-        _entries[Index] = entry;
-        //Console.WriteLine(entry);
+        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, Move.NullMove);
+        _table[Index] = entry;
     }
 
 }

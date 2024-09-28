@@ -9,19 +9,23 @@ internal class Thinker
 {
     private const int Infinity = 999999;
     
-    private const int DepthHardLimit = 32;
-    private const int ExpectedTurnCount = 30;
+    private const int DepthHardLimit = 100;
+    private const int ExpectedTurnCount = 40;
     
     private readonly long _maximumThinkTime;
+    private static ThinkTimeEstimator _thinkTimeEstimator;
     private readonly Searcher _searcher;
     private readonly Stopwatch _timer;
 
     internal Thinker(Board board, Timer timer)
     {
+        if (timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining < 25) _thinkTimeEstimator = new();
+        
         _searcher = new(board);
         _timer = Stopwatch.StartNew();
-        
-        _maximumThinkTime = timer.MillisecondsRemaining / ExpectedTurnCount * Stopwatch.Frequency / 1000;
+
+        float thinkTimeMilliseconds = (float)timer.MillisecondsRemaining / ExpectedTurnCount;
+        _maximumThinkTime = (long)(thinkTimeMilliseconds * Stopwatch.Frequency / 1000);
     }
 
     internal ScoredMove IterativeDeepening()
@@ -29,10 +33,16 @@ internal class Thinker
         ScoredMove currentBest = Think(out long timeTaken);
         for (int depth = 1; depth < DepthHardLimit; depth++)
         {
-            long thinkTimeEstimate = GetThinkTimeEstimate(depth, timeTaken);
+            long previousThinkTime = timeTaken;
+            long thinkTimeEstimate = GetThinkTimeEstimate(depth, previousThinkTime);
             if (TimeToStopThinking(thinkTimeEstimate)) break;
-
+            
             currentBest = Think(out timeTaken, depth);
+            long currentThinkTime = timeTaken;
+            
+            float branchFactor = (float)currentThinkTime / previousThinkTime;
+            _thinkTimeEstimator.AddBranch(depth, branchFactor);
+            
             if (currentBest.IsCheckmate) break;
         }
         
@@ -43,9 +53,8 @@ internal class Thinker
     {
         Stopwatch s = Stopwatch.StartNew();
         
-        Line line = new();
-        int evaluation = _searcher.Search(line, maxDepth, alpha, beta);
-        ScoredMove thoughtProduct = new(line, evaluation);
+        int evaluation = _searcher.Search(maxDepth);
+        ScoredMove thoughtProduct = new(_searcher.BestMove, evaluation, maxDepth);
         
         timeTaken = s.ElapsedTicks;
         return thoughtProduct;
@@ -56,25 +65,10 @@ internal class Thinker
         long estimatedEndTime = _timer.ElapsedTicks + thinkTimeEstimate;
         return estimatedEndTime > _maximumThinkTime;
     }
-    
+
     private static long GetThinkTimeEstimate(int depth, long previousThinkTime = 0)
     {
-        return (long)MathF.Max(0, EstimateThinkTime());
-
-        float EstimateThinkTime()
-        {
-            return depth switch
-            {
-                0 => previousThinkTime + 225f,
-                1 => previousThinkTime * 3.7755f + 323.92f,
-                2 => previousThinkTime * 14.321f - 1762.3f,
-                3 => previousThinkTime * 8.6170f - 6272.1f,
-                4 => previousThinkTime * 11.293f - 102303f,
-                5 => previousThinkTime * 5.2390f + 232060f,
-                6 => previousThinkTime * 7.4013f + 972526f,
-                7 => previousThinkTime * 3.9426f + 20000000f,
-                _ => previousThinkTime * 7f
-            };
-        }
+        float branchFactor = _thinkTimeEstimator.GetBranchFactor(depth);
+        return (long)(previousThinkTime * branchFactor);
     }
 }

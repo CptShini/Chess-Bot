@@ -11,11 +11,8 @@ public class BestBotV5 : IChessBot
 {
     /*
     TODO:
-        PVS
-        Iterative Deepening
-            (PVS) Move Ordering
-            Aspiration Windows
-        Transposition Table
+        Aspiration Windows
+        Better move ordering
     */
 
     private Thinker _thinker;
