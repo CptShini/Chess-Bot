@@ -6,7 +6,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 internal class Searcher
 {
     private BoardEvaluation _boardEvaluation;
-    private static readonly TranspositionTable _transpositionTable = new(8);
+    private static readonly TranspositionTable _transpositionTable = new(16);
     
     internal Move BestMove { get; private set; }
 
