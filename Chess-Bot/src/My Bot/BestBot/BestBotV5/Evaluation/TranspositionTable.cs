@@ -1,5 +1,4 @@
-﻿using System;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 

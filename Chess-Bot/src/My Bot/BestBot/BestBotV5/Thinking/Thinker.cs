@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 using ChessChallenge.API;
 

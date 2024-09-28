@@ -1,5 +1,4 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators.Valueboards.Valueboards;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV2.Evaluations.Evaluators;
