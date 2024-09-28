@@ -8,7 +8,7 @@ internal class Thinker
 {
     private const int Infinity = 999999;
     
-    private const int DepthHardLimit = 100;
+    private const int DepthHardLimit = 64;
     private const int ExpectedTurnCount = 30;
     
     private readonly long _maximumThinkTime;
@@ -18,7 +18,7 @@ internal class Thinker
 
     internal Thinker(Board board, Timer timer)
     {
-        if (timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining < 25) _thinkTimeEstimator = new();
+        if (timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining < 50) _thinkTimeEstimator = new();
         
         _searcher = new(board);
         _timer = Stopwatch.StartNew();

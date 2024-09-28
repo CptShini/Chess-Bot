@@ -2,9 +2,9 @@
 
 internal class ThinkTimeEstimator
 {
-    private const int MaxDepth = 64;
+    private const int MaxDepth = 32;
     private const int TableLength = 8;
-    private const float DefaultBranchFactor = 7f;
+    private const float DefaultBranchFactor = 6f;
     
     private readonly float[,] _branchingTable;
     private readonly int[] _branchingTableIndexers;
