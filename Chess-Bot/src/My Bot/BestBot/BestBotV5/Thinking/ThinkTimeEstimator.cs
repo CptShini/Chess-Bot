@@ -36,7 +36,7 @@ internal class ThinkTimeEstimator
         for (int i = 0; i < TableLength; i++)
         {
             float branchFactor = _branchingTable[depth, i];
-            if (branchFactor == 0f) continue;
+            if (branchFactor == 0f) break;
                 
             branchFactorSum += branchFactor;
             n++;
