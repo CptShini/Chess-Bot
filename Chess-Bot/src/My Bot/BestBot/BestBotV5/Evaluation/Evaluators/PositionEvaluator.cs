@@ -20,12 +20,12 @@ internal static class PositionEvaluator
 
     private static int EvaluateEarlyGameRandomness(this Board board)
     {
-        const int extent = 4;
+        const int extent = 6;
         
         int ply = board.PlyCount;
         if (ply > extent) return 0;
 
-        const int strength = 50;
+        const int strength = 80;
         int randomness = (int)((1f - (float)ply / extent) * strength);
         return Random.Next(-randomness, randomness + 1);
     }
