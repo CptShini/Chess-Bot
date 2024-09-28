@@ -4,7 +4,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Evaluators;
 
 internal static class MaterialEvaluator
 {
-    private static readonly int[] PieceValues = { 0, 100, 320, 330, 500, 900, 10000 };
+    private static readonly int[] PieceValues = { 0, 100, 300, 320, 500, 900, 10000 };
 
     internal static int EvaluateMoveMaterial(Move move)
     {
