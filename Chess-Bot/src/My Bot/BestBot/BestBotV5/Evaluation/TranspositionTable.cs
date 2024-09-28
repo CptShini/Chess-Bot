@@ -40,6 +40,8 @@ internal class TranspositionTable
     
     private ulong Index => _board.ZobristKey % _tableSize;
 
+    internal Move TryGetStoredMove() => _table[Index].Move;
+    
     internal int LookupEvaluation(int depth, int alpha, int beta)
     {
         if (!_enabled) return LookupFailed;
@@ -58,11 +60,11 @@ internal class TranspositionTable
         };
     }
 
-    internal void StoreEvaluation(int depth, int val, int flags/*, Move move*/)
+    internal void StoreEvaluation(int depth, int val, int flags, Move move)
     {
         if (!_enabled) return;
         
-        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, Move.NullMove);
+        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move);
         _table[Index] = entry;
     }
 

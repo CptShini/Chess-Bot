@@ -1,4 +1,5 @@
-﻿using ChessChallenge.API;
+﻿using System;
+using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
@@ -28,17 +29,23 @@ internal class Searcher
         if (depthReached) return QuiescentSearch(alpha, beta);
 
         int evaluationFlag = TranspositionTable.FlagAlpha;
+        Move bestMoveThisPosition = Move.NullMove;
         
-        Move[] moves = _boardEvaluation.GetMoves();
+        Span<Move> moves = stackalloc Move[128];
+        Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
+        _boardEvaluation.FillOrderedMoves(ref moves, pvMove, false);
+        
         foreach (Move move in moves)
         {
+            if (move == Move.NullMove) break;
+            
             _boardEvaluation.MakeMove(move);
             int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
             _boardEvaluation.UndoMove(move);
 
             if (FailHigh(evaluation, beta)) // Prune
             {
-                _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionTable.FlagBeta);
+                _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionTable.FlagBeta, move);
                 return beta;
             }
             if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -46,10 +53,11 @@ internal class Searcher
             // PV-node
             alpha = evaluation;
             evaluationFlag = TranspositionTable.FlagExact;
+            bestMoveThisPosition = move;
             if (plyFromRoot == 0) BestMove = move;
         }
 
-        _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag);
+        _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
         
         return alpha;
     }
@@ -60,9 +68,13 @@ internal class Searcher
         if (FailHigh(evaluationCurrent, beta)) return beta; // Prune
         if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
         
-        Move[] moves = _boardEvaluation.GetMoves(true);
+        Span<Move> moves = stackalloc Move[128];
+        _boardEvaluation.FillOrderedMoves(ref moves, Move.NullMove, true);
+        
         foreach (Move move in moves)
         {
+            if (move == Move.NullMove) break;
+            
             _boardEvaluation.MakeMove(move);
             int evaluation = -QuiescentSearch(-beta, -alpha);
             _boardEvaluation.UndoMove(move);

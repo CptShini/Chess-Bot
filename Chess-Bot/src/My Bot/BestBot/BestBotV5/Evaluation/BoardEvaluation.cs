@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Evaluators;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Evaluators.Evaluator;
@@ -27,13 +28,12 @@ internal struct BoardEvaluation
         _depth = 0;
     }
 
-    internal Move[] GetMoves(bool capturesOnly = false)
+    internal void FillOrderedMoves(ref Span<Move> moves, Move pvMove, bool capturesOnly)
     {
-        Move[] moves = _board.GetLegalMoves(capturesOnly);
-        moves.GuessOrder();
-        return moves;
+        _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
+        MoveOrderer.OrderMoves(_board, moves, pvMove);
     }
-    
+
     internal bool GameHasEnded(out int endEvaluation)
     {
         int boardState = _evaluator.EvaluateBoardState(out endEvaluation);
