@@ -56,31 +56,31 @@ internal class Thinker
         task.Wait(maximumThinkTime);
         
         return task.IsCompleted;
-    }
-
-    private void Think()
-    {
-        long previousTimeTaken = timeTaken;
-        timeTaken = RunTakeTime(Search);
         
-        _thinkTimeEstimator.AddBranch(depth, timeTaken, previousTimeTaken);
-        
-        return;
-
-        static long RunTakeTime(Action action)
+        void Think()
         {
-            Stopwatch s = Stopwatch.StartNew();
-            
-            action();
-            s.Stop();
-            
-            return s.ElapsedTicks;
-        }
+            long previousTimeTaken = timeTaken;
+            timeTaken = RunTakeTime(Search);
         
-        void Search()
-        {
-            int evaluation = _searcher.Search(depth);
-            CurrentBest = new(_searcher.BestMove, evaluation, depth);
+            _thinkTimeEstimator.AddBranch(depth, timeTaken, previousTimeTaken);
+        
+            return;
+
+            static long RunTakeTime(Action action)
+            {
+                Stopwatch s = Stopwatch.StartNew();
+            
+                action();
+                s.Stop();
+            
+                return s.ElapsedTicks;
+            }
+        
+            void Search()
+            {
+                int evaluation = _searcher.Search(depth);
+                CurrentBest = new(_searcher.BestMove, evaluation, depth);
+            }
         }
     }
     
