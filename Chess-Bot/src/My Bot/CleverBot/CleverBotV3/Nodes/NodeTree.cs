@@ -45,7 +45,7 @@ internal class NodeTree
 
         var conn = bestConnections[_random.Next(bestConnections.Count)];
 
-        Console.WriteLine($"CleverBotV3: {conn.Key} | Evaluation: {conn.Value.Evaluation:0.00}");
+        Console.WriteLine($"CleverBotV3: {conn.Key} | {conn.Value.Evaluation:0.00}");
 
         return conn.Key;
     }
