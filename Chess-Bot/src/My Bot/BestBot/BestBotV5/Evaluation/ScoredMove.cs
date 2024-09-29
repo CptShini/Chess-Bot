@@ -23,5 +23,5 @@ internal readonly struct ScoredMove
         _depth = evaluation < 0 ? -_depth : _depth;
     }
     
-    public override string ToString() => $"{Move} | {(IsCheckmate ? $"Mate in {_depth}" : $"Depth: {_depth} | Evaluation: {_evaluation}")}";
+    public override string ToString() => $"{Move} | {(IsCheckmate ? $"Mate in {_depth - 1}" : $"Depth: {_depth} | Evaluation: {_evaluation}")}";
 }

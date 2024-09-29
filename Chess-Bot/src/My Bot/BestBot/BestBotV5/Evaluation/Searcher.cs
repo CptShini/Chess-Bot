@@ -19,15 +19,22 @@ internal class Searcher
 
     internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -999999, int beta = 999999)
     {
-        bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
-        if (gameHasEnded) return endEvaluation;
-
+        if (plyFromRoot > 0)
+        {
+            alpha = Math.Max(alpha, -10000 + plyFromRoot);
+            beta = Math.Min(beta, 10000 - plyFromRoot);
+            if (FailHigh(alpha, beta)) return alpha;
+        }
+        
         int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
         if (ttVal != TranspositionTable.LookupFailed) return ttVal;
         
         bool depthReached = plyRemaining == 0;
         if (depthReached) return QuiescentSearch(alpha, beta);
 
+        bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
+        if (gameHasEnded) return endEvaluation;
+        
         int evaluationFlag = TranspositionTable.FlagAlpha;
         Move bestMoveThisPosition = Move.NullMove;
         

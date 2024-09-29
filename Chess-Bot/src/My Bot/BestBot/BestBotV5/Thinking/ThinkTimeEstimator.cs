@@ -16,26 +16,20 @@ internal class ThinkTimeEstimator
         _branchingTable = new float[MaxDepth, TableLength];
         _branchingTableIndexers = new int[MaxDepth];
     }
-
-    internal void AddBranch(int depth, float branchFactor)
+    
+    internal void AddBranch(int depth, long current, long previous)
     {
-        if (depth >= MaxDepth) return;
+        if (depth is >= MaxDepth or <= 0) return;
         
         int index = _branchingTableIndexers[depth]++;
         if (index == TableLength - 1) _branchingTableIndexers[depth] = 0;
-        
+
+        float branchFactor = (float)current / previous;
         _branchingTable[depth, index] = branchFactor;
     }
 
-    internal float GetAverageBranchFactor(int depth)
-    {
-        switch (depth)
-        {
-            case >= MaxDepth:
-                return GetAverageBranchFactor(MaxDepth - 1);
-            case <= 0:
-                return DefaultBranchFactor;
-        }
+    internal float GetAverageBranchFactor(int depth) {
+        if (depth >= MaxDepth) return GetAverageBranchFactor(MaxDepth - 1);
 
         float branchFactorSum = 0f;
 
@@ -49,7 +43,7 @@ internal class ThinkTimeEstimator
             n++;
         }
 
-        return n == 0 ? GetAverageBranchFactor(depth - 1) : branchFactorSum / n;
+        return n == 0 ? DefaultBranchFactor : branchFactorSum / n;
     }
 
     public override string ToString()

@@ -12,6 +12,7 @@ public class BestBotV5 : IChessBot
     /*
     TODO:
         Aspiration Windows
+        De-clutter Search and Thinker (refactor)
     */
 
     private Thinker _thinker;
@@ -19,11 +20,12 @@ public class BestBotV5 : IChessBot
     public Move Think(Board board, Timer timer)
     {
         _thinker = new(board, timer);
+        _thinker.IterativeDeepening();
         
-        ScoredMove scoredMove = _thinker.IterativeDeepening();
-        Console.WriteLine(scoredMove);
+        ScoredMove currentBest = _thinker.CurrentBest;
+        Console.WriteLine(currentBest);
 
-        if (scoredMove.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining);
-        return scoredMove.Move;
+        if (currentBest.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining);
+        return currentBest.Move;
     }
 }

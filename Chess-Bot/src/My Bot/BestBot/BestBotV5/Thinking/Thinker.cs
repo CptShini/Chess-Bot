@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 using ChessChallenge.API;
 
@@ -6,68 +7,84 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
 
 internal class Thinker
 {
-    private const int Infinity = 999999;
-    
-    private const int DepthHardLimit = 64;
+    //private const int Infinity = 999999;
+    private const int DepthLimit = 64;
     private const int ExpectedTurnCount = 30;
     
-    private readonly long _maximumThinkTime;
-    private static ThinkTimeEstimator _thinkTimeEstimator;
+    internal ScoredMove CurrentBest { get; private set; }
+    
+    private int depth;
+    private long timeTaken;
+    private readonly long _maximumTurnThinkTime;
+    
     private readonly Searcher _searcher;
-    private readonly Stopwatch _timer;
+    private readonly Stopwatch _turnTimer;
+    private static ThinkTimeEstimator _thinkTimeEstimator;
 
     internal Thinker(Board board, Timer timer)
     {
-        if (timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining < 50) _thinkTimeEstimator = new();
+        int timeSinceGameStart = timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining;
+        bool newGameStarted = timeSinceGameStart < 50;
+        if (newGameStarted) _thinkTimeEstimator = new();
+        
+        float thinkTimeMilliseconds = (float)timer.MillisecondsRemaining / ExpectedTurnCount;
+        long tickMsConversion = Stopwatch.Frequency / 1000;
+        _maximumTurnThinkTime = (long)(thinkTimeMilliseconds * tickMsConversion);
         
         _searcher = new(board);
-        _timer = Stopwatch.StartNew();
-
-        float thinkTimeMilliseconds = (float)timer.MillisecondsRemaining / ExpectedTurnCount;
-        _maximumThinkTime = (long)(thinkTimeMilliseconds * Stopwatch.Frequency / 1000);
+        _turnTimer = Stopwatch.StartNew();
     }
 
-    internal ScoredMove IterativeDeepening()
+    internal void IterativeDeepening()
     {
-        ScoredMove currentBest = Think(out long timeTaken);
-        for (int depth = 1; depth < DepthHardLimit; depth++)
+        while (depth < DepthLimit)
         {
-            long previousThinkTime = timeTaken;
-            long thinkTimeEstimate = GetThinkTimeEstimate(depth, previousThinkTime);
-            if (TimeToStopThinking(thinkTimeEstimate)) break;
+            Think();
             
-            currentBest = Think(out timeTaken, depth);
-            long currentThinkTime = timeTaken;
+            if (TimeToStopThinking()) break;
+            depth++;
             
-            float branchFactor = (float)currentThinkTime / previousThinkTime;
-            _thinkTimeEstimator.AddBranch(depth, branchFactor);
+            if (CurrentBest.IsCheckmate) break;
+        }
+    }
+
+    private void Think()
+    {
+        long previousTimeTaken = timeTaken;
+        timeTaken = RunTakeTime(Search);
+        
+        _thinkTimeEstimator.AddBranch(depth, timeTaken, previousTimeTaken);
+        
+        return;
+
+        static long RunTakeTime(Action action)
+        {
+            Stopwatch s = Stopwatch.StartNew();
             
-            if (currentBest.IsCheckmate) break;
+            action();
+            s.Stop();
+            
+            return s.ElapsedTicks;
         }
         
-        return currentBest;
+        void Search()
+        {
+            int evaluation = _searcher.Search(depth);
+            CurrentBest = new(_searcher.BestMove, evaluation, depth);
+        }
     }
     
-    private ScoredMove Think(out long timeTaken, int maxDepth = 0, int alpha = -Infinity, int beta = Infinity)
+    private bool TimeToStopThinking()
     {
-        Stopwatch s = Stopwatch.StartNew();
-        
-        int evaluation = _searcher.Search(maxDepth);
-        ScoredMove thoughtProduct = new(_searcher.BestMove, evaluation, maxDepth);
-        
-        timeTaken = s.ElapsedTicks;
-        return thoughtProduct;
-    }
-    
-    private bool TimeToStopThinking(long thinkTimeEstimate)
-    {
-        long estimatedEndTime = _timer.ElapsedTicks + thinkTimeEstimate;
-        return estimatedEndTime > _maximumThinkTime;
-    }
+        long thinkTimeEstimate = GetThinkTimeEstimate();
 
-    private static long GetThinkTimeEstimate(int depth, long previousThinkTime = 0)
-    {
-        float branchFactor = _thinkTimeEstimator.GetAverageBranchFactor(depth);
-        return (long)(previousThinkTime * branchFactor);
+        long estimatedEndTime = _turnTimer.ElapsedTicks + thinkTimeEstimate;
+        return estimatedEndTime > _maximumTurnThinkTime;
+        
+        long GetThinkTimeEstimate()
+        {
+            float branchFactor = _thinkTimeEstimator.GetAverageBranchFactor(depth + 1);
+            return (long)(timeTaken * branchFactor);
+        }
     }
 }
