@@ -5,7 +5,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Thinking;
 internal class ThinkTimeEstimator
 {
     private const int MaxDepth = 32;
-    private const int TableLength = 8;
+    private const int TableLength = 5;
     private const float DefaultBranchFactor = 6f;
     
     private readonly float[,] _branchingTable;
@@ -28,8 +28,9 @@ internal class ThinkTimeEstimator
         _branchingTable[depth, index] = branchFactor;
     }
 
-    internal float GetAverageBranchFactor(int depth) {
-        if (depth >= MaxDepth) return GetAverageBranchFactor(MaxDepth - 1);
+    internal float GetAverageBranchFactor(int depth)
+    {
+        if (depth >= MaxDepth) return DefaultBranchFactor;
 
         float branchFactorSum = 0f;
 
@@ -46,6 +47,20 @@ internal class ThinkTimeEstimator
         return n == 0 ? DefaultBranchFactor : branchFactorSum / n;
     }
 
+    private string ToString(int depth)
+    {
+        string result = $"{depth} | {GetAverageBranchFactor(depth):0.00} | ";
+
+        for (int i = 0; i < TableLength; i++)
+        {
+            result += $"{_branchingTable[depth, i]:0.00} ";
+        }
+        
+        result += "\n";
+
+        return result;
+    }
+    
     public override string ToString()
     {
         string result = "";
@@ -61,20 +76,6 @@ internal class ThinkTimeEstimator
             prevBranchFactor = branchFactor;
         }
         
-        return result;
-    }
-
-    private string ToString(int depth)
-    {
-        string result = $"{depth} | {GetAverageBranchFactor(depth):0.00} | ";
-
-        for (int i = 0; i < TableLength; i++)
-        {
-            result += $"{_branchingTable[depth, i]:0.00} ";
-        }
-        
-        result += "\n";
-
         return result;
     }
 }

@@ -40,11 +40,10 @@ internal class Thinker
         while (depth < DepthLimit)
         {
             Think();
+            if (CurrentBest.IsCheckmate) break;
             
             if (TimeToStopThinking()) break;
             depth++;
-            
-            if (CurrentBest.IsCheckmate) break;
         }
     }
 
