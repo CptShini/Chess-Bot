@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 using ChessChallenge.API;
 
@@ -39,12 +40,22 @@ internal class Thinker
     {
         while (depth < DepthLimit)
         {
-            Think();
-            if (CurrentBest.IsCheckmate) break;
+            bool doneThinking = TryThink();
+            if (!doneThinking || CurrentBest.IsCheckmate) break;
             
             if (TimeToStopThinking()) break;
             depth++;
         }
+    }
+
+    private bool TryThink()
+    {
+        Task task = Task.Factory.StartNew(Think);
+
+        TimeSpan maximumThinkTime = TimeSpan.FromTicks(_maximumTurnThinkTime);
+        task.Wait(maximumThinkTime);
+        
+        return task.IsCompleted;
     }
 
     private void Think()

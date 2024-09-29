@@ -11,7 +11,6 @@ public class BestBotV5 : IChessBot
     /*
     TODO:
         Aspiration Windows
-        De-clutter Search and Thinker (refactor)
     */
 
     private Thinker _thinker;
