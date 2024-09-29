@@ -28,14 +28,14 @@ internal class Searcher
             if (FailHigh(alpha, beta)) return alpha;
         }
         
+        bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
+        if (gameHasEnded) return endEvaluation;
+        
         int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
         if (ttVal != LookupFailed) return ttVal;
         
         bool depthReached = plyRemaining == 0;
         if (depthReached) return QuiescentSearch(alpha, beta);
-
-        bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
-        if (gameHasEnded) return endEvaluation;
         
         return SearchMoves();
         
