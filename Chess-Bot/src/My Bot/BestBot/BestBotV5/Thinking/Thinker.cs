@@ -52,7 +52,7 @@ internal class Thinker
     {
         Task task = Task.Factory.StartNew(Think);
 
-        TimeSpan maximumThinkTime = TimeSpan.FromTicks(_maximumTurnThinkTime);
+        TimeSpan maximumThinkTime = TimeSpan.FromTicks((long)(_maximumTurnThinkTime * 1.5f));
         task.Wait(maximumThinkTime);
         
         return task.IsCompleted;
