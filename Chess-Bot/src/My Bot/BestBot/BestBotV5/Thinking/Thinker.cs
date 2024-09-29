@@ -10,7 +10,7 @@ internal class Thinker
 {
     //private const int Infinity = 999999;
     private const int DepthLimit = 64;
-    private const int ExpectedTurnCount = 30;
+    private const int ExpectedTurnCount = 25;
     
     internal ScoredMove CurrentBest { get; private set; }
     
