@@ -11,6 +11,7 @@ internal class Thinker
     //private const int Infinity = 999999;
     private const int DepthLimit = 64;
     private const int ExpectedTurnCount = 25;
+    private const float MaxThinkTimeFactor = 1.5f;
     
     internal ScoredMove CurrentBest { get; private set; }
     
@@ -50,12 +51,12 @@ internal class Thinker
 
     private bool TryThink()
     {
-        Task task = Task.Factory.StartNew(Think);
+        Task thinkTask = Task.Factory.StartNew(Think);
 
-        TimeSpan maximumThinkTime = TimeSpan.FromTicks((long)(_maximumTurnThinkTime * 1.5f));
-        task.Wait(maximumThinkTime);
+        TimeSpan maximumThinkTime = TimeSpan.FromTicks((long)(_maximumTurnThinkTime * MaxThinkTimeFactor));
+        thinkTask.Wait(maximumThinkTime);
         
-        return task.IsCompleted;
+        return thinkTask.IsCompleted;
         
         void Think()
         {
