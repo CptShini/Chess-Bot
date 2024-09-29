@@ -35,9 +35,7 @@ internal class Searcher
         if (ttVal != LookupFailed) return ttVal;
         
         bool depthReached = plyRemaining == 0;
-        if (depthReached) return QuiescentSearch(alpha, beta);
-        
-        return SearchMoves();
+        return !depthReached ? SearchMoves() : QuiescentSearch(alpha, beta);
         
         int SearchMoves()
         {
