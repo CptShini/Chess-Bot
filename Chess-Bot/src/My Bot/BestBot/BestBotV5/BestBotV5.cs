@@ -8,11 +8,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV5;
 
 public class BestBotV5 : IChessBot
 {
-    /*
-    TODO:
-        Aspiration Windows
-    */
-
     private Thinker _thinker;
 
     public Move Think(Board board, Timer timer)
