@@ -1,6 +1,6 @@
 ﻿using ChessChallenge.API;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Transpositions;
 
 internal readonly record struct TranspositionEntry(ulong Key, int Value, int Depth, int Flag, Move Move)
 {

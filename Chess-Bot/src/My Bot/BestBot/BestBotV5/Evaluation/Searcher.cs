@@ -1,5 +1,7 @@
 ﻿using System;
+using Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Transpositions;
 using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Transpositions.TranspositionTable;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation;
 
@@ -27,7 +29,7 @@ internal class Searcher
         }
         
         int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
-        if (ttVal != TranspositionTable.LookupFailed) return ttVal;
+        if (ttVal != LookupFailed) return ttVal;
         
         bool depthReached = plyRemaining == 0;
         if (depthReached) return QuiescentSearch(alpha, beta);
@@ -35,7 +37,7 @@ internal class Searcher
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
         
-        int evaluationFlag = TranspositionTable.FlagAlpha;
+        int evaluationFlag = FlagAlpha;
         Move bestMoveThisPosition = Move.NullMove;
         
         Span<Move> moves = stackalloc Move[128];
@@ -52,14 +54,14 @@ internal class Searcher
 
             if (FailHigh(evaluation, beta)) // Prune
             {
-                _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionTable.FlagBeta, move);
+                _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move);
                 return beta;
             }
             if (FailLow(evaluation, alpha)) continue; // Ignore
             
             // PV-node
             alpha = evaluation;
-            evaluationFlag = TranspositionTable.FlagExact;
+            evaluationFlag = FlagExact;
             bestMoveThisPosition = move;
             if (plyFromRoot == 0) BestMove = move;
         }
