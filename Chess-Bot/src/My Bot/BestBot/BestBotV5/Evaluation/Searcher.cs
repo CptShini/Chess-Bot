@@ -37,40 +37,46 @@ internal class Searcher
         bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
         if (gameHasEnded) return endEvaluation;
         
-        int evaluationFlag = FlagAlpha;
-        Move bestMoveThisPosition = Move.NullMove;
+        return SearchMoves();
         
-        Span<Move> moves = stackalloc Move[128];
-        Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
-        _boardEvaluation.FillOrderedMoves(ref moves, pvMove, false);
-        
-        foreach (Move move in moves)
+        int SearchMoves()
         {
-            if (move == Move.NullMove) break;
-            
-            _boardEvaluation.MakeMove(move);
-            int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
-            _boardEvaluation.UndoMove(move);
-
-            if (FailHigh(evaluation, beta)) // Prune
-            {
-                _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move);
-                return beta;
-            }
-            if (FailLow(evaluation, alpha)) continue; // Ignore
-            
-            // PV-node
-            alpha = evaluation;
-            evaluationFlag = FlagExact;
-            bestMoveThisPosition = move;
-            if (plyFromRoot == 0) BestMove = move;
-        }
-
-        _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
+            int evaluationFlag = FlagAlpha;
+            Move bestMoveThisPosition = Move.NullMove;
+            Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
         
-        return alpha;
-    }
+            Span<Move> moves = stackalloc Move[128];
+            _boardEvaluation.PopulateMoves(ref moves, false);
+            _boardEvaluation.OrderMoves(ref moves, pvMove);
+        
+            foreach (Move move in moves)
+            {
+                if (move == Move.NullMove) break;
+            
+                _boardEvaluation.MakeMove(move);
+                int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
+                _boardEvaluation.UndoMove(move);
 
+                if (FailHigh(evaluation, beta)) // Prune
+                {
+                    _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move);
+                    return beta;
+                }
+                if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+                // PV-node
+                alpha = evaluation;
+                evaluationFlag = FlagExact;
+                bestMoveThisPosition = move;
+                if (plyFromRoot == 0) BestMove = move;
+            }
+
+            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
+        
+            return alpha;
+        }
+    }
+    
     private int QuiescentSearch(int alpha, int beta)
     {
         int evaluationCurrent = _boardEvaluation.Current;
@@ -78,7 +84,8 @@ internal class Searcher
         if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
         
         Span<Move> moves = stackalloc Move[128];
-        _boardEvaluation.FillOrderedMoves(ref moves, Move.NullMove, true);
+        _boardEvaluation.PopulateMoves(ref moves, true);
+        _boardEvaluation.OrderMoves(ref moves, Move.NullMove);
         
         foreach (Move move in moves)
         {

@@ -25,12 +25,10 @@ internal struct BoardEvaluation
 
         _currentEvaluation = _evaluator.EvaluateBoard();
     }
+    
+    internal void PopulateMoves(ref Span<Move> moves, bool capturesOnly) => _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
 
-    internal void FillOrderedMoves(ref Span<Move> moves, Move pvMove, bool capturesOnly)
-    {
-        _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
-        MoveOrderer.OrderMoves(_board, moves, pvMove);
-    }
+    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => MoveOrderer.OrderMoves(_board, moves, pvMove);
 
     internal bool GameHasEnded(out int endEvaluation)
     {
