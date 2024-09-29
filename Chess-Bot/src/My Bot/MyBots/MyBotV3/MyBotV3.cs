@@ -5,7 +5,7 @@ using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.MyBots.MyBotV3;
 
-public class MyBotV3ABPruneOp : IChessBot
+public class MyBotV3 : IChessBot
 {
     public static readonly int FutureThinkTurns = 1;
     private static readonly int _maxDepth = FutureThinkTurns * 2 + 1;

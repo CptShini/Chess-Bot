@@ -5,7 +5,7 @@ using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.MyBots.MyBotV2;
 
-public class MyBotV2ABPrune : IChessBot
+public class MyBotV2 : IChessBot
 {
     private static readonly int _maxDepth = 3;
 
