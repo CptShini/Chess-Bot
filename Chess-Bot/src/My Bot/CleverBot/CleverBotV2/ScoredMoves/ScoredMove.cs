@@ -13,5 +13,5 @@ internal struct ScoredMove
         Score = score;
     }
 
-    public override string ToString() => $"{Move} | Eval: {Score:0.00}";
+    public override string ToString() => $"{Move} | Evaluation: {Score:0.00}";
 }

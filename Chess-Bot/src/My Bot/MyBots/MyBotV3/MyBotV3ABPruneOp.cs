@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChessChallenge.API;
 
@@ -18,8 +19,11 @@ public class MyBotV3ABPruneOp : IChessBot
     Move GetBestMove(Board board)
     {
         ScoredMoveList scoredMoves = EvaluateBoardMoves(board);
-
-        return scoredMoves.GetMove(board.IsWhiteToMove);
+        Move move = scoredMoves.GetMove(board.IsWhiteToMove);
+        
+        Console.WriteLine($"MyBotV3: {move} | Evaluation: {scoredMoves.GetEval(board.IsWhiteToMove):0.00}");
+        
+        return move;
     }
 
     ScoredMoveList EvaluateBoardMoves(Board board, int depth = 0, float alpha = float.MinValue,

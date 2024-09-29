@@ -27,7 +27,7 @@ internal class NodeTree
         }
 
         ScoredMove move = moveList.Move;
-        //Console.WriteLine(move);
+        Console.WriteLine($"CleverBotV2: {move}");
 
         return move;
     }

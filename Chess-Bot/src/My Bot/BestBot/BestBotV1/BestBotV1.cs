@@ -30,7 +30,7 @@ public class BestBotV1 : IChessBot
         TimeSpan thinkTime = CalculateThinkTime(timer);
         if (!task.Wait(thinkTime)) cts.Cancel();
 
-        //Console.WriteLine($"Best {task.Result.move} | Depth: {task.Result.depth} | Eval: {task.Result.eval:0.00}");
+        Console.WriteLine($"BestBotV1: {task.Result.move} | Depth: {task.Result.depth} | Evaluation: {task.Result.eval:0.00}");
 
         return task.Result.move;
     }

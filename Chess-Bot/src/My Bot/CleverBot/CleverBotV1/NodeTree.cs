@@ -26,7 +26,7 @@ internal class NodeTree
         }
 
         Move move = moveList.GetMove(_root.White);
-        //Console.WriteLine($"{move} | Eval: {moveList.GetEval(_root.White)}");
+        Console.WriteLine($"CleverBotV1: {move} | Evaluation: {moveList.GetEval(_root.White):0.00}");
 
         return move;
     }
