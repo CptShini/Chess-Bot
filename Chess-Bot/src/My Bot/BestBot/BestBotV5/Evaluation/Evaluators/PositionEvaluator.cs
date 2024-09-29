@@ -8,7 +8,11 @@ internal static class PositionEvaluator
 {
     private static readonly Random Random = new();
     private const int Castle = 50;
-
+    
+    // Opening randomness
+    private const int extent = 6;
+    private const int strength = 80;
+    
     internal static int EvaluateMovePositioning(Move move, Board board)
     {
         int positioning = move.EvaluateMoveValueboard(board) + board.EvaluateEarlyGameRandomness();
@@ -20,13 +24,11 @@ internal static class PositionEvaluator
 
     private static int EvaluateEarlyGameRandomness(this Board board)
     {
-        const int extent = 6;
-        
         int ply = board.PlyCount;
         if (ply > extent) return 0;
 
-        const int strength = 80;
-        int randomness = (int)((1f - (float)ply / extent) * strength);
+        float openingFactor = 1f - (float)ply / extent;
+        int randomness = (int)(openingFactor * strength);
         return Random.Next(-randomness, randomness + 1);
     }
 
