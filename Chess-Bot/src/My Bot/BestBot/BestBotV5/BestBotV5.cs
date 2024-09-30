@@ -10,6 +10,9 @@ public class BestBotV5 : IChessBot
 {
     private Thinker _thinker;
 
+    
+    // (Forced) draw detection, just 1 repetition is enough for draw score?
+    
     public Move Think(Board board, Timer timer)
     {
         _thinker = new(board, timer);
