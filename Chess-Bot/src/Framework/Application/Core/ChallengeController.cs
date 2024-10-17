@@ -395,7 +395,16 @@ namespace ChessChallenge.Application
         }
 
         static string GetPlayerName(ChessPlayer player) => GetPlayerName(player.PlayerType);
-        static string GetPlayerName(PlayerType type) => type.ToString();
+        static string GetPlayerName(PlayerType type)
+        {
+            return type switch
+            {
+                PlayerType.Human => "Human",
+                PlayerType.MyBot => Settings.MyBot.GetType().Name,
+                PlayerType.EvilBot => Settings.OpponentBot.GetType().Name,
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+        }
 
         public void StartNewBotMatch(PlayerType botTypeA, PlayerType botTypeB)
         {
