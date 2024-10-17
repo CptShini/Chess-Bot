@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
@@ -16,6 +13,8 @@ public class BestBotV6 : IChessBot
      *
      * Better (forced) draw detection, just 1 repetition is enough for draw score?
      * Experiment with valueboards
+     * Experiment with all constants
+     * Re-add early-game randomness
      * King Safety
      *
      */
@@ -24,18 +23,6 @@ public class BestBotV6 : IChessBot
     
     public Move Think(Board board, Timer timer)
     {
-        Dictionary<Move, int> scoredMoves = new();
-        foreach (Move move in board.GetLegalMoves())
-        {
-            int eval = PositionEvaluator.EvaluateMovePositioning(move, board);
-            scoredMoves.Add(move, eval);
-        }
-
-        foreach ((Move move, int eval) in scoredMoves.OrderByDescending(kvp => kvp.Value))
-        {
-            Console.WriteLine($"{move} | Eval: {eval}");
-        }
-
         _thinker = new(board, timer);
         _thinker.IterativeDeepening();
         
