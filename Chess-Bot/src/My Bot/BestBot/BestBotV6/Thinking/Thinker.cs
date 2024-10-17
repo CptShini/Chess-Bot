@@ -8,7 +8,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 
 internal class Thinker
 {
-    private const int DepthLimit = 2;
+    private const int DepthLimit = 64;
     private const int ExpectedTurnCount = 25;
     private const float MaxThinkTimeFactor = 1.5f;
     
