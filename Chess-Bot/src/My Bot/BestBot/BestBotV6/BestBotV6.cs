@@ -15,8 +15,9 @@ public class BestBotV6 : IChessBot
      * Experiment with valueboards
      * Experiment with all constants
      * Re-add early-game randomness
-     * King Safety
+     * Better King Safety
      *
+     * Research 2nd video features (since everything up until now was basically video 1)
      */
     
     private Thinker _thinker;
