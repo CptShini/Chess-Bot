@@ -37,7 +37,8 @@ internal struct BoardEvaluation
         {
             CheckmateState => true,
             DrawState => true,
-            _ => false
+            GameNotOver => false,
+            _ => throw new ArgumentOutOfRangeException($"This should never happen! {boardState}")
         };
     }
     

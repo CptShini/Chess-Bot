@@ -10,6 +10,7 @@ internal class Evaluator
     private const int CheckmateValue = -10000;
     private const int ContemptValue = -50;
 
+    internal const int GameNotOver = -1;
     internal const int DrawState = 0;
     internal const int CheckmateState = 1;
     
@@ -51,13 +52,18 @@ internal class Evaluator
         bool isDraw = _board.IsDraw();
         if (isDraw)
         {
-            float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
-            int drawValue = (int)(earlyGameFactor * -ContemptValue);
+            int drawValue = ComputeDrawValue();
             endEvaluation = drawValue;
             return DrawState;
         }
 
         endEvaluation = 0;
-        return -1;
+        return GameNotOver;
+    }
+
+    private int ComputeDrawValue()
+    {
+        float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
+        return (int)(earlyGameFactor * -ContemptValue);
     }
 }
