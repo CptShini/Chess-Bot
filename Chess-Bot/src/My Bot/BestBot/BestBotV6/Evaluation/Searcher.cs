@@ -1,14 +1,17 @@
 ﻿using System;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions;
 using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions.TranspositionTable;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
 
 internal class Searcher
 {
+    private const int Infinity = 99999;
+    
     private BoardEvaluation _boardEvaluation;
-    private static readonly TranspositionTable _transpositionTable = new(16);
+    private static readonly TranspositionTable _transpositionTable = new(TTSize);
     
     internal Move BestMove { get; private set; }
 
@@ -19,12 +22,12 @@ internal class Searcher
         BestMove = Move.NullMove;
     }
 
-    internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -999999, int beta = 999999)
+    internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
     {
         if (plyFromRoot > 0)
         {
-            alpha = Math.Max(alpha, -10000 + plyFromRoot);
-            beta = Math.Min(beta, 10000 - plyFromRoot);
+            alpha = Math.Max(alpha, plyFromRoot - KingValue);
+            beta = Math.Min(beta, KingValue - plyFromRoot);
             if (FailHigh(alpha, beta)) return alpha;
         }
         

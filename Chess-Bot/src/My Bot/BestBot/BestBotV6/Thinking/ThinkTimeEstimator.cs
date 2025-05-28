@@ -1,25 +1,24 @@
 ﻿using System;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 
 internal class ThinkTimeEstimator
 {
-    private const int MaxDepth = 32;
-    private const int TableLength = 5;
-    private const float DefaultBranchFactor = 6f;
+    
     
     private readonly float[,] _branchingTable;
     private readonly int[] _branchingTableIndexers;
 
     internal ThinkTimeEstimator()
     {
-        _branchingTable = new float[MaxDepth, TableLength];
-        _branchingTableIndexers = new int[MaxDepth];
+        _branchingTable = new float[DepthLimit, TableLength];
+        _branchingTableIndexers = new int[DepthLimit];
     }
     
     internal void AddBranch(int depth, long current, long previous)
     {
-        if (depth is >= MaxDepth or <= 0) return;
+        if (depth is >= DepthLimit or <= 0) return;
         
         int index = _branchingTableIndexers[depth]++;
         if (index == TableLength - 1) _branchingTableIndexers[depth] = 0;
@@ -30,7 +29,7 @@ internal class ThinkTimeEstimator
 
     internal float GetAverageBranchFactor(int depth)
     {
-        if (depth >= MaxDepth) return DefaultBranchFactor;
+        if (depth >= DepthLimit) return DefaultBranchFactor;
 
         float branchFactorSum = 0f;
 
@@ -66,7 +65,7 @@ internal class ThinkTimeEstimator
         string result = "";
 
         float prevBranchFactor = -1f;
-        for (int i = 1; i < MaxDepth; i++)
+        for (int i = 1; i < DepthLimit; i++)
         {
             float branchFactor = GetAverageBranchFactor(i);
             

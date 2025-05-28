@@ -1,11 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
 using ChessChallenge.API;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6;
 
-internal static class Valueboards
+public static class BotSettings
 {
+    // Piece values
+    internal const int
+        PawnValue = 100,
+        KnightValue = 300,
+        BishopValue = 320,
+        RookValue = 500,
+        QueenValue = 900,
+        KingValue = 10000;
+    
+    // State & move values
+    internal const int
+        CheckmateValue = -KingValue,
+        ContemptValue = -50,
+        Castle = 50;
+
+    // Transposition Table
+    internal const int
+        TTSize = 16;
+    
+    // Opening randomness
+    internal const int
+        RandomExtent = 5,
+        RandomStrength = 80;
+    
+    // Thinker
+    internal const int
+        DepthLimit = 64,
+        ExpectedTurnCount = 25;
+    internal const float MaxThinkTimeFactor = 1.5f;
+    
+    // ThinkTimeEstimator
+    internal const int TableLength = 5;
+    internal const float DefaultBranchFactor = 6f;
+    
     internal static readonly Dictionary<PieceType, Valueboard> PieceValueboards = new()
     {
         {

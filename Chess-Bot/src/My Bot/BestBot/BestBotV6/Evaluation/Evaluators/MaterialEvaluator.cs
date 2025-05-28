@@ -1,17 +1,16 @@
 ﻿using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class MaterialEvaluator
 {
-    private static readonly int[] PieceValues = { 0, 100, 300, 320, 500, 900, 10000 };
-
     internal static int EvaluateMoveMaterial(Move move)
     {
         int materialScore = 0;
 
-        if (move.IsCapture) materialScore += GetPieceValue(move.CapturePieceType);
-        if (move.IsPromotion) materialScore += GetPieceValue(move.PromotionPieceType) - 100;
+        if (move.IsCapture) materialScore += move.CapturePieceType.GetPieceValue();
+        if (move.IsPromotion) materialScore += move.PromotionPieceType.GetPieceValue() - PawnValue;
 
         return materialScore;
     }
@@ -22,7 +21,7 @@ internal static class MaterialEvaluator
 
         foreach (PieceList pieceList in board.GetAllPieceLists())
         {
-            int value = GetPieceValue(pieceList.TypeOfPieceInList);
+            int value = pieceList.TypeOfPieceInList.GetPieceValue();
             int count = pieceList.Count;
             int worth = value * count;
 
@@ -32,6 +31,4 @@ internal static class MaterialEvaluator
         
         return evaluation;
     }
-
-    internal static int GetPieceValue(PieceType pieceType) => PieceValues[(int)pieceType];
 }

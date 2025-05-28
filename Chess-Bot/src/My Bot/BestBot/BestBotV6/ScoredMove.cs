@@ -17,7 +17,7 @@ internal readonly struct ScoredMove
         _evaluation = evaluation;
         _depth = depth;
         
-        IsCheckmate = Math.Abs(evaluation) > 9000;
+        IsCheckmate = Math.Abs(evaluation) > BotSettings.KingValue * 0.9f;
         if (!IsCheckmate) return;
         
         _depth = evaluation < 0 ? -_depth : _depth;

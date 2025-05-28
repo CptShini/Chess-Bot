@@ -1,5 +1,6 @@
 ﻿using System;
 using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.MaterialEvaluator;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.PositionEvaluator;
 
@@ -7,16 +8,10 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal class Evaluator
 {
-    private const int CheckmateValue = -10000;
-    private const int ContemptValue = -50;
-
     internal const int GameNotOverState = -1;
     internal const int DrawState = 0;
     internal const int CheckmateState = 1;
     
-    // Opening randomness
-    private const int extent = 5;
-    private const int strength = 80;
     private static readonly Random Random = new();
     
     private readonly Board _board;
@@ -30,10 +25,10 @@ internal class Evaluator
         int EvaluateEarlyGameRandomness()
         {
             int ply = _board.PlyCount;
-            if (ply > extent) return 0;
+            if (ply > RandomExtent) return 0;
 
-            float openingFactor = 1f - (float)ply / extent;
-            int randomness = (int)(openingFactor * strength);
+            float openingFactor = 1f - (float)ply / RandomExtent;
+            int randomness = (int)(openingFactor * RandomStrength);
             return Random.Next(-randomness, randomness + 1);
         }
     }

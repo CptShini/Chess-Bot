@@ -1,12 +1,10 @@
 ﻿using ChessChallenge.API;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards.Valueboards;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class PositionEvaluator
 {
-    private const int Castle = 50;
-
     internal static int EvaluateMovePositioning(Move move, Board board)
     {
         int positioning = move.EvaluateMoveValueboard(board);

@@ -4,8 +4,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class EndgameEvaluator
 {
-    private const float magicNumber = 1f / 15f; // I honestly don't even know if this helps (maybe compiler would do this behind the scenes?)
-    internal static float EndgameFactor(Board board) => (16 - board.CountEnemyPieces()) * magicNumber;
+    internal static float EndgameFactor(Board board) => (16 - board.CountEnemyPieces()) / 15f;
 
     private static ulong CountEnemyPieces(this Board board) => (board.IsWhiteToMove ? board.BlackPiecesBitboard : board.WhitePiecesBitboard).HammingWeight();
 

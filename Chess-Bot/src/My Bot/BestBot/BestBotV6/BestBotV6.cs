@@ -17,7 +17,6 @@ public class BestBotV6 : IChessBot
      * Better (forced) draw detection, just 1 repetition is enough for draw score?
      * Experiment with valueboards
      * Experiment with all constants
-     * Re-add early-game randomness
      * Better King Safety
      * Optimization check (try profiler)
      *  - Stop using hamming weight, just increment on enemy piece taken?
