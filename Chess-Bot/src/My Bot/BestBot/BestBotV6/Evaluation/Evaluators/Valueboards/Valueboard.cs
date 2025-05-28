@@ -10,6 +10,12 @@ internal class Valueboard
         _lateGameValueboard = ConvertWeightedValueboard(lateValueboard);
     }
 
+    internal Valueboard(WeightedValueboard valueboard, float lateGameWeight)
+    {
+        _earlyGameValueboard = ConvertWeightedValueboard(valueboard);
+        _lateGameValueboard = ConvertWeightedValueboard(valueboard with { Weight = lateGameWeight });
+    }
+
     private static float[] ConvertWeightedValueboard(WeightedValueboard weightedValueboard)
     {
         float[] valueboard = new float[64];

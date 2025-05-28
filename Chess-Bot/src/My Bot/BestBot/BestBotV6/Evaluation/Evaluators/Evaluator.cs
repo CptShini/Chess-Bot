@@ -10,13 +10,13 @@ internal class Evaluator
     private const int CheckmateValue = -10000;
     private const int ContemptValue = -50;
 
-    internal const int GameNotOver = -1;
+    internal const int GameNotOverState = -1;
     internal const int DrawState = 0;
     internal const int CheckmateState = 1;
     
     // Opening randomness
     private const int extent = 5;
-    private const int strength = 60;
+    private const int strength = 80;
     private static readonly Random Random = new();
     
     private readonly Board _board;
@@ -25,7 +25,7 @@ internal class Evaluator
     
     internal int EvaluateMove(Move move)
     {
-        return EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board);// + EvaluateEarlyGameRandomness();
+        return EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board) + EvaluateEarlyGameRandomness();
         
         int EvaluateEarlyGameRandomness()
         {
@@ -58,12 +58,12 @@ internal class Evaluator
         }
 
         endEvaluation = 0;
-        return GameNotOver;
-    }
-
-    private int ComputeDrawValue()
-    {
-        float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
-        return (int)(earlyGameFactor * -ContemptValue);
+        return GameNotOverState;
+        
+        int ComputeDrawValue()
+        {
+            float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
+            return (int)(earlyGameFactor * -ContemptValue);
+        }
     }
 }
