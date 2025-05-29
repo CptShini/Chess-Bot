@@ -20,6 +20,7 @@ public class BestBotV6 : IChessBot
      * Better King Safety
      * Optimization check (try profiler)
      *  - Stop using hamming weight, just increment on enemy piece taken?
+     *  - Faster move ordering
      * Retry Aspiration windows
      * Reexamine move ordering with iterative deepening and transposition tables
      * 
