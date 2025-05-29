@@ -8,7 +8,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
 
 internal class Searcher
 {
-    private const int Infinity = 99999;
+    private const int Infinity = 9999_99;
     
     private BoardEvaluation _boardEvaluation;
     private static readonly TranspositionTable _transpositionTable = new(TTSize);

@@ -8,9 +8,10 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal class Evaluator
 {
-    internal const int GameNotOverState = -1;
-    internal const int DrawState = 0;
-    internal const int CheckmateState = 1;
+    internal const int
+        GameNotOverState = -1,
+        DrawState = 0,
+        CheckmateState = 1;
     
     private static readonly Random Random = new();
     

@@ -9,18 +9,18 @@ public static class BotSettings
 {
     // Piece values
     internal const int
-        PawnValue = 100,
-        KnightValue = 300,
-        BishopValue = 320,
-        RookValue = 500,
-        QueenValue = 900,
-        KingValue = 10000;
+        PawnValue = 1_00,
+        KnightValue = 3_00,
+        BishopValue = 3_20,
+        RookValue = 5_00,
+        QueenValue = 9_00,
+        KingValue = 100_00;
     
     // State & move values
     internal const int
         CheckmateValue = -KingValue,
-        ContemptValue = -50,
-        Castle = 50;
+        ContemptValue = -0_50,
+        Castle = 0_50;
 
     // Transposition Table
     internal const int
@@ -28,12 +28,12 @@ public static class BotSettings
     
     // Opening randomness
     internal const int
-        RandomExtent = 5,
+        RandomExtent = 6,
         RandomStrength = 80;
     
     // Thinker
     internal const int
-        DepthLimit = 64,
+        DepthLimit = 32,
         ExpectedTurnCount = 25;
     internal const float MaxThinkTimeFactor = 1.5f;
     
