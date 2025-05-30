@@ -50,7 +50,6 @@ public static class BotSettings
     
     // Think time estimation
     internal const int TableLength = 5;
-    internal const float DefaultBranchFactor = 6f;
     internal static float BranchFactorRecencyWeight(int n) => 1f / (n + 1);
     
     internal static readonly Dictionary<PieceType, Valueboard> PieceValueboards = new()

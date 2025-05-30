@@ -33,6 +33,7 @@ internal class ThinkTimeEstimator
         switch (depth)
         {
             case <= 0:
+                const float DefaultBranchFactor = 6f;
                 return DefaultBranchFactor;
             case >= DepthLimit:
                 return GetAverageBranchFactor(DepthLimit - 1);
