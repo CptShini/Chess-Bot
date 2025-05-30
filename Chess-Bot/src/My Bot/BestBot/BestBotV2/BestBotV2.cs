@@ -64,7 +64,7 @@ public class BestBotV2 : IChessBot
         TimeSpan thinkTime = CalculateThinkTime(timer);
         if (!task.Wait(thinkTime)) _cts.Cancel();
         
-        Console.WriteLine($"BestBotV2: {task.Result.move} | Depth: {task.Result.moveDepth} | Evaluation: {task.Result.eval:0.00}");
+        this.PrintMove(task.Result.move, task.Result.moveDepth, task.Result.eval, 90f);
 
         return task.Result.move;
     }
@@ -99,7 +99,7 @@ public class BestBotV2 : IChessBot
             if (Math.Abs(bestEval) > 99f) break;
         }
 
-        return (bestEval, bestMove, (depth - 1) / 2);
+        return (bestEval, bestMove, depth);
     }
 
     private (float, Move) EvaluateMoves(Board board, int maxDepth, int depth = 0, float alpha = int.MinValue, float beta = int.MaxValue)

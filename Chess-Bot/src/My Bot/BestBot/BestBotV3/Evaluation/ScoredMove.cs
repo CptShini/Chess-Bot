@@ -10,36 +10,33 @@ internal readonly struct ScoredMove : IComparable<ScoredMove>
     internal readonly Move Move;
     internal readonly bool IsCheckmate;
     
-    private readonly int _evaluation;
-    private readonly int _depth;
+    internal readonly int Evaluation;
+    internal readonly int Depth;
     
     internal ScoredMove(Move move, int evaluation, int depth)
     {
         Move = move;
-        _evaluation = evaluation;
-        _depth = depth;
+        Evaluation = evaluation;
+        Depth = depth;
 
         int absEval = Math.Abs(evaluation);
         IsCheckmate = absEval > 9000;
         if (!IsCheckmate) return;
         
-        _depth = 10000 - absEval;
-        _depth = evaluation < 0 ? -_depth : _depth;
+        Depth = 10000 - absEval;
     }
 
     public int CompareTo(ScoredMove other)
     {
-        int evaluationComparator = _evaluation.CompareTo(other._evaluation);
+        int evaluationComparator = Evaluation.CompareTo(other.Evaluation);
         bool sameEvaluation = evaluationComparator == 0;
         if (!sameEvaluation) return evaluationComparator;
 
-        int depthComparator = other._depth.CompareTo(_depth);
+        int depthComparator = other.Depth.CompareTo(Depth);
         bool sameDepth = depthComparator == 0;
         if (!sameDepth) return depthComparator;
         
         bool isFunnier = Random.Next(2) == 0;
         return isFunnier ? 1 : 0;
     }
-    
-    public override string ToString() => $"{Move} | {(IsCheckmate ? $"Mate in {_depth}" : $"Depth: {_depth} | Evaluation: {_evaluation}")}";
 }

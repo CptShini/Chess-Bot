@@ -21,7 +21,7 @@ public class MyBotV3 : IChessBot
         ScoredMoveList scoredMoves = EvaluateBoardMoves(board);
         Move move = scoredMoves.GetMove(board.IsWhiteToMove);
         
-        Console.WriteLine($"MyBotV3: {move} | Evaluation: {scoredMoves.GetEval(board.IsWhiteToMove):0.00}");
+        this.PrintMove(move, _maxDepth, scoredMoves.GetEval(board.IsWhiteToMove), 90f);
         
         return move;
     }

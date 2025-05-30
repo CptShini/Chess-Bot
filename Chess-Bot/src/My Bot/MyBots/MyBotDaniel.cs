@@ -16,7 +16,7 @@ public class MyBotDaniel : IChessBot
     {
         evaluation = new(board);
         (float eval, Move move) = MinMax(board, 0);
-        Console.WriteLine($"MyBotDaniel: {move} | Depth: {MaxDepth} | Evaluation: {eval:0.00}");
+        this.PrintMove(move, MaxDepth, eval, 90f);
         return move;
     }
 

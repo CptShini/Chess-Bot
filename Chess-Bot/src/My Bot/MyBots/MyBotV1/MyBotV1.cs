@@ -36,8 +36,8 @@ public class MyBotV1 : IChessBot
 
         int i = _random.Next(bestMoves.Count());
         ScoredMove bestMove = bestMoves.ElementAt(i);
-
-        Console.WriteLine($"MyBotV1: {bestMove.Move} | Evaluation: {bestMove.Score:0.00}");
+        
+        this.PrintMove(bestMove.Move, _maxDepth, bestMove.Score, 90f);
         
         return bestMove.Move;
     }

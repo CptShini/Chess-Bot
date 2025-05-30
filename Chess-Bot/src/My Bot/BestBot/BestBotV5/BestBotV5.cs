@@ -19,7 +19,7 @@ public class BestBotV5 : IChessBot
         _thinker.IterativeDeepening();
         
         ScoredMove currentBest = _thinker.CurrentBest;
-        Console.WriteLine($"BestBotV5: {currentBest}");
+        this.PrintMove(board, currentBest);
 
         if (currentBest.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining);
         return currentBest.Move;

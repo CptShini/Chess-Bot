@@ -9,20 +9,15 @@ internal readonly struct ScoredMove
     internal readonly bool IsCheckmate;
 
     private readonly Line _line;
-    private readonly int _evaluation;
-    private readonly int _depth;
+    internal readonly int Evaluation;
+    internal readonly int Depth;
     
     internal ScoredMove(Line line, int evaluation)
     {
         _line = line;
-        _evaluation = evaluation;
-        _depth = line.Depth;
+        Evaluation = evaluation;
+        Depth = line.Depth;
         
         IsCheckmate = Math.Abs(evaluation) > 9000;
-        if (!IsCheckmate) return;
-        
-        _depth = evaluation < 0 ? -_depth : _depth;
     }
-    
-    public override string ToString() => $"{Move} | {(IsCheckmate ? $"Mate in {_depth}" : $"Depth: {_depth} | Evaluation: {_evaluation}")}";
 }
