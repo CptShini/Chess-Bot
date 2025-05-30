@@ -22,13 +22,14 @@ public static class BotSettings
         ContemptValue = -0_50,
         Castle = 0_50;
 
-    // Move ordering biases
+    // Move ordering
     private const int million = 1_000_000;
     internal const int
         pvMoveBias = 100 * million,
         winningCaptureBias = 8 * million,
         promoteBias = 6 * million,
         losingCaptureBias = 2 * million;
+    internal const int InsertionSortThreshold = 8;
 
     // Transposition table
     internal const int

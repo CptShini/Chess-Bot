@@ -55,11 +55,26 @@ internal static class MoveOrderer
     
     private static void Quicksort(Span<Move> values, int[] scores, int low, int high)
     {
-        if (low >= high) return;
-        
-        int pivotIndex = Partition(values, scores, low, high);
-        Quicksort(values, scores, low, pivotIndex - 1);
-        Quicksort(values, scores, pivotIndex + 1, high);
+        while (low < high)
+        {
+            if (high - low <= InsertionSortThreshold)
+            {
+                InsertionSort(values, scores, low, high);
+                break;
+            }
+
+            int pivotIndex = Partition(values, scores, low, high);
+            if (pivotIndex - low < high - pivotIndex)
+            {
+                Quicksort(values, scores, low, pivotIndex - 1);
+                low = pivotIndex + 1;
+            }
+            else
+            {
+                Quicksort(values, scores, pivotIndex + 1, high);
+                high = pivotIndex - 1;
+            }
+        }
     }
 
     private static int Partition(Span<Move> values, int[] scores, int low, int high)
@@ -75,9 +90,29 @@ internal static class MoveOrderer
             (values[i], values[j]) = (values[j], values[i]);
             (scores[i], scores[j]) = (scores[j], scores[i]);
         }
-        (values[i + 1], values[high]) = (values[high], values[i + 1]);
-        (scores[i + 1], scores[high]) = (scores[high], scores[i + 1]);
+        
+        int pivotFinalIndex = i + 1;
+        (values[pivotFinalIndex], values[high]) = (values[high], values[pivotFinalIndex]);
+        (scores[pivotFinalIndex], scores[high]) = (scores[high], scores[pivotFinalIndex]);
 
-        return i + 1;
+        return pivotFinalIndex;
+    }
+    
+    private static void InsertionSort(Span<Move> values, int[] scores, int low, int high)
+    {
+        for (int i = low + 1; i <= high; i++)
+        {
+            var key = values[i];
+            int keyScore = scores[i];
+            int j = i - 1;
+            while (j >= low && scores[j] < keyScore)
+            {
+                values[j + 1] = values[j];
+                scores[j + 1] = scores[j];
+                j--;
+            }
+            values[j + 1] = key;
+            scores[j + 1] = keyScore;
+        }
     }
 }

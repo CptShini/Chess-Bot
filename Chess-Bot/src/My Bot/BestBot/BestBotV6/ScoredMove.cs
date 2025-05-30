@@ -7,7 +7,7 @@ internal readonly struct ScoredMove
 {
     internal readonly Move Move;
     internal readonly bool IsCheckmate;
-
+    
     internal readonly int Evaluation;
     internal readonly int Depth;
     
