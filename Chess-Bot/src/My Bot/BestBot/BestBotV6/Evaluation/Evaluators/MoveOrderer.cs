@@ -13,8 +13,9 @@ internal static class MoveOrderer
     private const int promoteBias = 6 * million;
     private const int losingCaptureBias = 2 * million;
     
-    internal static void OrderMoves(Board board, Span<Move> moves, Move pvMove)
+    internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove)
     {
+        float endgameFactor = board.EndgameFactor();
         for (int i = 0; i < moves.Length; i++)
         {
             Move move = moves[i];
@@ -24,19 +25,19 @@ internal static class MoveOrderer
                 continue;
             }
             
-            _moveScores[i] = ScoreMove(move, board);
+            _moveScores[i] = ScoreMove(move, board, endgameFactor);
         }
         
         Quicksort(moves, _moveScores, 0, moves.Length - 1);
     }
 
-    private static int ScoreMove(Move move, Board board)
+    private static int ScoreMove(Move move, Board board, float endgameFactor)
     {
         int score = 0;
         if (move.IsCapture) score += ScoreCapture(move, board);
 
         if (move is { MovePieceType: PieceType.Pawn, IsPromotion: true } and { PromotionPieceType: PieceType.Queen, IsCapture: false }) score += promoteBias;
-        else score += PositionEvaluator.EvaluateMovePositioning(move, board);
+        else score += move.EvaluatePositioning(board.IsWhiteToMove, endgameFactor);
 
         return score;
     }

@@ -5,8 +5,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 
 internal class ThinkTimeEstimator
 {
-    
-    
     private readonly float[,] _branchingTable;
     private readonly int[] _branchingTableIndexers;
 

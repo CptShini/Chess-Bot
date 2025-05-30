@@ -21,7 +21,10 @@ internal class Evaluator
     
     internal int EvaluateMove(Move move)
     {
-        return EvaluateMoveMaterial(move) + EvaluateMovePositioning(move, _board) + EvaluateEarlyGameRandomness();
+        return
+            move.EvaluateMaterial() +
+            move.EvaluatePositioning(_board.IsWhiteToMove, _board.EndgameFactor()) +
+            EvaluateEarlyGameRandomness();
         
         int EvaluateEarlyGameRandomness()
         {
@@ -34,7 +37,7 @@ internal class Evaluator
         }
     }
 
-    internal int EvaluateBoard() => EvaluateBoardMaterial(_board) + EvaluateBoardPositioning(_board);
+    internal int EvaluateBoard() => _board.EvaluateMaterial() + _board.EvaluatePositioning();
 
     internal int EvaluateBoardState(out int endEvaluation)
     {
@@ -58,7 +61,7 @@ internal class Evaluator
         
         int ComputeDrawValue()
         {
-            float earlyGameFactor = 1f - EndgameEvaluator.EndgameFactor(_board);
+            float earlyGameFactor = 1f - _board.EndgameFactor();
             return (int)(earlyGameFactor * -ContemptValue);
         }
     }

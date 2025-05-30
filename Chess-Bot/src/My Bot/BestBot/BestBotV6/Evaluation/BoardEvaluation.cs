@@ -28,7 +28,7 @@ internal struct BoardEvaluation
     
     internal void PopulateMoves(ref Span<Move> moves, bool capturesOnly) => _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
 
-    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => MoveOrderer.OrderMoves(_board, moves, pvMove);
+    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove);
 
     internal bool GameHasEnded(out int endEvaluation)
     {

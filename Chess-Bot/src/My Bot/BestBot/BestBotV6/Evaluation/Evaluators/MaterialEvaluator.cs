@@ -5,7 +5,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class MaterialEvaluator
 {
-    internal static int EvaluateMoveMaterial(Move move)
+    internal static int EvaluateMaterial(this Move move)
     {
         int materialScore = 0;
 
@@ -15,7 +15,7 @@ internal static class MaterialEvaluator
         return materialScore;
     }
 
-    internal static int EvaluateBoardMaterial(Board board)
+    internal static int EvaluateMaterial(this Board board)
     {
         int evaluation = 0;
 
