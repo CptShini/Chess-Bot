@@ -1,78 +1,90 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 
 internal class ThinkTimeEstimator
 {
-    private readonly float[,] _branchingTable;
-    private readonly int[] _branchingTableIndexers;
+    private readonly LinkedList<float>[] _branchingTable;
 
-    internal ThinkTimeEstimator()
+    public ThinkTimeEstimator()
     {
-        _branchingTable = new float[DepthLimit, TableLength];
-        _branchingTableIndexers = new int[DepthLimit];
+        _branchingTable = new LinkedList<float>[DepthLimit];
+        for (int i = 0; i < DepthLimit; i++) _branchingTable[i] = [];
     }
-    
+
     internal void AddBranch(int depth, long current, long previous)
     {
         if (depth is >= DepthLimit or <= 0) return;
-        
-        int index = _branchingTableIndexers[depth]++;
-        if (index == TableLength - 1) _branchingTableIndexers[depth] = 0;
 
         float branchFactor = (float)current / previous;
-        _branchingTable[depth, index] = branchFactor;
+        
+        LinkedList<float> branchingList = _branchingTable[depth];
+        branchingList.AddFirst(branchFactor);
+
+        if (branchingList.Count <= TableLength) return;
+        branchingList.RemoveLast();
     }
 
     internal float GetAverageBranchFactor(int depth)
     {
-        if (depth >= DepthLimit) return DefaultBranchFactor;
-
-        float branchFactorSum = 0f;
-
-        int n = 0;
-        for (int i = 0; i < TableLength; i++)
+        switch (depth)
         {
-            float branchFactor = _branchingTable[depth, i];
-            if (branchFactor == 0f) break;
-                
-            branchFactorSum += branchFactor;
+            case <= 0:
+                return DefaultBranchFactor;
+            case >= DepthLimit:
+                return GetAverageBranchFactor(DepthLimit - 1);
+        }
+
+        float branchFactorSum = 0f, weightSum = 0f;
+        
+        int n = 0;
+        foreach (float branchFactor in _branchingTable[depth])
+        {
+            float weight = BranchFactorRecencyWeight(n);
+            weightSum += weight;
+            
+            branchFactorSum += branchFactor * weight;
             n++;
         }
 
-        return n == 0 ? DefaultBranchFactor : branchFactorSum / n;
+        if (n > 0) return branchFactorSum / weightSum;
+
+        float previousBranchFactor1 = GetAverageBranchFactor(depth - 1);
+        float previousBranchFactor2 = GetAverageBranchFactor(depth - 2);
+        float averageNextBranchFactor = (previousBranchFactor1 + previousBranchFactor2) / 2f;
+        return averageNextBranchFactor;
     }
 
     private string ToString(int depth)
     {
-        string result = $"{depth} | {GetAverageBranchFactor(depth):0.00} | ";
+        StringBuilder sb = new();
+        
+        sb.Append($"{depth.ToString().PadLeft(2)} | {GetAverageBranchFactor(depth).ToString("F", CultureInfo.InvariantCulture).PadLeft(5)} | ");
 
-        for (int i = 0; i < TableLength; i++)
+        foreach (float branchFactor in _branchingTable[depth])
         {
-            result += $"{_branchingTable[depth, i]:0.00} ";
+            sb.Append($"{branchFactor.ToString("F", CultureInfo.InvariantCulture).PadLeft(5)} ");
         }
         
-        result += "\n";
+        sb.AppendLine();
 
-        return result;
+        return sb.ToString();
     }
     
     public override string ToString()
     {
-        string result = "";
+        StringBuilder sb = new();
 
-        float prevBranchFactor = -1f;
         for (int i = 1; i < DepthLimit; i++)
         {
-            float branchFactor = GetAverageBranchFactor(i);
+            sb.Append(ToString(i));
             
-            if (Math.Abs(branchFactor - prevBranchFactor) < 0.001f) break;
-            result += ToString(i);
-
-            prevBranchFactor = branchFactor;
+            if (_branchingTable[i].Count == 0) break;
         }
         
-        return result;
+        return sb.ToString();
     }
 }

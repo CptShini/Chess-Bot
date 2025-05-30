@@ -14,7 +14,6 @@ public class BestBotV6 : IChessBot
      * Sit the fuck down and actually learn how your own bot works
      * 
      * Fix search going infinitely when draw
-     * Weighted average for TTE to prioritize more recent times
      * Better (forced) draw detection, just 1 repetition is enough for draw score?
      * Experiment with valueboards
      * Experiment with all constants
