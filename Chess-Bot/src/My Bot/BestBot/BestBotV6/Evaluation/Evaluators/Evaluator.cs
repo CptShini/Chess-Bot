@@ -1,17 +1,17 @@
 ﻿using System;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.MaterialEvaluator;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.PositionEvaluator;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal class Evaluator
 {
-    internal const int
-        GameNotOverState = -1,
-        DrawState = 0,
-        CheckmateState = 1;
+    internal enum GameState
+    {
+        GameNotOver = -1,
+        Draw = 0,
+        Checkmate = 1
+    }
     
     private static readonly Random Random = new();
     
@@ -39,13 +39,13 @@ internal class Evaluator
 
     internal int EvaluateBoard() => _board.EvaluateMaterial() + _board.EvaluatePositioning();
 
-    internal int EvaluateBoardState(out int endEvaluation)
+    internal GameState EvaluateBoardState(out int endEvaluation)
     {
         bool isCheckmate = _board.IsInCheckmate();
         if (isCheckmate)
         {
             endEvaluation = CheckmateValue;
-            return CheckmateState;
+            return GameState.Checkmate;
         }
 
         bool isDraw = _board.IsDraw();
@@ -53,11 +53,11 @@ internal class Evaluator
         {
             int drawValue = ComputeDrawValue();
             endEvaluation = drawValue;
-            return DrawState;
+            return GameState.Draw;
         }
 
         endEvaluation = 0;
-        return GameNotOverState;
+        return GameState.GameNotOver;
         
         int ComputeDrawValue()
         {

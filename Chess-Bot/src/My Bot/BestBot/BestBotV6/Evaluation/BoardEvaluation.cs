@@ -32,13 +32,13 @@ internal struct BoardEvaluation
 
     internal bool GameHasEnded(out int endEvaluation)
     {
-        int boardState = _evaluator.EvaluateBoardState(out endEvaluation);
-        return boardState switch
+        GameState gameState = _evaluator.EvaluateBoardState(out endEvaluation);
+        return gameState switch
         {
-            CheckmateState => true,
-            DrawState => true,
-            GameNotOverState => false,
-            _ => throw new ArgumentOutOfRangeException($"This should never happen! {boardState}")
+            GameState.Checkmate => true,
+            GameState.Draw => true,
+            GameState.GameNotOver => false,
+            _ => throw new ArgumentOutOfRangeException($"This should never happen! {gameState}")
         };
     }
     
