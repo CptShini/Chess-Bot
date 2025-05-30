@@ -26,24 +26,21 @@ public static class BotPrinter
     internal static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, float threshold) =>
         bot.PrintMove(move, depth, evaluation, Math.Abs(evaluation) > threshold);
     
-    private static void PrintMove(this IChessBot bot, Move move, int depth, int evaluation, bool? isCheckmate = null) =>
-        bot.PrintMove(move, depth, evaluation / 100f, isCheckmate);
-    
     private static int InvertEvaluation(this int evaluation, Board board) =>
         board.IsWhiteToMove ? evaluation : -evaluation;
 
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV3.Evaluation.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board), scoredMove.IsCheckmate);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, scoredMove.IsCheckmate);
     
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV4.Evaluation.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board), scoredMove.IsCheckmate);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, scoredMove.IsCheckmate);
     
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV5.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board), scoredMove.IsCheckmate);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, scoredMove.IsCheckmate);
     
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV6.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board), scoredMove.IsCheckmate);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, 90f);
     
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV6B.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board), scoredMove.IsCheckmate);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, scoredMove.IsCheckmate);
 }
