@@ -22,14 +22,23 @@ public static class BotSettings
         ContemptValue = -0_50,
         Castle = 0_50;
 
-    // Transposition Table
+    // Move ordering biases
+    private const int million = 1_000_000;
+    internal const int
+        pvMoveBias = 100 * million,
+        winningCaptureBias = 8 * million,
+        promoteBias = 6 * million,
+        losingCaptureBias = 2 * million;
+
+    // Transposition table
     internal const int
         TTSize = 16;
     
     // Opening randomness
     internal const int
-        RandomExtent = 6,
-        RandomStrength = 80;
+        Random_PlyExtent = 6,
+        Random_Strength = 80;
+    internal static float OpeningFactor(int ply) => 1f - (float)ply / Random_PlyExtent;
     
     // Thinker
     internal const int
@@ -37,7 +46,7 @@ public static class BotSettings
         ExpectedTurnCount = 25;
     internal const float MaxThinkTimeFactor = 1.5f;
     
-    // ThinkTimeEstimator
+    // Think time estimation
     internal const int TableLength = 5;
     internal const float DefaultBranchFactor = 6f;
     

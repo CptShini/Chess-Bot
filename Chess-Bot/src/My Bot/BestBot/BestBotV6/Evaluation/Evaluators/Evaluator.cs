@@ -29,10 +29,9 @@ internal class Evaluator
         int EvaluateEarlyGameRandomness()
         {
             int ply = _board.PlyCount;
-            if (ply > RandomExtent) return 0;
-
-            float openingFactor = 1f - (float)ply / RandomExtent;
-            int randomness = (int)(openingFactor * RandomStrength);
+            if (ply > Random_PlyExtent) return 0;
+            
+            int randomness = (int)(OpeningFactor(ply) * Random_Strength);
             return Random.Next(-randomness, randomness + 1);
         }
     }

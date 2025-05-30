@@ -1,17 +1,12 @@
 ﻿using System;
 using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class MoveOrderer
 {
     private static readonly int[] _moveScores = new int[128];
-    
-    private const int million = 1_000_000;
-    private const int pvMoveBias = 100 * million;
-    private const int winningCaptureBias = 8 * million;
-    private const int promoteBias = 6 * million;
-    private const int losingCaptureBias = 2 * million;
     
     internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove)
     {
@@ -36,8 +31,11 @@ internal static class MoveOrderer
         int score = 0;
         if (move.IsCapture) score += ScoreCapture(move, board);
 
-        if (move is { MovePieceType: PieceType.Pawn, IsPromotion: true } and { PromotionPieceType: PieceType.Queen, IsCapture: false }) score += promoteBias;
-        else score += move.EvaluatePositioning(board.IsWhiteToMove, endgameFactor);
+        if (move is { MovePieceType: PieceType.Pawn, IsPromotion: true }
+            and { PromotionPieceType: PieceType.Queen, IsCapture: false })
+            score += promoteBias;
+        else
+            score += move.EvaluatePositioning(board.IsWhiteToMove, endgameFactor);
 
         return score;
     }
