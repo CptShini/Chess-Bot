@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
@@ -11,14 +9,15 @@ public class BestBotV6 : IChessBot
     /*
      * TODO:
      *
-     * Sit the fuck down and actually learn how your own bot works
-     *
      * Fix random opposite sign??? (and rarely, checkmate evaluation???)
      * 
-     * Experiment with valueboards
-     * Experiment with all constants
-     * 
-     * Better King Safety
+     * Experiment with
+     *  - valueboards
+     *  - all constants
+     *
+     * Better
+     *  - move ordering
+     *  - king safety
      * 
      * Retry Aspiration windows
      * Reexamine move ordering with iterative deepening and transposition tables

@@ -47,7 +47,4 @@ public static class BotPrinter
     
     internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV6.ScoredMove scoredMove) =>
         bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, (int)scoredMove.GameState);
-    
-    internal static void PrintMove(this IChessBot bot, Board board, BestBot.BestBotV6B.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(board) / 100f, scoredMove.IsCheckmate);
 }

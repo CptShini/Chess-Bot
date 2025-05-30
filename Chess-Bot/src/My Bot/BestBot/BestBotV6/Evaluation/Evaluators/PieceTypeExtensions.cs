@@ -8,7 +8,6 @@ public static class PieceTypeExtensions
 {
     private static readonly Dictionary<PieceType, int> _pieceValues = new()
     {
-        { PieceType.None, 0 },
         { PieceType.Pawn, PawnValue },
         { PieceType.Knight, KnightValue },
         { PieceType.Bishop, BishopValue },

@@ -34,6 +34,7 @@ internal static class PositionEvaluator
         {
             Square square = new(i);
             Piece piece = board.GetPiece(square);
+            if (piece.PieceType == PieceType.None) continue;
 
             bool whitePiece = piece.IsWhite;
             int perspectiveIndex = square.PerspectiveIndex(whitePiece);
@@ -46,11 +47,8 @@ internal static class PositionEvaluator
         return evaluation;
     }
 
-    private static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, float endgameFactor)
-    {
-        bool pieceTypeHasValueboard = PieceValueboards.TryGetValue(pieceType, out var valueBoard);
-        return !pieceTypeHasValueboard ? 0 : valueBoard.GetValueAt(endgameFactor, positionIndex);
-    }
+    private static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, float endgameFactor) =>
+        PieceValueboards[pieceType].GetValueAt(endgameFactor, positionIndex);
 
     private static int PerspectiveIndex(this Square square, bool whitePerspective) => whitePerspective ? square.Index : 63 - square.Index;
 }

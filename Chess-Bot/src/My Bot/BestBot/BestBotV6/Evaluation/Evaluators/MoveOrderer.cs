@@ -80,22 +80,21 @@ internal static class MoveOrderer
     private static int Partition(Span<Move> values, int[] scores, int low, int high)
     {
         int pivotScore = scores[high];
-        int i = low - 1;
+        int i = low;
 
-        for (int j = low; j <= high - 1; j++)
+        for (int j = low; j < high; j++)
         {
             if (scores[j] <= pivotScore) continue;
             
-            i++;
             (values[i], values[j]) = (values[j], values[i]);
             (scores[i], scores[j]) = (scores[j], scores[i]);
+            i++;
         }
         
-        int pivotFinalIndex = i + 1;
-        (values[pivotFinalIndex], values[high]) = (values[high], values[pivotFinalIndex]);
-        (scores[pivotFinalIndex], scores[high]) = (scores[high], scores[pivotFinalIndex]);
+        (values[i], values[high]) = (values[high], values[i]);
+        (scores[i], scores[high]) = (scores[high], scores[i]);
 
-        return pivotFinalIndex;
+        return i;
     }
     
     private static void InsertionSort(Span<Move> values, int[] scores, int low, int high)
