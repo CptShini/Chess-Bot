@@ -22,25 +22,18 @@ internal class Searcher
         BestMove = Move.NullMove;
     }
 
-    internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
+    internal int Search(int plyRemaining, out GameState gameState, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
     {
-        if (plyFromRoot > 0)
-        {
-            alpha = Math.Max(alpha, plyFromRoot - KingValue);
-            beta = Math.Min(beta, KingValue - plyFromRoot);
-            if (FailHigh(alpha, beta)) return alpha;
-        }
-        
-        bool gameHasEnded = _boardEvaluation.GameHasEnded(out int endEvaluation);
-        if (gameHasEnded) return endEvaluation;
+        gameState = _boardEvaluation.CheckGameState(plyFromRoot, out int endEvaluation);
+        if (gameState != GameState.GameNotOver) return endEvaluation;
         
         int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
         if (ttVal != LookupFailed) return ttVal;
         
         bool depthReached = plyRemaining == 0;
-        return !depthReached ? SearchMoves() : QuiescentSearch(alpha, beta);
-        
-        int SearchMoves()
+        return !depthReached ? SearchMoves(ref gameState) : QuiescentSearch(alpha, beta);
+
+        int SearchMoves(ref GameState pvGameState)
         {
             int evaluationFlag = FlagAlpha;
             Move bestMoveThisPosition = Move.NullMove;
@@ -55,7 +48,7 @@ internal class Searcher
                 if (move == Move.NullMove) break;
             
                 _boardEvaluation.MakeMove(move);
-                int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
+                int evaluation = -Search(plyRemaining - 1, out GameState moveState, plyFromRoot + 1, -beta, -alpha);
                 _boardEvaluation.UndoMove(move);
 
                 if (FailHigh(evaluation, beta)) // Prune
@@ -67,6 +60,7 @@ internal class Searcher
             
                 // PV-node
                 alpha = evaluation;
+                pvGameState = moveState;
                 evaluationFlag = FlagExact;
                 bestMoveThisPosition = move;
                 if (plyFromRoot == 0) BestMove = move;

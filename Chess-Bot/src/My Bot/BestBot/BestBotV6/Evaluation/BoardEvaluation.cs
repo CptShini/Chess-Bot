@@ -37,12 +37,12 @@ internal struct BoardEvaluation
 
     internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _endgameFactor);
 
-    internal GameState CheckGameState(out int endEvaluation)
+    internal GameState CheckGameState(int plyFromRoot, out int endEvaluation)
     {
         bool isCheckmate = _board.IsInCheckmate();
         if (isCheckmate)
         {
-            endEvaluation = CheckmateValue;
+            endEvaluation = CheckmateValue + plyFromRoot;
             return GameState.Checkmate;
         }
 
