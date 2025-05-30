@@ -1,4 +1,5 @@
 ﻿using ChessChallenge.API;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions;
 
@@ -13,8 +14,6 @@ internal class TranspositionTable
     
     private readonly ulong _tableSize;
     private readonly TranspositionEntry[] _table;
-    
-    private const bool _enabled = true;
 
     internal TranspositionTable(int sizeMb)
     {
@@ -43,7 +42,7 @@ internal class TranspositionTable
     
     internal int LookupEvaluation(int depth, int alpha, int beta)
     {
-        if (!_enabled) return LookupFailed;
+        if (!TTEnabled) return LookupFailed;
         
         TranspositionEntry entry = _table[Index];
         
@@ -61,7 +60,7 @@ internal class TranspositionTable
 
     internal void StoreEvaluation(int depth, int val, int flags, Move move)
     {
-        if (!_enabled) return;
+        if (!TTEnabled) return;
         
         TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move);
         _table[Index] = entry;

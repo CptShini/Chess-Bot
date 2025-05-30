@@ -32,8 +32,9 @@ public static class BotSettings
     internal const int InsertionSortThreshold = 8;
 
     // Transposition table
+    internal const bool TTEnabled = true;
     internal const int
-        TTSize = 16;
+        TTSize = 64;
     
     // Opening randomness
     internal const int
