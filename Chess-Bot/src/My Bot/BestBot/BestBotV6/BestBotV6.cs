@@ -33,8 +33,7 @@ public class BestBotV6 : IChessBot
         
         ScoredMove currentBest = _thinker.CurrentBest;
         this.PrintMove(board, currentBest);
-
-        if (currentBest.Move == Move.NullMove) Thread.Sleep(timer.MillisecondsRemaining * 2);
+        
         return currentBest.Move;
     }
 }
