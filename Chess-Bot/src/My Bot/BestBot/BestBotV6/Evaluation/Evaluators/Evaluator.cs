@@ -19,11 +19,11 @@ internal class Evaluator
 
     internal Evaluator(Board board) => _board = board;
     
-    internal int EvaluateMove(Move move)
+    internal int EvaluateMove(Move move, float endgameFactor)
     {
         return
             move.EvaluateMaterial() +
-            move.EvaluatePositioning(_board.IsWhiteToMove, _board.EndgameFactor()) +
+            move.EvaluatePositioning(_board.IsWhiteToMove, endgameFactor) +
             EvaluateEarlyGameRandomness();
         
         int EvaluateEarlyGameRandomness()
@@ -36,9 +36,10 @@ internal class Evaluator
         }
     }
 
-    internal int EvaluateBoard() => _board.EvaluateMaterial() + _board.EvaluatePositioning();
+    internal int EvaluateBoard(float endgameFactor) =>
+        _board.EvaluateMaterial() + _board.EvaluatePositioning(endgameFactor);
 
-    internal GameState EvaluateBoardState(out int endEvaluation)
+    internal GameState EvaluateBoardState(float endgameFactor, out int endEvaluation)
     {
         bool isCheckmate = _board.IsInCheckmate();
         if (isCheckmate)
@@ -60,7 +61,7 @@ internal class Evaluator
         
         int ComputeDrawValue()
         {
-            float earlyGameFactor = 1f - _board.EndgameFactor();
+            float earlyGameFactor = 1f - endgameFactor;
             return (int)(earlyGameFactor * -ContemptValue);
         }
     }

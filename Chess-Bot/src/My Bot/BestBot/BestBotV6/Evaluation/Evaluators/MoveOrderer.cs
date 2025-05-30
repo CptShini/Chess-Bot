@@ -8,9 +8,8 @@ internal static class MoveOrderer
 {
     private static readonly int[] _moveScores = new int[128];
     
-    internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove)
+    internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove, float endgameFactor)
     {
-        float endgameFactor = board.EndgameFactor();
         for (int i = 0; i < moves.Length; i++)
         {
             Move move = moves[i];

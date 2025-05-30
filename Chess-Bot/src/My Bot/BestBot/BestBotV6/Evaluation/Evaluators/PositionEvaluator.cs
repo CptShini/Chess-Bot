@@ -27,10 +27,8 @@ internal static class PositionEvaluator
         }
     }
 
-    internal static int EvaluatePositioning(this Board board)
+    internal static int EvaluatePositioning(this Board board, float endgameFactor)
     {
-        float endgameFactor = board.EndgameFactor();
-        
         int evaluation = 0;
         for (int i = 0; i < 64; i++)
         {
