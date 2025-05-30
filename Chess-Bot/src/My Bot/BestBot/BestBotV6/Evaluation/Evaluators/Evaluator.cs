@@ -6,13 +6,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal class Evaluator
 {
-    internal enum GameState
-    {
-        GameNotOver = -1,
-        Draw = 0,
-        Checkmate = 1
-    }
-    
     private static readonly Random Random = new();
     
     private readonly Board _board;
@@ -38,31 +31,4 @@ internal class Evaluator
 
     internal int EvaluateBoard(float endgameFactor) =>
         _board.EvaluateMaterial() + _board.EvaluatePositioning(endgameFactor);
-
-    internal GameState EvaluateBoardState(float endgameFactor, out int endEvaluation)
-    {
-        bool isCheckmate = _board.IsInCheckmate();
-        if (isCheckmate)
-        {
-            endEvaluation = CheckmateValue;
-            return GameState.Checkmate;
-        }
-
-        bool isDraw = _board.IsDraw();
-        if (isDraw)
-        {
-            int drawValue = ComputeDrawValue();
-            endEvaluation = drawValue;
-            return GameState.Draw;
-        }
-
-        endEvaluation = 0;
-        return GameState.GameNotOver;
-        
-        int ComputeDrawValue()
-        {
-            float earlyGameFactor = 1f - endgameFactor;
-            return (int)(earlyGameFactor * -ContemptValue);
-        }
-    }
 }

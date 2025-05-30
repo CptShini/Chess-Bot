@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 using ChessChallenge.API;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Evaluator;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
 
@@ -37,16 +37,26 @@ internal struct BoardEvaluation
 
     internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _endgameFactor);
 
-    internal bool GameHasEnded(out int endEvaluation)
+    internal GameState CheckGameState(out int endEvaluation)
     {
-        GameState gameState = _evaluator.EvaluateBoardState(_endgameFactor, out endEvaluation);
-        return gameState switch
+        bool isCheckmate = _board.IsInCheckmate();
+        if (isCheckmate)
         {
-            GameState.Checkmate => true,
-            GameState.Draw => true,
-            GameState.GameNotOver => false,
-            _ => throw new ArgumentOutOfRangeException($"This should never happen! {gameState}")
-        };
+            endEvaluation = CheckmateValue;
+            return GameState.Checkmate;
+        }
+
+        bool isDraw = _board.IsDraw();
+        if (isDraw)
+        {
+            float earlyGameFactor = 1f - _endgameFactor;
+            int drawValue = (int)(earlyGameFactor * -ContemptValue);
+            endEvaluation = drawValue;
+            return GameState.Draw;
+        }
+
+        endEvaluation = 0;
+        return GameState.GameNotOver;
     }
     
     internal void MakeMove(Move move)
@@ -79,4 +89,11 @@ internal struct BoardEvaluation
         int enemyPieceCount = _board.IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
         _endgameFactor = enemyPieceCount.EndgameFactor();
     }
+}
+
+internal enum GameState
+{
+    GameNotOver = -1,
+    Draw = 0,
+    Checkmate = 1
 }
