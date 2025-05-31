@@ -12,8 +12,8 @@ public class BestBotV6 : IChessBot
      * Fix random opposite sign??? (and rarely, checkmate evaluation???)
      * 
      * Experiment with
-     *  - valueboards
      *  - all constants
+     *  - valueboards
      *
      * Better
      *  - move ordering

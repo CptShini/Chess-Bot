@@ -10,17 +10,17 @@ public static class BotSettings
     // Piece values
     internal const int
         PawnValue = 1_00,
-        KnightValue = 3_00,
-        BishopValue = 3_20,
-        RookValue = 5_00,
-        QueenValue = 9_00,
+        KnightValue = 3_00, // 3_25
+        BishopValue = 3_20, // 3_25
+        RookValue = 5_00, // 5_25
+        QueenValue = 9_00, // 9_50
         KingValue = 100_00;
     
     // State & move values
     internal const int
         CheckmateValue = -KingValue,
-        ContemptValue = -0_50,
-        Castle = 0_50;
+        ContemptValue = -0_50, // -0_25
+        Castle = 0_50; // 0_75
 
     // Move ordering
     private const int million = 1_000_000;
@@ -34,22 +34,22 @@ public static class BotSettings
     // Transposition table
     internal const bool TTEnabled = true;
     internal const int
-        TTSize = 64;
+        TTSize = 64; // 16
     
     // Opening randomness
     internal const int
-        Random_PlyExtent = 10,
-        Random_Strength = 1_50;
+        Random_PlyExtent = 10, // 8
+        Random_Strength = 1_50; // 1_00
     internal static float OpeningFactor(int ply) => 1f - MathF.Sqrt(ply * Random_PlyExtent) / Random_PlyExtent;
     
     // Thinker
     internal const int
         DepthLimit = 32,
-        ExpectedTurnCount = 25;
-    internal const float MaxThinkTimeFactor = 1.5f;
+        ExpectedTurnCount = 25; // ??
+    internal const float MaxThinkTimeFactor = 1.5f; // 1.75
     
     // Think time estimation
-    internal const int TableLength = 5;
+    internal const int TableLength = 5; // 8
     internal static float BranchFactorRecencyWeight(int n) => 1f / (n + 1);
     
     internal static readonly Dictionary<PieceType, Valueboard> PieceValueboards = new()
