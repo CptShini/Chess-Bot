@@ -38,10 +38,11 @@ public static class BotSettings
     
     // Opening randomness
     internal const int
-        Random_PlyExtent = 10, // 8
-        Random_Strength = 1_50; // 1_00
-    internal static float OpeningFactor(int ply) => 1f - MathF.Sqrt(ply * Random_PlyExtent) / Random_PlyExtent;
-    
+        Random_PlyExtent = 8,
+        Random_Strength = 1_00;
+    internal static float OpeningFactor(int ply) =>
+        MathF.Sqrt(Random_PlyExtent - ply) / MathF.Sqrt(Random_PlyExtent);
+
     // Thinker
     internal const int
         DepthLimit = 32,
