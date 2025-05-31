@@ -34,7 +34,7 @@ public static class BotSettings
     // Transposition table
     internal const bool TTEnabled = true;
     internal const int
-        TTSize = 64; // 16
+        TTSize = 128;
     
     // Opening randomness
     internal const int
