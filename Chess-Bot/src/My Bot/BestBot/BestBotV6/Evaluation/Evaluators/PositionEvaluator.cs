@@ -37,7 +37,7 @@ internal static class PositionEvaluator
             if (piece.PieceType == PieceType.None) continue;
             
             bool whitePiece = piece.IsWhite;
-            int perspectiveIndex = square.Index.FlipIndex(whitePiece);
+            int perspectiveIndex = square.Index.FlipIndex(!whitePiece);
             
             int worth = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPiecesLeft);
             evaluation += worth.Perspective(whitePiece);
