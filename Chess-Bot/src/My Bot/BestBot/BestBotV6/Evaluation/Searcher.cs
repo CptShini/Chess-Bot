@@ -19,16 +19,20 @@ internal class Searcher
     {
         _boardEvaluation = new(board);
         _transpositionTable.Initialize(board);
-        BestMove = Move.NullMove;
+
+        BestMove = board.GetLegalMoves().RandomElement();
     }
 
     internal int Search(int plyRemaining, out GameState gameState, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
     {
-        gameState = _boardEvaluation.CheckGameState(plyFromRoot, out int endEvaluation);
-        if (gameState != GameState.GameNotOver) return endEvaluation;
+        if (plyFromRoot > 0)
+        {
+            gameState = _boardEvaluation.CheckGameState(plyFromRoot, out int endEvaluation);
+            if (gameState != GameState.GameNotOver) return endEvaluation;
         
-        int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
-        if (ttVal != LookupFailed) return ttVal;
+            int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
+            if (ttVal != LookupFailed) return ttVal;
+        } else gameState = GameState.GameNotOver;
         
         bool depthReached = plyRemaining == 0;
         return !depthReached ? SearchMoves(ref gameState) : QuiescentSearch(alpha, beta);
