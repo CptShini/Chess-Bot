@@ -15,11 +15,12 @@ public class BestBotV5 : IChessBot
     
     public Move Think(Board board, Timer timer)
     {
+        bool isWhiteToMove = board.IsWhiteToMove;
         _thinker = new(board, timer);
         _thinker.IterativeDeepening();
         
         ScoredMove currentBest = _thinker.CurrentBest;
-        this.PrintMove(board, currentBest);
+        this.PrintMove(isWhiteToMove, currentBest);
         
         return currentBest.Move;
     }

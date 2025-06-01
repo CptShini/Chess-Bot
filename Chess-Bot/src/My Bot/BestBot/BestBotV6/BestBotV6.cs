@@ -1,4 +1,5 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
+﻿using System;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
@@ -9,9 +10,8 @@ public class BestBotV6 : IChessBot
     /*
      * TODO:
      *
-     * Bugfix:
-     *  - Fix random opposite sign??? (probably InvertEvaluation() in BotPrinter)
-     *
+     * Revert back to previous version...
+     * 
      * Add or improve:
      *  - move ordering
      *  - king safety
@@ -30,11 +30,12 @@ public class BestBotV6 : IChessBot
     
     public Move Think(Board board, Timer timer)
     {
+        bool isWhiteToMove = board.IsWhiteToMove;
         _thinker = new(board, timer);
         _thinker.IterativeDeepening();
         
         ScoredMove currentBest = _thinker.CurrentBest;
-        this.PrintMove(board, currentBest);
+        this.PrintMove(isWhiteToMove, currentBest);
         
         return currentBest.Move;
     }
