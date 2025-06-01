@@ -10,10 +10,10 @@ public static class BotSettings
     // Piece values
     internal const int
         PawnValue = 1_00,
-        KnightValue = 3_00, // 3_25
-        BishopValue = 3_20, // 3_25
-        RookValue = 5_00, // 5_25
-        QueenValue = 9_00, // 9_50
+        KnightValue = 3_00,
+        BishopValue = 3_20,
+        RookValue = 5_00,
+        QueenValue = 9_00,
         KingValue = 100_00;
     
     // State & move values

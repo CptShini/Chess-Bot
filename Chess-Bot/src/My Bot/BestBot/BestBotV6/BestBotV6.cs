@@ -11,10 +11,6 @@ public class BestBotV6 : IChessBot
      *
      * Bugfix:
      *  - Fix random opposite sign??? (and rarely, checkmate evaluation???)
-     * 
-     * Experiment with:
-     *  - all constants
-     *  - valueboards
      *
      * Add or improve:
      *  - move ordering
@@ -24,6 +20,8 @@ public class BestBotV6 : IChessBot
      * Retry Aspiration windows
      * Reexamine move ordering with iterative deepening and transposition tables
      * Retry alpha-beta window tightening
+     *
+     * Neural network evaluation (maybe)
      *
      * Research 2nd video features (since everything up until now was basically video 1)
      */
