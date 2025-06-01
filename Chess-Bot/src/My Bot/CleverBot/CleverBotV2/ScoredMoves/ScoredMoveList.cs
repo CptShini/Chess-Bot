@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV2.ScoredMoves;
 
 internal struct ScoredMoveList
 {
-    private readonly Random _random = new();
+    private readonly System.Random _random = new();
 
     private readonly bool _white;
     private readonly List<Move> _moves;

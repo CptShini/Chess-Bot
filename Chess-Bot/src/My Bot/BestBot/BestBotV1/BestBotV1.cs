@@ -9,7 +9,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV1;
 
 public class BestBotV1 : IChessBot
 {
-    private readonly Random _rnd = new();
     private Evaluation _evaluation;
 
     private const int ExpectedTurnCount = 60;
@@ -94,7 +93,7 @@ public class BestBotV1 : IChessBot
             if (isMax ? eval > beta : eval < alpha) return (eval, Move.NullMove);
 
             if ((isMax ? eval > bestEval : eval < bestEval) || bestMove == Move.NullMove ||
-                eval == bestEval && _rnd.Next(2) == 0)
+                eval == bestEval && Random.Next(2) == 0)
             {
                 bestMove = move;
                 bestEval = eval;

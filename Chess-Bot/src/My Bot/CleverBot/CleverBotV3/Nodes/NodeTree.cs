@@ -11,7 +11,7 @@ internal class NodeTree
 
     private readonly int _printAmount;
 
-    private readonly Random _random = new();
+    private readonly System.Random _random = new();
 
     internal NodeTree(Board board, int printAmount = 0)
     {

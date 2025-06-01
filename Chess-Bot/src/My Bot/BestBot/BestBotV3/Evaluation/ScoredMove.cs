@@ -5,8 +5,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV3.Evaluation;
 
 internal readonly struct ScoredMove : IComparable<ScoredMove>
 {
-    private static readonly Random Random = new();
-    
     internal readonly Move Move;
     internal readonly bool IsCheckmate;
     

@@ -1,5 +1,4 @@
 ﻿using ChessChallenge.API;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +7,6 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV1.Evaluations;
 
 internal class ScoredMoveList
 {
-    private static readonly Random _random = new();
-
     private readonly bool _whiteToMove;
     private readonly List<Move> _moves;
     internal float Evaluation { get; private set; }
@@ -43,7 +40,7 @@ internal class ScoredMoveList
 
     internal Move GetMove()
     {
-        static T PickRandom<T>(List<T> list) => list[_random.Next(list.Count)];
+        static T PickRandom<T>(List<T> list) => list[Random.Next(list.Count)];
 
         return PickRandom(_moves);
     }

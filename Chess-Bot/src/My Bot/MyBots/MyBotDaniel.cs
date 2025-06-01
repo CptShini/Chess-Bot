@@ -9,7 +9,7 @@ public class MyBotDaniel : IChessBot
 {
     const int MaxDepth = 4;
     static readonly float[] PieceValues = new float[] { 0, 1, 3, 3, 5, 9, 100 };
-    readonly Random rand = new Random();
+    readonly System.Random rand = new System.Random();
     Evaluation evaluation;
 
     public Move Think(Board board, Timer timer)

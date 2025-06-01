@@ -1,12 +1,10 @@
-﻿using System;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Evaluators.Valueboards.Valueboards;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV5.Evaluation.Evaluators;
 
 internal static class PositionEvaluator
 {
-    private static readonly Random Random = new();
     private const int Castle = 50;
     
     // Opening randomness

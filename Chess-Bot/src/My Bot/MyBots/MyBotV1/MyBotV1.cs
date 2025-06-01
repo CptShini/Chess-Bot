@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ChessChallenge.API;
 
@@ -13,7 +12,7 @@ public class MyBotV1 : IChessBot
     private const float _checkmateValue = float.MaxValue;
     private const float _drawValue = 0f;
 
-    private static readonly Random _random = new();
+    private static readonly System.Random _random = new();
 
     public Move Think(Board board, Timer timer)
     {

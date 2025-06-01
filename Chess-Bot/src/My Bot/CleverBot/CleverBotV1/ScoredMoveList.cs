@@ -1,5 +1,4 @@
 ﻿using ChessChallenge.API;
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +6,7 @@ namespace Chess_Challenge.My_Bot.CleverBot.CleverBotV1;
 
 internal struct ScoredMoveList
 {
-    private static readonly Random _random = new();
+    private static readonly System.Random _random = new();
 
     private readonly List<Move> _maxMoves;
     private readonly List<Move> _minMoves;

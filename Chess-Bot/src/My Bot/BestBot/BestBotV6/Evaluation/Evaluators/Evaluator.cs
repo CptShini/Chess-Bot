@@ -1,13 +1,10 @@
-﻿using System;
-using ChessChallenge.API;
+﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal class Evaluator
 {
-    private static readonly Random Random = new();
-    
     private readonly Board _board;
 
     internal Evaluator(Board board) => _board = board;
