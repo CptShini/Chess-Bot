@@ -2,31 +2,35 @@
 
 internal class Valueboard
 {
-    private readonly int[][] _precomputedValues;
+    private const int
+        maxPieces = 16,
+        squareCount = 64;
+    
+    private readonly int[] _precomputedValues;
 
     internal Valueboard(WeightedValueboard valueboard, float lateGameWeight)
         : this(valueboard, valueboard with { Weight = lateGameWeight }) { }
     
     internal Valueboard(WeightedValueboard earlyValueboard, WeightedValueboard lateValueboard)
     {
-        _precomputedValues = new int[17][];
-        for (int pieceCount = 1; pieceCount <= 16; pieceCount++)
+        _precomputedValues = new int[(maxPieces + 1) * squareCount];
+        for (int pieceCount = 1; pieceCount <= maxPieces; pieceCount++)
         {
-            float endgameFactor = 1.0f - pieceCount / 16f;
-            _precomputedValues[pieceCount] = new int[64];
-        
-            for (int pos = 0; pos < 64; pos++)
+            float endgameFactor = 1.0f - (float)pieceCount / maxPieces;
+            
+            int offset = pieceCount * squareCount;
+            for (int pos = 0; pos < squareCount; pos++)
             {
                 float early = earlyValueboard[pos];
                 float late = lateValueboard[pos];
                 float value = early + (late - early) * endgameFactor;
-                _precomputedValues[pieceCount][pos] = (int)value;
+                _precomputedValues[offset + pos] = (int)value;
             }
         }
     }
 
     internal int GetValueAt(int enemyPiecesLeft, int positionIndex) =>
-        _precomputedValues[enemyPiecesLeft][positionIndex];
+        _precomputedValues[enemyPiecesLeft * squareCount + positionIndex];
 }
 
 internal readonly record struct WeightedValueboard(float[] Values, float Weight, bool Flip = true)
