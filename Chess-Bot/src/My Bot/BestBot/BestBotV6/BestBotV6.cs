@@ -11,6 +11,8 @@ public class BestBotV6 : IChessBot
      * TODO:
      *
      * Revert back to previous version...
+     *
+     * TTE unknown (+1) depth looks at depth -2?
      * 
      * Add or improve:
      *  - move ordering
