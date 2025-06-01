@@ -44,13 +44,18 @@ public static class BotSettings
         MathF.Sqrt(Random_PlyExtent - ply) / MathF.Sqrt(Random_PlyExtent);
 
     // Thinker
-    internal const int
-        DepthLimit = 32,
-        ExpectedTurnCount = 25; // ??
-    internal const float MaxThinkTimeFactor = 1.5f; // 1.75
-    
+    internal const int DepthLimit = 32;
+    internal const float MaxThinkTimeFactor = 1.5f;
+    internal static float TurnThinkTime(int msRemaining) =>
+        msRemaining switch
+        {
+            < 10_000 => msRemaining / 30f,
+            < 60_000 => msRemaining / 25f - 66.666f,
+            _ => MathF.Pow(MathF.Sqrt(msRemaining), 1.5f) / 1.643f
+        };
+
     // Think time estimation
-    internal const int TableLength = 5; // 8
+    internal const int TableLength = 5;
     internal static float BranchFactorRecencyWeight(int n) => 1f / (n + 1);
     
     internal static readonly Dictionary<PieceType, Valueboard> PieceValueboards = new()
