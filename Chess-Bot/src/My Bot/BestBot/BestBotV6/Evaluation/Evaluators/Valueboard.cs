@@ -3,7 +3,7 @@
 internal class Valueboard
 {
     private const int
-        maxPieces = 16,
+        maxPieceCount = 16,
         squareCount = 64;
     
     private readonly int[] _precomputedValues;
@@ -13,24 +13,42 @@ internal class Valueboard
     
     internal Valueboard(WeightedValueboard earlyValueboard, WeightedValueboard lateValueboard)
     {
-        _precomputedValues = new int[(maxPieces + 1) * squareCount];
-        for (int pieceCount = 1; pieceCount <= maxPieces; pieceCount++)
+        _precomputedValues = new int[(maxPieceCount + 1) * squareCount];
+        for (int pieceCount = 1; pieceCount <= maxPieceCount; pieceCount++)
         {
-            float endgameFactor = 1.0f - (float)pieceCount / maxPieces;
-            
+            PrecomputeForPieceCount(pieceCount);
+        }
+
+        return;
+
+        void PrecomputeForPieceCount(int pieceCount)
+        {
+            float endgameFactor = 1.0f - (float)pieceCount / maxPieceCount;
+
             int offset = pieceCount * squareCount;
-            for (int pos = 0; pos < squareCount; pos++)
+            for (int square = 0; square < squareCount; square++)
             {
-                float early = earlyValueboard[pos];
-                float late = lateValueboard[pos];
-                float value = early + (late - early) * endgameFactor;
-                _precomputedValues[offset + pos] = (int)value;
+                int index = offset + square;
+                int value = ComputeInterpolatedValue(square, endgameFactor);
+                _precomputedValues[index] = value;
             }
         }
+
+        int ComputeInterpolatedValue(int square, float endgameFactor)
+        {
+            float earlyValue = earlyValueboard[square];
+            float lateValue = lateValueboard[square];
+            float interpolated = Lerp(earlyValue, lateValue, endgameFactor);
+            return (int)interpolated;
+        }
+        
+        float Lerp(float a, float b, float t) =>
+            a + (b - a) * t;
     }
 
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     internal int GetValueAt(int enemyPiecesLeft, int positionIndex) =>
-        _precomputedValues[enemyPiecesLeft * squareCount + positionIndex];
+        _precomputedValues[(enemyPiecesLeft << 6) + positionIndex];
 }
 
 internal readonly record struct WeightedValueboard(float[] Values, float Weight, bool Flip = true)
