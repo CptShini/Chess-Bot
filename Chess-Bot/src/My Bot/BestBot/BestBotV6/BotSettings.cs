@@ -58,6 +58,7 @@ public static class BotSettings
     internal const int TableLength = 5;
     internal static float BranchFactorRecencyWeight(int n) => 1f / (n + 1);
     
+    // Valueboards
     internal static readonly Dictionary<PieceType, Valueboard> PieceValueboards = new()
     {
         {

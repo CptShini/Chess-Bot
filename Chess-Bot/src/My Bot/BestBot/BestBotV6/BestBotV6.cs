@@ -1,5 +1,4 @@
-﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 

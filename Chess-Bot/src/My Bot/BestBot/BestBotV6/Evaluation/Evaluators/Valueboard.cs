@@ -45,8 +45,7 @@ internal class Valueboard
         float Lerp(float a, float b, float t) =>
             a + (b - a) * t;
     }
-
-    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    
     internal int GetValueAt(int enemyPiecesLeft, int positionIndex) =>
         _precomputedValues[(enemyPiecesLeft << 6) + positionIndex];
 }
