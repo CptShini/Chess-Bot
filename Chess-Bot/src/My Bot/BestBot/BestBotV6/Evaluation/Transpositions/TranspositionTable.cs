@@ -40,11 +40,12 @@ internal class TranspositionTable
 
     internal Move TryGetStoredMove() => _table[Index].Move;
     
-    internal int LookupEvaluation(int depth, int alpha, int beta)
+    internal int LookupEvaluation(int depth, int alpha, int beta, ref GameState gameState)
     {
         if (!TTEnabled) return LookupFailed;
         
         TranspositionEntry entry = _table[Index];
+        gameState = entry.GameState;
         
         if (entry.Key != _board.ZobristKey) return LookupFailed;
         if (entry.Depth < depth) return LookupFailed;
@@ -58,11 +59,11 @@ internal class TranspositionTable
         };
     }
 
-    internal void StoreEvaluation(int depth, int val, int flags, Move move)
+    internal void StoreEvaluation(int depth, int val, int flags, Move move, GameState gameState)
     {
         if (!TTEnabled) return;
         
-        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move);
+        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move, gameState);
         _table[Index] = entry;
     }
 }

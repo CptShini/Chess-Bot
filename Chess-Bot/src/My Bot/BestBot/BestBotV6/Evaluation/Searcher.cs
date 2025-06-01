@@ -25,14 +25,16 @@ internal class Searcher
 
     internal int Search(int plyRemaining, out GameState gameState, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
     {
+        gameState = GameState.GameNotOver;
+        
         if (plyFromRoot > 0)
         {
+            int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta, ref gameState);
+            if (ttVal != LookupFailed) return ttVal;
+            
             gameState = _boardEvaluation.CheckGameState(plyFromRoot, out int endEvaluation);
             if (gameState != GameState.GameNotOver) return endEvaluation;
-        
-            int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
-            if (ttVal != LookupFailed) return ttVal;
-        } else gameState = GameState.GameNotOver;
+        }
         
         bool depthReached = plyRemaining == 0;
         return !depthReached ? SearchMoves(ref gameState) : QuiescentSearch(alpha, beta);
@@ -57,7 +59,7 @@ internal class Searcher
 
                 if (FailHigh(evaluation, beta)) // Prune
                 {
-                    _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move);
+                    _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move, moveState);
                     return beta;
                 }
                 if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -70,7 +72,7 @@ internal class Searcher
                 if (plyFromRoot == 0) BestMove = move;
             }
 
-            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
+            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition, pvGameState);
         
             return alpha;
         }

@@ -10,7 +10,7 @@ public class BestBotV6 : IChessBot
      * TODO:
      *
      * Bugfix:
-     *  - Fix random opposite sign??? (and rarely, checkmate evaluation???)
+     *  - Fix random opposite sign??? (probably InvertEvaluation() in BotPrinter)
      *
      * Add or improve:
      *  - move ordering
