@@ -11,16 +11,18 @@ internal class Evaluator
     
     internal int EvaluateMove(Move move, int enemyPiecesLeft)
     {
-        return
+        int moveValue =
             move.EvaluateMaterial() +
-            move.EvaluatePositioning(_board.IsWhiteToMove, enemyPiecesLeft) +
-            EvaluateEarlyGameRandomness();
+            move.EvaluatePositioning(_board.IsWhiteToMove, enemyPiecesLeft);
+
+        int ply = _board.PlyCount;
+        if (ply <= Random_PlyExtent)
+            moveValue += EvaluateEarlyGameRandomness();
+        
+        return moveValue;
         
         int EvaluateEarlyGameRandomness()
         {
-            int ply = _board.PlyCount;
-            if (ply > Random_PlyExtent) return 0;
-            
             int randomness = (int)(OpeningFactor(ply) * Random_Strength);
             return Random.Next(-randomness, randomness + 1);
         }
