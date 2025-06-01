@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6;
@@ -19,8 +19,8 @@ public static class BotSettings
     // State & move values
     internal const int
         CheckmateValue = -KingValue,
-        ContemptValue = -0_50, // -0_25
-        Castle = 0_50; // 0_75
+        ContemptValue = -0_50,
+        Castle = 0_50;
 
     // Move ordering
     private const int million = 1_000_000;
