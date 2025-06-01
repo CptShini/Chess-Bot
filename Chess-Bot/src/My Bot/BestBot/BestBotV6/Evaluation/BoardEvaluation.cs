@@ -11,7 +11,7 @@ internal struct BoardEvaluation
     private int _currentEvaluation;
     
     private int _whitePieceCount, _blackPieceCount;
-    private float _endgameFactor;
+    private int _enemyPiecesLeft => _board.IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
     
     internal int Current => _currentEvaluation * Perspective;
     private int Perspective => _board.IsWhiteToMove ? 1 : -1;
@@ -26,16 +26,23 @@ internal struct BoardEvaluation
         _evaluator = new(board);
         _moveEvaluationChanges = new();
 
-        _whitePieceCount = _board.CountPieces(true);
-        _blackPieceCount = _board.CountPieces(false);
-        UpdateEndgameFactor();
+        _whitePieceCount = CountPieces(true);
+        _blackPieceCount = CountPieces(false);
         
-        _currentEvaluation = _evaluator.EvaluateBoard(_endgameFactor);
+        _currentEvaluation = _evaluator.EvaluateBoard(_enemyPiecesLeft);
+
+        return;
+        
+        int CountPieces(bool white)
+        {
+            ulong bitBoard = white ? board.WhitePiecesBitboard : board.BlackPiecesBitboard;
+            return System.Numerics.BitOperations.PopCount(bitBoard);
+        }
     }
     
     internal void PopulateMoves(ref Span<Move> moves, bool capturesOnly) => _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
 
-    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _endgameFactor);
+    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _enemyPiecesLeft);
 
     internal GameState CheckGameState(int plyFromRoot, out int endEvaluation)
     {
@@ -49,7 +56,7 @@ internal struct BoardEvaluation
         bool isDraw = _board.IsDraw();
         if (isDraw)
         {
-            float earlyGameFactor = 1f - _endgameFactor;
+            float earlyGameFactor = _enemyPiecesLeft / 16f;
             int drawValue = (int)(earlyGameFactor * -ContemptValue);
             endEvaluation = drawValue;
             return GameState.Draw;
@@ -63,11 +70,10 @@ internal struct BoardEvaluation
     {
         if (move.IsCapture && _board.IsWhiteToMove) _blackPieceCount--;
         if (move.IsCapture && !_board.IsWhiteToMove) _whitePieceCount--;
-        UpdateEndgameFactor();
         
         _board.MakeMove(move);
         
-        int evalChange = _evaluator.EvaluateMove(move, _endgameFactor) * -Perspective;
+        int evalChange = _evaluator.EvaluateMove(move, _enemyPiecesLeft) * -Perspective;
         _currentEvaluation += evalChange;
         
         _moveEvaluationChanges.Push(evalChange);
@@ -79,15 +85,8 @@ internal struct BoardEvaluation
         
         if (move.IsCapture && _board.IsWhiteToMove) _blackPieceCount++;
         if (move.IsCapture && !_board.IsWhiteToMove) _whitePieceCount++;
-        UpdateEndgameFactor();
 
         _currentEvaluation -= _moveEvaluationChanges.Pop();
-    }
-
-    private void UpdateEndgameFactor()
-    {
-        int enemyPieceCount = _board.IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
-        _endgameFactor = enemyPieceCount.EndgameFactor();
     }
 }
 

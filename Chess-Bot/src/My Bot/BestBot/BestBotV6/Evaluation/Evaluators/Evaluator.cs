@@ -9,11 +9,11 @@ internal class Evaluator
 
     internal Evaluator(Board board) => _board = board;
     
-    internal int EvaluateMove(Move move, float endgameFactor)
+    internal int EvaluateMove(Move move, int enemyPiecesLeft)
     {
         return
             move.EvaluateMaterial() +
-            move.EvaluatePositioning(_board.IsWhiteToMove, endgameFactor) +
+            move.EvaluatePositioning(_board.IsWhiteToMove, enemyPiecesLeft) +
             EvaluateEarlyGameRandomness();
         
         int EvaluateEarlyGameRandomness()
@@ -26,6 +26,6 @@ internal class Evaluator
         }
     }
 
-    internal int EvaluateBoard(float endgameFactor) =>
-        _board.EvaluateMaterial() + _board.EvaluatePositioning(endgameFactor);
+    internal int EvaluateBoard(int enemyPiecesLeft) =>
+        _board.EvaluateMaterial() + _board.EvaluatePositioning(enemyPiecesLeft);
 }

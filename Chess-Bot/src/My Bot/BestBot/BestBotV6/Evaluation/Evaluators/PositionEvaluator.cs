@@ -5,7 +5,7 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class PositionEvaluator
 {
-    internal static int EvaluatePositioning(this Move move, bool isWhiteToMove, float endgameFactor)
+    internal static int EvaluatePositioning(this Move move, bool isWhiteToMove, int enemyPiecesLeft)
     {
         int positioning = EvaluateValueboardMove();
 
@@ -20,14 +20,14 @@ internal static class PositionEvaluator
             int start = move.StartSquare.PerspectiveIndex(!isWhiteToMove);
             int target = move.TargetSquare.PerspectiveIndex(!isWhiteToMove);
         
-            int startPositionValue = pieceType.EvaluatePiecePositioning(start, endgameFactor);
-            int targetPositionValue = pieceType.EvaluatePiecePositioning(target, endgameFactor);
+            int startPositionValue = pieceType.EvaluatePiecePositioning(start, enemyPiecesLeft);
+            int targetPositionValue = pieceType.EvaluatePiecePositioning(target, enemyPiecesLeft);
 
             return targetPositionValue - startPositionValue;
         }
     }
 
-    internal static int EvaluatePositioning(this Board board, float endgameFactor)
+    internal static int EvaluatePositioning(this Board board, int enemyPiecesLeft)
     {
         int evaluation = 0;
         for (int i = 0; i < 64; i++)
@@ -39,7 +39,7 @@ internal static class PositionEvaluator
             bool whitePiece = piece.IsWhite;
             int perspectiveIndex = square.PerspectiveIndex(whitePiece);
 
-            int worth = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, endgameFactor);
+            int worth = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPiecesLeft);
 
             evaluation += whitePiece ? worth : -worth;
         }
@@ -47,8 +47,8 @@ internal static class PositionEvaluator
         return evaluation;
     }
 
-    private static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, float endgameFactor) =>
-        PieceValueboards[pieceType].GetValueAt(endgameFactor, positionIndex);
+    private static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, int enemyPiecesLeft) =>
+        PieceValueboards[pieceType].GetValueAt(enemyPiecesLeft, positionIndex);
 
     private static int PerspectiveIndex(this Square square, bool whitePerspective) => whitePerspective ? square.Index : 63 - square.Index;
 }
