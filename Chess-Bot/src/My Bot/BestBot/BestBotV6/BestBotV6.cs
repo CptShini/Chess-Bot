@@ -1,4 +1,5 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
+﻿using System;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
@@ -9,15 +10,19 @@ public class BestBotV6 : IChessBot
     /*
      * TODO:
      *
-     * Fix random opposite sign??? (and rarely, checkmate evaluation???)
+     * Bugfix:
+     *  - Fix random opposite sign??? (and rarely, checkmate evaluation???)
+     *
+     * - 1D precomputed valueboard
      * 
-     * Experiment with
+     * Experiment with:
      *  - all constants
      *  - valueboards
      *
-     * Better
+     * Add or improve:
      *  - move ordering
      *  - king safety
+     *  - think time calculator (more fiddling, endgame factor, enemy time remaining, etc.)
      * 
      * Retry Aspiration windows
      * Reexamine move ordering with iterative deepening and transposition tables
