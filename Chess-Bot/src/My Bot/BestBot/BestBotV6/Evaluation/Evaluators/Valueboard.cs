@@ -52,5 +52,5 @@ internal class Valueboard
 
 internal readonly record struct WeightedValueboard(float[] Values, float Weight, bool Flip = true)
 {
-    internal float this[int index] => Values[Flip ? 63 - index : index] * Weight;
+    internal float this[int index] => Values[index.FlipIndex(Flip)] * Weight;
 }

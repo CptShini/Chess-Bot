@@ -26,7 +26,7 @@ internal static class MaterialEvaluator
             int worth = value * count;
 
             bool whitePieceList = pieceList.IsWhitePieceList;
-            evaluation += whitePieceList ? worth : -worth;
+            evaluation += worth.Perspective(whitePieceList);
         }
         
         return evaluation;

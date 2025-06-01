@@ -8,13 +8,11 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
 
 internal struct BoardEvaluation
 {
+    internal int Current => _currentEvaluation.Perspective(_board.IsWhiteToMove);
     private int _currentEvaluation;
     
-    private int _whitePieceCount, _blackPieceCount;
     private int _enemyPiecesLeft => _board.IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
-    
-    internal int Current => _currentEvaluation * Perspective;
-    private int Perspective => _board.IsWhiteToMove ? 1 : -1;
+    private int _whitePieceCount, _blackPieceCount;
     
     private readonly Board _board;
     private readonly Evaluator _evaluator;
@@ -68,12 +66,16 @@ internal struct BoardEvaluation
     
     internal void MakeMove(Move move)
     {
-        if (move.IsCapture && _board.IsWhiteToMove) _blackPieceCount--;
-        if (move.IsCapture && !_board.IsWhiteToMove) _whitePieceCount--;
+        bool isWhiteToMove = _board.IsWhiteToMove;
+        if (move.IsCapture)
+        {
+            if (isWhiteToMove) _blackPieceCount--;
+            else _whitePieceCount--;
+        }
         
         _board.MakeMove(move);
-        
-        int evalChange = _evaluator.EvaluateMove(move, _enemyPiecesLeft) * -Perspective;
+
+        int evalChange = _evaluator.EvaluateMove(move, _enemyPiecesLeft).Perspective(isWhiteToMove);
         _currentEvaluation += evalChange;
         
         _moveEvaluationChanges.Push(evalChange);
@@ -83,8 +85,11 @@ internal struct BoardEvaluation
     {
         _board.UndoMove(move);
         
-        if (move.IsCapture && _board.IsWhiteToMove) _blackPieceCount++;
-        if (move.IsCapture && !_board.IsWhiteToMove) _whitePieceCount++;
+        if (move.IsCapture)
+        {
+            if (_board.IsWhiteToMove) _blackPieceCount++;
+            else _whitePieceCount++;
+        }
 
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }

@@ -16,10 +16,10 @@ internal static class PositionEvaluator
         int EvaluateValueboardMove()
         {
             PieceType pieceType = move.MovePieceType;
-        
-            int start = move.StartSquare.PerspectiveIndex(!isWhiteToMove);
-            int target = move.TargetSquare.PerspectiveIndex(!isWhiteToMove);
-        
+            
+            int start = move.StartSquare.Index.FlipIndex(isWhiteToMove);
+            int target = move.TargetSquare.Index.FlipIndex(isWhiteToMove);
+            
             int startPositionValue = pieceType.EvaluatePiecePositioning(start, enemyPiecesLeft);
             int targetPositionValue = pieceType.EvaluatePiecePositioning(target, enemyPiecesLeft);
 
@@ -35,13 +35,12 @@ internal static class PositionEvaluator
             Square square = new(i);
             Piece piece = board.GetPiece(square);
             if (piece.PieceType == PieceType.None) continue;
-
+            
             bool whitePiece = piece.IsWhite;
-            int perspectiveIndex = square.PerspectiveIndex(whitePiece);
-
+            int perspectiveIndex = square.Index.FlipIndex(whitePiece);
+            
             int worth = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPiecesLeft);
-
-            evaluation += whitePiece ? worth : -worth;
+            evaluation += worth.Perspective(whitePiece);
         }
 
         return evaluation;
@@ -49,6 +48,4 @@ internal static class PositionEvaluator
 
     private static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, int enemyPiecesLeft) =>
         PieceValueboards[pieceType].GetValueAt(enemyPiecesLeft, positionIndex);
-
-    private static int PerspectiveIndex(this Square square, bool whitePerspective) => whitePerspective ? square.Index : 63 - square.Index;
 }
