@@ -100,10 +100,3 @@ internal struct BoardEvaluation
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }
 }
-
-internal enum GameState
-{
-    GameNotOver = -1,
-    Draw = 0,
-    Checkmate = 1
-}
