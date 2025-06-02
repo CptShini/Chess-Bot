@@ -25,7 +25,7 @@ internal struct BoardEvaluation
         _whitePieceCount = CountPieces(true);
         _blackPieceCount = CountPieces(false);
         
-        _currentEvaluation = EvaluateBoard();
+        _currentEvaluation = EvaluateBoard(_enemyPiecesLeft);
 
         return;
         
@@ -34,19 +34,17 @@ internal struct BoardEvaluation
             ulong bitBoard = white ? board.WhitePiecesBitboard : board.BlackPiecesBitboard;
             return System.Numerics.BitOperations.PopCount(bitBoard);
         }
+        
+        int EvaluateBoard(int enemyPiecesLeft) =>
+            board.EvaluateMaterial() + 
+            board.EvaluatePositioning(enemyPiecesLeft);
     }
     
-    internal void PopulateMoves(ref Span<Move> moves, bool capturesOnly) => _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
+    internal void PopulateMoves(ref Span<Move> moves, bool capturesOnly) =>
+        _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
 
-    internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _enemyPiecesLeft);
-
-    private int EvaluateMove(Move move) =>
-        move.EvaluateMaterial() +
-        move.EvaluatePositioning(_board.IsWhiteToMove, _enemyPiecesLeft);
-
-    private int EvaluateBoard() =>
-        _board.EvaluateMaterial() +
-        _board.EvaluatePositioning(_enemyPiecesLeft);
+    internal void OrderMoves(ref Span<Move> moves, Move pvMove) =>
+        _board.OrderMoves(moves, pvMove, _enemyPiecesLeft);
     
     internal GameState CheckGameState(int plyFromRoot, out int endEvaluation)
     {
@@ -73,30 +71,37 @@ internal struct BoardEvaluation
     internal void MakeMove(Move move)
     {
         bool isWhiteToMove = _board.IsWhiteToMove;
-        if (move.IsCapture)
-        {
-            if (isWhiteToMove) _blackPieceCount--;
-            else _whitePieceCount--;
-        }
+        UpdatePieceCountForCapture(move, isWhiteToMove, true);
         
         _board.MakeMove(move);
 
-        int evalChange = EvaluateMove(move).Perspective(isWhiteToMove);
+        int evalChange = EvaluateMove(_enemyPiecesLeft).Perspective(isWhiteToMove);
         _currentEvaluation += evalChange;
         
         _moveEvaluationChanges.Push(evalChange);
+
+        return;
+        
+        int EvaluateMove(int enemyPiecesLeft) =>
+            move.EvaluateMaterial() +
+            move.EvaluatePositioning(isWhiteToMove, enemyPiecesLeft);
     }
 
     internal void UndoMove(Move move)
     {
         _board.UndoMove(move);
-        
-        if (move.IsCapture)
-        {
-            if (_board.IsWhiteToMove) _blackPieceCount++;
-            else _whitePieceCount++;
-        }
-
         _currentEvaluation -= _moveEvaluationChanges.Pop();
+        
+        UpdatePieceCountForCapture(move, _board.IsWhiteToMove, false);
+    }
+    
+    private void UpdatePieceCountForCapture(Move move, bool isWhiteToMove, bool isCapturing)
+    {
+        if (!move.IsCapture) return;
+        
+        if (isWhiteToMove)
+            _blackPieceCount += isCapturing ? -1 : 1;
+        else
+            _whitePieceCount += isCapturing ? -1 : 1;
     }
 }
