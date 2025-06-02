@@ -1,5 +1,4 @@
-﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 using ChessChallenge.API;
 using Timer = ChessChallenge.API.Timer;
 
@@ -9,7 +8,10 @@ public class BestBotV6 : IChessBot
 {
     /*
      * TODO:
-     *
+     * Crazy fen string to analyze:
+     * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
+     * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
+     * 
      * Fiddle/tinker with:
      *  - turn think time
      *  - piece values
