@@ -15,19 +15,17 @@ internal struct BoardEvaluation
     private int _whitePieceCount, _blackPieceCount;
     
     private readonly Board _board;
-    private readonly Evaluator _evaluator;
     private readonly Stack<int> _moveEvaluationChanges;
     
     internal BoardEvaluation(Board board)
     {
         _board = board;
-        _evaluator = new(board);
         _moveEvaluationChanges = new();
 
         _whitePieceCount = CountPieces(true);
         _blackPieceCount = CountPieces(false);
         
-        _currentEvaluation = _evaluator.EvaluateBoard(_enemyPiecesLeft);
+        _currentEvaluation = EvaluateBoard();
 
         return;
         
@@ -42,6 +40,14 @@ internal struct BoardEvaluation
 
     internal void OrderMoves(ref Span<Move> moves, Move pvMove) => _board.OrderMoves(moves, pvMove, _enemyPiecesLeft);
 
+    private int EvaluateMove(Move move) =>
+        move.EvaluateMaterial() +
+        move.EvaluatePositioning(_board.IsWhiteToMove, _enemyPiecesLeft);
+
+    private int EvaluateBoard() =>
+        _board.EvaluateMaterial() +
+        _board.EvaluatePositioning(_enemyPiecesLeft);
+    
     internal GameState CheckGameState(int plyFromRoot, out int endEvaluation)
     {
         bool isCheckmate = _board.IsInCheckmate();
@@ -75,7 +81,7 @@ internal struct BoardEvaluation
         
         _board.MakeMove(move);
 
-        int evalChange = _evaluator.EvaluateMove(move, _enemyPiecesLeft).Perspective(isWhiteToMove);
+        int evalChange = EvaluateMove(move).Perspective(isWhiteToMove);
         _currentEvaluation += evalChange;
         
         _moveEvaluationChanges.Push(evalChange);
