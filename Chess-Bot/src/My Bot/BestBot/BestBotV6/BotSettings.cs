@@ -13,7 +13,7 @@ public static class BotSettings
         KnightValue = 3_00,
         BishopValue = 3_20,
         RookValue = 5_00,
-        QueenValue = 9_00,
+        QueenValue = 9_50,
         KingValue = 100_00;
     
     // State & move values
