@@ -10,9 +10,10 @@ public class BestBotV6 : IChessBot
     /*
      * TODO:
      *
-     * Revert back to previous version...
-     *
-     * TTE unknown (+1) depth looks at depth -2?
+     * Fiddle/tinker with:
+     *  - turn think time
+     *  - piece values
+     *  - state & move values
      * 
      * Add or improve:
      *  - move ordering

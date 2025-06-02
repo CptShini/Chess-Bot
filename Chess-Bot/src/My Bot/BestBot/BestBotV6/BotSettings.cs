@@ -35,13 +35,6 @@ public static class BotSettings
     internal const bool TTEnabled = true;
     internal const int
         TTSize = 128;
-    
-    // Opening randomness
-    internal const int
-        Random_PlyExtent = 8,
-        Random_Strength = 1_00;
-    internal static float OpeningFactor(int ply) =>
-        MathF.Sqrt(Random_PlyExtent - ply) / MathF.Sqrt(Random_PlyExtent);
 
     // Thinker
     internal const int DepthLimit = 32;
@@ -49,9 +42,10 @@ public static class BotSettings
     internal static float TurnThinkTime(int msRemaining) =>
         msRemaining switch
         {
-            < 10_000 => msRemaining / 30f,
+            /*< 10_000 => msRemaining / 30f,
             < 60_000 => msRemaining / 25f - 66.666f,
-            _ => MathF.Pow(MathF.Sqrt(msRemaining), 1.5f) / 1.643f
+            _ => MathF.Pow(MathF.Sqrt(msRemaining), 1.5f) / 1.643f*/
+            _ => msRemaining / 25f
         };
 
     // Think time estimation
