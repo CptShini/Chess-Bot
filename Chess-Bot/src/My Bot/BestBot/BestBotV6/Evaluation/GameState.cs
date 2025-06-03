@@ -2,7 +2,7 @@
 
 internal enum GameState
 {
-    GameNotOver = -1,
-    Draw = 0,
-    Checkmate = 1
+    GameNotOver = 0,
+    Draw = 1,
+    Checkmate = 2
 }
