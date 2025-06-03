@@ -12,7 +12,7 @@ internal class BoardWrapper
     
     private protected bool IsWhiteToMove { get; private set; }
     
-    private int EnemyPiecesLeft => IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
+    private int EnemyPieceCount => IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
     private int _whitePieceCount, _blackPieceCount;
     
     private protected BoardWrapper(Board board)
@@ -35,16 +35,16 @@ internal class BoardWrapper
     internal void GetOrderedMoves(ref Span<Move> moves, bool capturesOnly, Move pvMove)
     {
         _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
-        _board.OrderMoves(moves, pvMove, EnemyPiecesLeft);
+        _board.OrderMoves(moves, pvMove, EnemyPieceCount);
     }
     
     internal int EvaluateMove(Move move) =>
         move.EvaluateMaterial() +
-        move.EvaluatePositioning(IsWhiteToMove, EnemyPiecesLeft);
+        move.EvaluatePositioning(IsWhiteToMove, EnemyPieceCount);
 
     internal int EvaluateBoard() =>
         _board.EvaluateMaterial() + 
-        _board.EvaluatePositioning(EnemyPiecesLeft);
+        _board.EvaluatePositioning(EnemyPieceCount);
     
     internal GameState EvaluateGameState(int plyFromRoot, out int endEvaluation)
     {
@@ -58,7 +58,7 @@ internal class BoardWrapper
         bool isDraw = _board.IsDraw();
         if (isDraw)
         {
-            float earlyGameFactor = EnemyPiecesLeft / 16f;
+            float earlyGameFactor = EnemyPieceCount / 16f;
             int drawValue = (int)(earlyGameFactor * -ContemptValue);
             endEvaluation = drawValue;
             return Draw;

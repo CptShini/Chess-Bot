@@ -8,7 +8,7 @@ internal static class MoveOrderer
 {
     private static readonly int[] _moveScores = new int[128];
     
-    internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove, int enemyPiecesLeft)
+    internal static void OrderMoves(this Board board, Span<Move> moves, Move pvMove, int enemyPieceCount)
     {
         for (int i = 0; i < moves.Length; i++)
         {
@@ -19,13 +19,13 @@ internal static class MoveOrderer
                 continue;
             }
             
-            _moveScores[i] = ScoreMove(move, board, enemyPiecesLeft);
+            _moveScores[i] = ScoreMove(move, board, enemyPieceCount);
         }
         
         Sorting.Quicksort(moves, _moveScores);
     }
 
-    private static int ScoreMove(Move move, Board board, int enemyPiecesLeft)
+    private static int ScoreMove(Move move, Board board, int enemyPieceCount)
     {
         int score = 0;
         if (move.IsCapture) score += ScoreCapture(move, board);
@@ -34,7 +34,7 @@ internal static class MoveOrderer
             and { PromotionPieceType: PieceType.Queen, IsCapture: false })
             score += promoteBias;
         else
-            score += move.EvaluatePositioning(board.IsWhiteToMove, enemyPiecesLeft);
+            score += move.EvaluatePositioning(board.IsWhiteToMove, enemyPieceCount);
 
         return score;
     }

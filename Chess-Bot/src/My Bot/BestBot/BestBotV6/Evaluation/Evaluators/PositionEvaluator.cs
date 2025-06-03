@@ -6,16 +6,16 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 
 internal static class PositionEvaluator
 {
-    internal static int EvaluatePositioning(this Move move, bool isWhiteToMove, int enemyPiecesLeft)
+    internal static int EvaluatePositioning(this Move move, bool isWhiteToMove, int enemyPieceCount)
     {
-        int positioning = move.EvaluateValueboardMove(isWhiteToMove, enemyPiecesLeft);
+        int positioning = move.EvaluateValueboardMove(isWhiteToMove, enemyPieceCount);
 
         if (move.IsCastles) positioning += CastleValue;
 
         return positioning;
     }
 
-    internal static int EvaluatePositioning(this Board board, int enemyPiecesLeft)
+    internal static int EvaluatePositioning(this Board board, int enemyPieceCount)
     {
         int evaluation = 0;
         
@@ -27,7 +27,7 @@ internal static class PositionEvaluator
             
             bool whitePiece = piece.IsWhite;
             int perspectiveIndex = square.Index.FlipIndex(!whitePiece);
-            int positioning = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPiecesLeft);
+            int positioning = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPieceCount);
             
             int value = positioning.Perspective(whitePiece);
             evaluation += value;
