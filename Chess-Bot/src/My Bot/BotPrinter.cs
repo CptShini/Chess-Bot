@@ -8,7 +8,11 @@ public static class BotPrinter
 {
     private static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, int gameState)
     {
-        StringBuilder sb = new($"{bot.GetType().Name,-11} | {move.ToString(),-13} | ");
+        StringBuilder sb = new();
+        
+        sb.Append($"{bot.GetType().Name,-11} | ");
+        sb.Append($"{move.ToString(),-13} | ");
+        sb.Append($"{move.GetAlgebraicNotation(),-6} | ");
         
         switch (gameState)
         {
@@ -20,7 +24,7 @@ public static class BotPrinter
                 break;
             case 2:
                 if (evaluation < 0) depth *= -1;
-                sb.Append($"Mate in {depth}");
+                sb.Append($"Mate in {depth,3}");
                 break;
         }
     
