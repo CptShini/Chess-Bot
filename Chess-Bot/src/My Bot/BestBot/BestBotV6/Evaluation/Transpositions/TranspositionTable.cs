@@ -1,40 +1,35 @@
 ﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions.TranspositionFlag;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions;
 
 internal class TranspositionTable
 {
     internal const int LookupFailed = -1;
-    internal const int FlagExact = 0;
-    internal const int FlagAlpha = 1;
-    internal const int FlagBeta = 2;
-
-    private Board _board;
     
+    private readonly int numEntries;
     private readonly ulong _tableSize;
-    private readonly TranspositionEntry[] _table;
+    
+    private Board _board;
+    private TranspositionEntry[] _table;
 
     internal TranspositionTable(int sizeMb)
     {
         int ttEntrySizeBytes = System.Runtime.InteropServices.Marshal.SizeOf<TranspositionEntry>();
         int desiredTableSizeInBytes = sizeMb * 1024 * 1024;
-        int numEntries = desiredTableSizeInBytes / ttEntrySizeBytes;
+        numEntries = desiredTableSizeInBytes / ttEntrySizeBytes;
 
         _tableSize = (ulong)numEntries;
-        _table = new TranspositionEntry[numEntries];
     }
 
     internal void Initialize(Board board)
     {
         _board = board;
-        for (int i = 0; i < (int)_tableSize; i++)
-        {
-            if (_table[i].Key == 0) continue;
-            
-            _table[i] = new();
-        }
+        ResetTable();
     }
+    
+    private void ResetTable() => _table = new TranspositionEntry[numEntries];
     
     private ulong Index => _board.ZobristKey % _tableSize;
 
@@ -52,18 +47,18 @@ internal class TranspositionTable
         
         return entry.Flag switch
         {
-            FlagExact => entry.Value,
-            FlagAlpha when entry.Value <= alpha => alpha,
-            FlagBeta when entry.Value >= beta => beta,
+            Exact => entry.Value,
+            Alpha when entry.Value <= alpha => alpha,
+            Beta when entry.Value >= beta => beta,
             _ => LookupFailed
         };
     }
 
-    internal void StoreEvaluation(int depth, int val, int flags, Move move, GameState gameState)
+    internal void StoreEvaluation(int depth, int val, TranspositionFlag flag, Move move, GameState gameState)
     {
         if (!TTEnabled) return;
         
-        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flags, move, gameState);
+        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flag, move, gameState);
         _table[Index] = entry;
     }
 }

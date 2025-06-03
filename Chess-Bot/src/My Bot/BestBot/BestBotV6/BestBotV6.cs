@@ -11,24 +11,32 @@ public class BestBotV6 : IChessBot
      * Crazy fen string to analyze:
      * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
      * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
+     *
+     * Complete Systems analysis...
      * 
      * Fiddle/tinker with:
      *  - turn think time
      *  - piece values
      *  - state & move values
+     *  - InsertionSortThreshold (try 8, 12, 16, 20, and 32)
+     *  - valueboards
      * 
-     * Add or improve:
-     *  - move ordering
+     * Add:
      *  - king safety
+     *
+     * Improve/refactor:
+     *  - searcher
      *  - think time calculator (more fiddling, endgame factor, enemy time remaining, etc.)
-     * 
-     * Retry Aspiration windows
-     * Reexamine move ordering with iterative deepening and transposition tables
-     * Retry alpha-beta window tightening
+     *  - move ordering
      *
-     * Neural network evaluation (maybe)
+     * Retry:
+     *  - aspiration windows
+     *  - alpha-beta window tightening
+     *  - move ordering with iterative deepening and transposition tables
      *
-     * Research 2nd video features (since everything up until now was basically video 1)
+     * Research:
+     *  - neural network evaluation (maybe)
+     *  - 2nd video features (since everything up until now was basically video 1)
      */
     
     private Thinker _thinker;

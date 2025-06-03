@@ -7,12 +7,15 @@ internal static class MaterialEvaluator
 {
     internal static int EvaluateMaterial(this Move move)
     {
-        int materialScore = 0;
+        int material = 0;
 
-        if (move.IsCapture) materialScore += move.CapturePieceType.GetPieceValue();
-        if (move.IsPromotion) materialScore += move.PromotionPieceType.GetPieceValue() - PawnValue;
+        if (move.IsCapture)
+            material += move.CapturePieceType.GetPieceValue();
+        
+        if (move.IsPromotion)
+            material += move.PromotionPieceType.GetPieceValue() - PawnValue;
 
-        return materialScore;
+        return material;
     }
 
     internal static int EvaluateMaterial(this Board board)
@@ -21,12 +24,13 @@ internal static class MaterialEvaluator
 
         foreach (PieceList pieceList in board.GetAllPieceLists())
         {
-            int value = pieceList.TypeOfPieceInList.GetPieceValue();
+            int pieceValue = pieceList.TypeOfPieceInList.GetPieceValue();
             int count = pieceList.Count;
-            int worth = value * count;
+            int material = pieceValue * count;
 
             bool whitePieceList = pieceList.IsWhitePieceList;
-            evaluation += worth.Perspective(whitePieceList);
+            int value = material.Perspective(whitePieceList);
+            evaluation += value;
         }
         
         return evaluation;

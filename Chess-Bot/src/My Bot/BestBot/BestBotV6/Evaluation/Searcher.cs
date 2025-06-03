@@ -10,7 +10,7 @@ internal class Searcher
 {
     private const int Infinity = 9999_99;
     
-    private BoardEvaluation _boardEvaluation;
+    private readonly BoardEvaluation _boardEvaluation;
     private static readonly TranspositionTable _transpositionTable = new(TTSize);
     
     internal Move BestMove { get; private set; }
@@ -32,7 +32,7 @@ internal class Searcher
             int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta, ref gameState);
             if (ttVal != LookupFailed) return ttVal;
             
-            gameState = _boardEvaluation.CheckGameState(plyFromRoot, out int endEvaluation);
+            gameState = _boardEvaluation.EvaluateGameState(plyFromRoot, out int endEvaluation);
             if (gameState != GameState.GameNotOver) return endEvaluation;
         }
         
@@ -41,13 +41,12 @@ internal class Searcher
 
         int SearchMoves(ref GameState pvGameState)
         {
-            int evaluationFlag = FlagAlpha;
+            TranspositionFlag evaluationFlag = TranspositionFlag.Alpha;
             Move bestMoveThisPosition = Move.NullMove;
             Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
         
             Span<Move> moves = stackalloc Move[128];
-            _boardEvaluation.PopulateMoves(ref moves, false);
-            _boardEvaluation.OrderMoves(ref moves, pvMove);
+            _boardEvaluation.GetOrderedMoves(ref moves, false, pvMove);
         
             foreach (Move move in moves)
             {
@@ -59,7 +58,7 @@ internal class Searcher
 
                 if (FailHigh(evaluation, beta)) // Prune
                 {
-                    _transpositionTable.StoreEvaluation(plyRemaining, beta, FlagBeta, move, moveState);
+                    _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionFlag.Beta, move, moveState);
                     return beta;
                 }
                 if (FailLow(evaluation, alpha)) continue; // Ignore
@@ -67,7 +66,7 @@ internal class Searcher
                 // PV-node
                 alpha = evaluation;
                 pvGameState = moveState;
-                evaluationFlag = FlagExact;
+                evaluationFlag = TranspositionFlag.Exact;
                 bestMoveThisPosition = move;
                 if (plyFromRoot == 0) BestMove = move;
             }
@@ -85,8 +84,7 @@ internal class Searcher
         if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
         
         Span<Move> moves = stackalloc Move[128];
-        _boardEvaluation.PopulateMoves(ref moves, true);
-        _boardEvaluation.OrderMoves(ref moves, Move.NullMove);
+        _boardEvaluation.GetOrderedMoves(ref moves, true, Move.NullMove);
         
         foreach (Move move in moves)
         {
