@@ -50,7 +50,7 @@ internal class Searcher
         
             foreach (Move move in moves)
             {
-                if (move == Move.NullMove) break;
+                if (move.IsNull) break;
             
                 _boardEvaluation.MakeMove(move);
                 int evaluation = -Search(plyRemaining - 1, out GameState moveState, plyFromRoot + 1, -beta, -alpha);
