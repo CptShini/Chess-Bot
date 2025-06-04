@@ -33,4 +33,14 @@ internal class BoardEvaluation : BoardWrapper
         
         _currentEvaluation -= _moveEvaluationChanges.Pop();
     }
+
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+
+        sb.AppendLine($"Evaluation: {Current,6:+0;-0;0}");
+        sb.Append(base.ToString());
+        
+        return sb.ToString();
+    }
 }

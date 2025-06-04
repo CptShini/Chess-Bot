@@ -101,4 +101,21 @@ internal class BoardWrapper
             else _whitePieceCount++;
         }
     }
+    
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+        
+        string side = IsWhiteToMove ? "White" : "Black";
+        sb.AppendLine($"{side} to move");
+        
+        sb.Append($"W:{_whitePieceCount,2} ");
+        sb.Append($"B:{_blackPieceCount,2} ");
+        sb.Append($"(Enemy: {EnemyPieceCount,2})");
+        sb.AppendLine();
+
+        sb.Append(_board);
+
+        return sb.ToString();
+    }
 }
