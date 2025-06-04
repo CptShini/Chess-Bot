@@ -12,8 +12,8 @@ internal static class ValueboardEvaluator
     
     internal static int EvaluateValueboardMove(this Move move, bool isWhiteToMove, int enemyPieceCount)
     {
-        int start = move.StartSquare.Index.FlipIndex(isWhiteToMove);
-        int target = move.TargetSquare.Index.FlipIndex(isWhiteToMove);
+        int start = move.StartSquare.Index.FlipIndex(!isWhiteToMove);
+        int target = move.TargetSquare.Index.FlipIndex(!isWhiteToMove);
         
         Valueboard valueboard = move.MovePieceType.GetValueboard();
         int startValue = valueboard[enemyPieceCount, start];
