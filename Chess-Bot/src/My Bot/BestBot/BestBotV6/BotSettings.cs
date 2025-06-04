@@ -27,7 +27,7 @@ public static class BotSettings
         winningCaptureBias = 8 * million,
         promoteBias = 6 * million,
         losingCaptureBias = 2 * million;
-    internal const int InsertionSortThreshold = 8;
+    internal const int InsertionSortThreshold = 12;
 
     // Transposition table
     internal const bool TTEnabled = true;
