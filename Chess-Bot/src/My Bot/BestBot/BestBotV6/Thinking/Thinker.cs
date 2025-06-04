@@ -94,4 +94,31 @@ internal class Thinker
             return (long)(timeTaken * branchFactor);
         }
     }
+    
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+
+        sb.AppendLine("=== Thinker State ===");
+        sb.AppendLine($"Current Best Move : {CurrentBest.Move} (Eval: {CurrentBest.Evaluation})");
+        sb.AppendLine($"Search Depth      : {depth}");
+        sb.AppendLine($"Time Taken        : {FormatTime(timeTaken)}");
+        sb.AppendLine($"Time Budget       : {FormatTime(_maximumTurnThinkTime)}");
+        sb.AppendLine();
+
+        sb.AppendLine("--- Searcher ---");
+        sb.AppendLine(_searcher.ToString());
+
+        sb.AppendLine("--- Think Time Estimator ---");
+        sb.AppendLine(_thinkTimeEstimator.ToString());
+
+        return sb.ToString();
+    }
+
+    private static string FormatTime(long ticks)
+    {
+        TimeSpan time = TimeSpan.FromMilliseconds(ticks);
+        return $"{time.TotalSeconds:0.000}s";
+    }
+
 }

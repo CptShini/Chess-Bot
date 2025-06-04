@@ -20,7 +20,7 @@ internal class Searcher
         _boardEvaluation = new(board);
         _transpositionTable.Initialize(board);
 
-        BestMove = board.GetLegalMoves().RandomElement();
+        BestMove = Move.NullMove;
     }
 
     internal int Search(int plyRemaining, out GameState gameState, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
@@ -106,4 +106,22 @@ internal class Searcher
     
     private static bool FailHigh(int evaluation, int beta) => evaluation >= beta; // Cut-node
     private static bool FailLow(int evaluation, int alpha) => evaluation <= alpha; // All-node
+    
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+
+        sb.AppendLine("=== Searcher State ===");
+        sb.AppendLine($"Best {BestMove}");
+        sb.AppendLine();
+
+        sb.AppendLine("--- Board Evaluation ---");
+        sb.AppendLine(_boardEvaluation.ToString());
+
+        sb.AppendLine("--- Transposition Table ---");
+        sb.AppendLine(_transpositionTable.ToString());
+
+        return sb.ToString();
+    }
+
 }

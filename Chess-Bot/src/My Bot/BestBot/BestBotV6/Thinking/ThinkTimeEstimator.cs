@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
@@ -58,34 +56,31 @@ internal class ThinkTimeEstimator
         float averageNextBranchFactor = (previousBranchFactor1 + previousBranchFactor2) / 2f;
         return averageNextBranchFactor;
     }
-
-    private string ToString(int depth)
-    {
-        StringBuilder sb = new();
-        
-        sb.Append($"{depth.ToString().PadLeft(2)} | {GetAverageBranchFactor(depth).ToString("F", CultureInfo.InvariantCulture).PadLeft(5)} | ");
-
-        foreach (float branchFactor in _branchingTable[depth])
-        {
-            sb.Append($"{branchFactor.ToString("F", CultureInfo.InvariantCulture).PadLeft(5)} ");
-        }
-        
-        sb.AppendLine();
-
-        return sb.ToString();
-    }
     
     public override string ToString()
     {
-        StringBuilder sb = new();
+        var sb = new System.Text.StringBuilder();
 
-        for (int i = 1; i < DepthLimit; i++)
+        sb.AppendLine("=== Think Time Estimator ===");
+        sb.AppendLine("Depth | Avg BF | Recent Branch Factors");
+        sb.AppendLine("------+--------+------------------------");
+
+        for (int depth = 1; depth < DepthLimit; depth++)
         {
-            sb.Append(ToString(i));
+            LinkedList<float> entries = _branchingTable[depth];
+            if (entries.Count == 0) break;
             
-            if (_branchingTable[i].Count == 0) break;
+            float avg = GetAverageBranchFactor(depth);
+            sb.Append($"  {depth,2}  | {avg,6:0.00} |");
+
+            foreach (float bf in entries)
+            {
+                sb.Append($" {bf:0.00}");
+            }
+
+            sb.AppendLine();
         }
-        
+
         return sb.ToString();
     }
 }

@@ -25,6 +25,7 @@ public class BestBotV6 : IChessBot
      *  - valueboards
      * 
      * Add:
+     *  - dynamic transposition table size?
      *  - reward for king approaching enemy king in endgame
      *  - king safety
      *
