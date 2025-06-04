@@ -8,9 +8,12 @@ public class BestBotV6 : IChessBot
 {
     /*
      * TODO:
-     * Crazy fen string to analyze:
-     * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
-     * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
+     * Fen strings to analyze:
+     * - Weird null move:
+     *     * r4rk1/pp1nqpp1/2pbpn1p/3p1b2/2PP4/1PN1PN2/PB2BPPP/R2QR1K1 w - - 6 11
+     *  - why no queen promotion?
+     *     * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
+     *     * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
      *
      * Complete Systems analysis...
      * 
@@ -18,7 +21,7 @@ public class BestBotV6 : IChessBot
      *  - turn think time
      *  - piece values
      *  - state & move values
-     *  - InsertionSortThreshold (try 8, 12, 16, 20, and 32)
+     *  - InsertionSortThreshold (try 8, 12, 16, and 20)
      *  - valueboards
      * 
      * Add:
