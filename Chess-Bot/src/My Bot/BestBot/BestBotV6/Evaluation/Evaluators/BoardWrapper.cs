@@ -58,7 +58,7 @@ internal class BoardWrapper
         bool isDraw = _board.IsDraw();
         if (isDraw)
         {
-            float earlyGameFactor = EnemyPieceCount / 16f;
+            float earlyGameFactor = (EnemyPieceCount - 1) / 15f;
             int drawValue = (int)(earlyGameFactor * -ContemptValue);
             endEvaluation = drawValue;
             return Draw;

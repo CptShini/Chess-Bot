@@ -23,7 +23,7 @@ internal class Valueboard
 
         void PrecomputeForPieceCount(int pieceCount)
         {
-            float endgameFactor = 1.0f - (float)pieceCount / MaxPieceCount;
+            float endgameFactor = 1.0f - (pieceCount - 1f) / (MaxPieceCount - 1);
 
             int offset = pieceCount * SquareCount;
             for (int square = 0; square < SquareCount; square++)
