@@ -9,26 +9,34 @@ public static class BotPrinter
     private static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, int gameState)
     {
         StringBuilder sb = new();
-        
-        sb.Append($"{bot.GetType().Name,-11} | ");
-        sb.Append($"{move.ToString(),-13} | ");
-        sb.Append($"{move.GetAlgebraicNotation(),-6} | ");
-        
-        switch (gameState)
-        {
-            case 0:
-                sb.Append($"Depth: {depth,2} | Evaluation: {evaluation,6:F2}"); 
-                break;
-            case 1:
-                sb.Append($"Draw in {depth,2}");
-                break;
-            case 2:
-                if (evaluation < 0) depth *= -1;
-                sb.Append($"Mate in {depth,3}");
-                break;
-        }
-    
+        AppendMoveString();
         Console.WriteLine(sb.ToString());
+
+        return;
+        
+        void AppendMoveString()
+        {
+            sb.Append($"{bot.GetType().Name,-11}");
+            sb.Append($" | {move.ToString(),-13}");
+            if (move.IsNull) return;
+        
+            sb.Append($" | {move.GetAlgebraicNotation(),-6}");
+        
+            switch (gameState)
+            {
+                case 0:
+                    sb.Append($" | Depth: {depth,2}");
+                    sb.Append($" | Evaluation: {evaluation,6:F2}");
+                    break;
+                case 1:
+                    sb.Append($" | Draw in {depth,2}");
+                    break;
+                case 2:
+                    if (evaluation < 0) depth *= -1;
+                    sb.Append($" | Mate in {depth,3}");
+                    break;
+            }
+        }
     }
 
     internal static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, float threshold) =>
