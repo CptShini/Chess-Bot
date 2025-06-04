@@ -54,4 +54,35 @@ internal class Valueboard
             return _precomputedValueboards[index];
         }
     }
+    
+    public override string ToString()
+    {
+        var sb = new System.Text.StringBuilder();
+        for (int pieceCount = MaxPieceCount; pieceCount > 0; pieceCount--)
+        {
+            sb.AppendLine(ToString(pieceCount));
+        }
+        return sb.ToString();
+    }
+    
+    public string ToString(int enemyPieceCount)
+    {
+        var sb = new System.Text.StringBuilder();
+        
+        sb.AppendLine($"Valueboard for enemyPieceCount = {enemyPieceCount}:");
+        for (int rank = 7; rank >= 0; rank--)
+        {
+            sb.Append("  ");
+            for (int file = 0; file < 8; file++)
+            {
+                int index = rank * 8 + file;
+                int value = this[enemyPieceCount, index];
+                sb.Append($"{value,4} ");
+            }
+
+            sb.AppendLine();
+        }
+        
+        return sb.ToString();
+    }
 }
