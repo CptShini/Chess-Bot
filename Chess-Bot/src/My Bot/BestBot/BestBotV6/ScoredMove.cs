@@ -1,4 +1,4 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
+﻿using System;
 using ChessChallenge.API;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6;
@@ -6,17 +6,17 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6;
 internal readonly struct ScoredMove
 {
     internal readonly Move Move;
+    internal readonly bool IsCheckmate;
     
     internal readonly int Evaluation;
     internal readonly int Depth;
-    internal readonly GameState GameState;
     
-    internal ScoredMove(Move move, int evaluation, int depth, GameState gameState)
+    internal ScoredMove(Move move, int evaluation, int depth)
     {
         Move = move;
         Evaluation = evaluation;
         Depth = depth;
-
-        GameState = gameState;
+        
+        IsCheckmate = Math.Abs(evaluation) > 9000;
     }
 }

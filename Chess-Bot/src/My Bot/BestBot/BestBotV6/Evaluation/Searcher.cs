@@ -23,23 +23,21 @@ internal class Searcher
         BestMove = Move.NullMove;
     }
 
-    internal int Search(int plyRemaining, out GameState gameState, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
+    internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
     {
-        gameState = GameState.GameNotOver;
-        
         if (plyFromRoot > 0)
         {
+            GameState gameState = _boardEvaluation.EvaluateGameState(plyFromRoot, out int endEvaluation);
+            if (gameState != GameState.GameNotOver) return endEvaluation;
+        
             int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta, ref gameState);
             if (ttVal != LookupFailed) return ttVal;
-            
-            gameState = _boardEvaluation.EvaluateGameState(plyFromRoot, out int endEvaluation);
-            if (gameState != GameState.GameNotOver) return endEvaluation;
         }
         
         bool depthReached = plyRemaining == 0;
-        return !depthReached ? SearchMoves(ref gameState) : QuiescentSearch(alpha, beta);
-
-        int SearchMoves(ref GameState pvGameState)
+        return !depthReached ? SearchMoves() : QuiescentSearch(alpha, beta);
+        
+        int SearchMoves()
         {
             TranspositionFlag evaluationFlag = TranspositionFlag.Alpha;
             Move bestMoveThisPosition = Move.NullMove;
@@ -53,25 +51,24 @@ internal class Searcher
                 if (move.IsNull) break;
             
                 _boardEvaluation.MakeMove(move);
-                int evaluation = -Search(plyRemaining - 1, out GameState moveState, plyFromRoot + 1, -beta, -alpha);
+                int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
                 _boardEvaluation.UndoMove(move);
 
                 if (FailHigh(evaluation, beta)) // Prune
                 {
-                    _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionFlag.Beta, move, moveState);
+                    _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionFlag.Beta, move, 0);
                     return beta;
                 }
                 if (FailLow(evaluation, alpha)) continue; // Ignore
             
                 // PV-node
                 alpha = evaluation;
-                pvGameState = moveState;
                 evaluationFlag = TranspositionFlag.Exact;
                 bestMoveThisPosition = move;
                 if (plyFromRoot == 0) BestMove = move;
             }
 
-            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition, pvGameState);
+            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition, 0);
         
             return alpha;
         }
@@ -123,5 +120,4 @@ internal class Searcher
 
         return sb.ToString();
     }
-
 }

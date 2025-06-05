@@ -39,11 +39,11 @@ public static class BotPrinter
         }
     }
 
-    internal static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, float threshold) =>
-        bot.PrintMove(move, depth, evaluation, Math.Abs(evaluation) > threshold ? 1 : -1);
-    
     private static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, bool isCheckmate) =>
         bot.PrintMove(move, depth, evaluation, isCheckmate ? 2 : 0);
+    
+    internal static void PrintMove(this IChessBot bot, Move move, int depth, float evaluation, float threshold) =>
+        bot.PrintMove(move, depth, evaluation, Math.Abs(evaluation) > threshold);
     
     private static int InvertEvaluation(this int evaluation, bool isWhiteToMove) =>
         isWhiteToMove ? evaluation : -evaluation;
@@ -58,5 +58,5 @@ public static class BotPrinter
         bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(isWhiteToMove) / 100f, scoredMove.IsCheckmate);
 
     internal static void PrintMove(this IChessBot bot, bool isWhiteToMove, BestBot.BestBotV6.ScoredMove scoredMove) =>
-        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(isWhiteToMove) / 100f, (int)scoredMove.GameState);
+        bot.PrintMove(scoredMove.Move, scoredMove.Depth, scoredMove.Evaluation.InvertEvaluation(isWhiteToMove) / 100f, scoredMove.IsCheckmate);
 }

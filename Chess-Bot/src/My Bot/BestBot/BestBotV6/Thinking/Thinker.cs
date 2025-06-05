@@ -38,7 +38,7 @@ internal class Thinker
         while (depth < DepthLimit)
         {
             bool doneThinking = TryThink();
-            if (!doneThinking || CurrentBest.GameState != GameState.GameNotOver) break;
+            if (!doneThinking || CurrentBest.IsCheckmate) break;
             
             if (TimeToStopThinking()) break;
             depth++;
@@ -75,8 +75,8 @@ internal class Thinker
         
             void Search()
             {
-                int evaluation = _searcher.Search(depth, out GameState gameState);
-                CurrentBest = new(_searcher.BestMove, evaluation, depth, gameState);
+                int evaluation = _searcher.Search(depth);
+                CurrentBest = new(_searcher.BestMove, evaluation, depth);
             }
         }
     }

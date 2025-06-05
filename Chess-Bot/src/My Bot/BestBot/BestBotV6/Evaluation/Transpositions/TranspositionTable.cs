@@ -11,9 +11,9 @@ internal class TranspositionTable
     internal const int LookupFailed = -1;
     
     private readonly ulong _tableSize;
+    private readonly TranspositionEntry[] _table;
     
     private Board _board;
-    private readonly TranspositionEntry[] _table;
 
     internal TranspositionTable(int sizeMb)
     {
@@ -40,10 +40,10 @@ internal class TranspositionTable
         if (!TTEnabled) return LookupFailed;
         
         TranspositionEntry entry = _table[Index];
-        gameState = entry.GameState;
-        
         if (entry.Key != _board.ZobristKey) return LookupFailed;
         if (entry.Depth < depth) return LookupFailed;
+        
+        gameState = entry.GameState;
         
         return entry.Flag switch
         {
