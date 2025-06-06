@@ -83,7 +83,7 @@ internal class Searcher
         
         foreach (Move move in moves)
         {
-            if (move == Move.NullMove) break;
+            if (move.IsNull) break;
             
             _boardEvaluation.MakeMove(move);
             int evaluation = -QuiescentSearch(-beta, -alpha);
