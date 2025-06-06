@@ -1,4 +1,4 @@
-﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
+﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
 
 internal enum GameState
 {

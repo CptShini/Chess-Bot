@@ -2,7 +2,7 @@
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.MoveOrdering;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.MoveOrdering;
 
 internal static class MoveOrderer
 {

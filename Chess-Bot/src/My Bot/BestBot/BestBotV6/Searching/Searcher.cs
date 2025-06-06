@@ -1,10 +1,11 @@
 ﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Transpositions;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions.TranspositionTable;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Transpositions.TranspositionTable;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching;
 
 internal class Searcher
 {
@@ -30,48 +31,45 @@ internal class Searcher
             GameState gameState = _boardEvaluation.EvaluateGameState(plyFromRoot, out int endEvaluation);
             if (gameState != GameState.GameNotOver) return endEvaluation;
         
-            int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta, ref gameState);
+            int ttVal = _transpositionTable.LookupEvaluation(plyRemaining, alpha, beta);
             if (ttVal != LookupFailed) return ttVal;
         }
         
         bool depthReached = plyRemaining == 0;
-        return !depthReached ? SearchMoves() : QuiescentSearch(alpha, beta);
+        if (depthReached) return QuiescentSearch(alpha, beta);
         
-        int SearchMoves()
+        TranspositionFlag evaluationFlag = TranspositionFlag.Alpha;
+        Move bestMoveThisPosition = Move.NullMove;
+        Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
+        
+        Span<Move> moves = stackalloc Move[128];
+        _boardEvaluation.GetOrderedMoves(ref moves, false, pvMove);
+        
+        foreach (Move move in moves)
         {
-            TranspositionFlag evaluationFlag = TranspositionFlag.Alpha;
-            Move bestMoveThisPosition = Move.NullMove;
-            Move pvMove = plyFromRoot == 0 ? BestMove : _transpositionTable.TryGetStoredMove();
-        
-            Span<Move> moves = stackalloc Move[128];
-            _boardEvaluation.GetOrderedMoves(ref moves, false, pvMove);
-        
-            foreach (Move move in moves)
+            if (move.IsNull) break;
+            
+            _boardEvaluation.MakeMove(move);
+            int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
+            _boardEvaluation.UndoMove(move);
+
+            if (FailHigh(evaluation, beta)) // Prune
             {
-                if (move.IsNull) break;
-            
-                _boardEvaluation.MakeMove(move);
-                int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
-                _boardEvaluation.UndoMove(move);
-
-                if (FailHigh(evaluation, beta)) // Prune
-                {
-                    _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionFlag.Beta, move, 0);
-                    return beta;
-                }
-                if (FailLow(evaluation, alpha)) continue; // Ignore
-            
-                // PV-node
-                alpha = evaluation;
-                evaluationFlag = TranspositionFlag.Exact;
-                bestMoveThisPosition = move;
-                if (plyFromRoot == 0) BestMove = move;
+                _transpositionTable.StoreEvaluation(plyRemaining, beta, TranspositionFlag.Beta, move);
+                return beta;
             }
-
-            _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition, 0);
-        
-            return alpha;
+            if (FailLow(evaluation, alpha)) continue; // Ignore
+            
+            // PV-node
+            alpha = evaluation;
+            evaluationFlag = TranspositionFlag.Exact;
+            bestMoveThisPosition = move;
+            if (plyFromRoot == 0) BestMove = move;
         }
+
+        _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
+        
+        return alpha;
     }
     
     private int QuiescentSearch(int alpha, int beta)

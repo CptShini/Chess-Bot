@@ -1,15 +1,9 @@
 ﻿using ChessChallenge.API;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
 
 internal static class ValueboardEvaluator
 {
-    internal static int EvaluatePiecePositioning(this PieceType pieceType, int positionIndex, int enemyPieceCount)
-    {
-        Valueboard valueboard = pieceType.GetValueboard();
-        return valueboard[enemyPieceCount, positionIndex];
-    }
-    
     internal static int EvaluateValueboardMove(this Move move, bool isWhiteToMove, int enemyPieceCount)
     {
         int start = move.StartSquare.Index.FlipIndex(!isWhiteToMove);
@@ -20,5 +14,11 @@ internal static class ValueboardEvaluator
         int targetValue = valueboard[enemyPieceCount, target];
 
         return targetValue - startValue;
+    }
+    
+    internal static int EvaluateValueboardPositioning(this PieceType pieceType, int positionIndex, int enemyPieceCount)
+    {
+        Valueboard valueboard = pieceType.GetValueboard();
+        return valueboard[enemyPieceCount, positionIndex];
     }
 }

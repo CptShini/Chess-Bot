@@ -1,4 +1,4 @@
-﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+﻿namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
 
 internal readonly record struct WeightedValueboard(float[] Values, float Weight, bool Flip = true)
 {

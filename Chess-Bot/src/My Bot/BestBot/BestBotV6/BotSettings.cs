@@ -1,5 +1,5 @@
 ﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6;
 

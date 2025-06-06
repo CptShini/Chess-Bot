@@ -1,10 +1,10 @@
 ﻿using System;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.MoveOrdering;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.MoveOrdering;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.GameState;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.GameState;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
 
 internal class BoardWrapper
 {

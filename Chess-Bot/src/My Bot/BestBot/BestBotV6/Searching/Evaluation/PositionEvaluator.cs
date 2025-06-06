@@ -1,8 +1,8 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
 
 internal static class PositionEvaluator
 {
@@ -27,7 +27,7 @@ internal static class PositionEvaluator
             
             bool whitePiece = piece.IsWhite;
             int perspectiveIndex = square.Index.FlipIndex(!whitePiece);
-            int positioning = piece.PieceType.EvaluatePiecePositioning(perspectiveIndex, enemyPieceCount);
+            int positioning = piece.PieceType.EvaluateValueboardPositioning(perspectiveIndex, enemyPieceCount);
             
             int value = positioning.Perspective(whitePiece);
             evaluation += value;

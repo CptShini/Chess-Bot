@@ -14,8 +14,8 @@ public class BestBotV6 : IChessBot
      *  - why no queen promotion?
      *     * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
      *     * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
-     *
-     * Complete Systems analysis...
+     * 
+     * Handle terminal positions better
      * 
      * Fiddle/tinker with:
      *  - turn think time
@@ -24,15 +24,15 @@ public class BestBotV6 : IChessBot
      *  - InsertionSortThreshold (try 8, 12, 16, and 20)
      *  - valueboards
      * 
-     * Add:
-     *  - dynamic transposition table size?
-     *  - reward for king approaching enemy king in endgame
-     *  - king safety
-     *
      * Improve/refactor:
      *  - searcher
      *  - think time calculator (more fiddling, endgame factor, enemy time remaining, etc.)
      *  - move ordering
+     * 
+     * Add:
+     *  - dynamic transposition table size?
+     *  - reward for king approaching enemy king in endgame
+     *  - king safety
      *
      * Retry:
      *  - aspiration windows

@@ -2,13 +2,13 @@
 using System.Linq;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
-using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions.TranspositionFlag;
+using static Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Transpositions.TranspositionFlag;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Transpositions;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Transpositions;
 
 internal class TranspositionTable
 {
-    internal const int LookupFailed = -1;
+    internal const int LookupFailed = int.MinValue;
     
     private readonly ulong _tableSize;
     private readonly TranspositionEntry[] _table;
@@ -35,7 +35,7 @@ internal class TranspositionTable
 
     internal Move TryGetStoredMove() => _table[Index].Move;
     
-    internal int LookupEvaluation(int depth, int alpha, int beta, ref GameState gameState)
+    internal int LookupEvaluation(int depth, int alpha, int beta)
     {
         if (!TTEnabled) return LookupFailed;
         
@@ -43,22 +43,20 @@ internal class TranspositionTable
         if (entry.Key != _board.ZobristKey) return LookupFailed;
         if (entry.Depth < depth) return LookupFailed;
         
-        gameState = entry.GameState;
-        
         return entry.Flag switch
         {
             Exact => entry.Value,
-            Alpha when entry.Value <= alpha => alpha,
-            Beta when entry.Value >= beta => beta,
+            Alpha when entry.Value <= alpha => entry.Value,
+            Beta when entry.Value >= beta => entry.Value,
             _ => LookupFailed
         };
     }
 
-    internal void StoreEvaluation(int depth, int val, TranspositionFlag flag, Move move, GameState gameState)
+    internal void StoreEvaluation(int depth, int val, TranspositionFlag flag, Move move)
     {
         if (!TTEnabled) return;
         
-        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flag, move, gameState);
+        TranspositionEntry entry = new(_board.ZobristKey, val, depth, flag, move);
         _table[Index] = entry;
     }
     

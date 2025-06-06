@@ -1,7 +1,7 @@
 ﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators.Valueboards;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
 
 internal static class ValueboardExtensions
 {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation.Evaluators;
 using ChessChallenge.API;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
 
 internal class BoardEvaluation : BoardWrapper
 {
