@@ -75,7 +75,7 @@ internal class ThinkTimeEstimator
 
             foreach (float bf in entries)
             {
-                sb.Append($" {bf:0.00}");
+                sb.Append($" {bf,6:0.00}");
             }
 
             sb.AppendLine();

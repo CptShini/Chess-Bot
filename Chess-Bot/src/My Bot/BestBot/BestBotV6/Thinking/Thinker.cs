@@ -113,12 +113,11 @@ internal class Thinker
         sb.AppendLine(_thinkTimeEstimator.ToString());
 
         return sb.ToString();
+        
+        static string FormatTime(long ticks)
+        {
+            TimeSpan time = TimeSpan.FromTicks(ticks);
+            return $"{time.TotalMilliseconds,5:0}ms";
+        }
     }
-
-    private static string FormatTime(long ticks)
-    {
-        TimeSpan time = TimeSpan.FromMilliseconds(ticks);
-        return $"{time.TotalSeconds:0.000}s";
-    }
-
 }

@@ -24,7 +24,9 @@ internal class Searcher
         BestMove = Move.NullMove;
     }
 
-    internal int Search(int plyRemaining, int plyFromRoot = 0, int alpha = -Infinity, int beta = Infinity)
+    internal int Search(int depth, int alpha = -Infinity, int beta = Infinity) => Search(depth, 0, alpha, beta);
+
+    private int Search(int plyRemaining, int plyFromRoot, int alpha, int beta)
     {
         if (plyFromRoot > 0)
         {
