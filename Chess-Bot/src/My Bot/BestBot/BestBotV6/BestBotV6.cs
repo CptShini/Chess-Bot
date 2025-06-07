@@ -19,7 +19,6 @@ public class BestBotV6 : IChessBot
      * 
      * Fiddle/tinker with:
      *  - turn think time
-     *  - piece values
      *  - state & move values
      *  - InsertionSortThreshold (try 8, 12, 16, and 20)
      *  - valueboards

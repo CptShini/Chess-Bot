@@ -72,5 +72,4 @@ internal class TranspositionTable
 
         return sb.ToString();
     }
-
 }

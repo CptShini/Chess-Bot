@@ -8,10 +8,10 @@ public static class BotSettings
     // Piece values
     internal const int
         PawnValue = 1_00,
-        KnightValue = 3_00,
-        BishopValue = 3_20,
-        RookValue = 5_00,
-        QueenValue = 9_00,
+        KnightValue = 3_05,
+        BishopValue = 3_33,
+        RookValue = 5_63,
+        QueenValue = 9_50,
         KingValue = 100_00;
     
     // State & move values
@@ -32,18 +32,17 @@ public static class BotSettings
     // Transposition table
     internal const bool TTEnabled = true;
     internal const int
-        TTSize = 16;
+        TTSize = 64;
 
     // Thinker
-    internal const int DepthLimit = 32;
+    internal const int DepthLimit = 48;
     internal const float MaxThinkTimeFactor = 1.5f;
     internal static float TurnThinkTime(int msRemaining) =>
         msRemaining switch
         {
-            /*< 10_000 => msRemaining / 30f,
+            < 10_000 => msRemaining / 30f,
             < 60_000 => msRemaining / 25f - 66.666f,
-            _ => MathF.Pow(MathF.Sqrt(msRemaining), 1.5f) / 1.643f*/
-            _ => msRemaining / 25f
+            _ => MathF.Pow(MathF.Sqrt(msRemaining), 1.5f) / 1.643f
         };
 
     // Think time estimation
