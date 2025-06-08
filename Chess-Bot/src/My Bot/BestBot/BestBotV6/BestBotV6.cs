@@ -15,26 +15,24 @@ public class BestBotV6 : IChessBot
      *     * 5r1k/rpp3R1/1b2BB2/p4pP1/3P4/4P3/P4PK1/8 b - - 0 34
      *     * 6R1/rpp2P1k/1b2B3/p7/3P1p2/4P3/P4PK1/8 b - - 0 37
      * 
-     * Handle terminal positions better
+     * Add:
+     *  - Handle terminal positions better
+     *  - reward for king approaching enemy king in endgame
+     *     * (14 - mHattDist(myKing, enemyKing)) * 4
+     *     * mHattDist(center, enemyKing) * 10
+     *  - king safety
+     *  - dynamic transposition table size?
      * 
      * Fiddle/tinker with:
-     *  - turn think time
-     *  - state & move values
+     *  - Castle & contempt
      *  - InsertionSortThreshold (try 8, 12, 16, and 20)
      *  - valueboards
-     * 
+     *
      * Improve/refactor:
      *  - searcher
      *  - think time calculator (more fiddling, endgame factor, enemy time remaining, etc.)
      *  - move ordering
      * 
-     * Add:
-     *  - dynamic transposition table size?
-     *  - reward for king approaching enemy king in endgame
-     *     * (14 - mHattDist(myKing, enemyKing)) * 4
-     *     * mHattDist(center, enemyKing) * 10
-     *  - king safety
-     *
      * Retry:
      *  - aspiration windows
      *  - alpha-beta window tightening
@@ -42,7 +40,6 @@ public class BestBotV6 : IChessBot
      *
      * Research:
      *  - neural network evaluation (maybe)
-     *  - 2nd video features (since everything up until now was basically video 1)
      */
     
     private Thinker _thinker;
