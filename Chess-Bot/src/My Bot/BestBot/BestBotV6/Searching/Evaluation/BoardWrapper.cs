@@ -34,12 +34,6 @@ internal class BoardWrapper
         }
     }
     
-    internal void GetOrderedMoves(ref Span<Move> moves, bool capturesOnly, Move pvMove)
-    {
-        _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
-        _board.OrderMoves(moves, pvMove, EnemyPieceCount);
-    }
-    
     internal int EvaluateMove(Move move) =>
         move.EvaluateMaterial() +
         move.EvaluatePositioning(IsWhiteToMove, EnemyPieceCount);
@@ -47,6 +41,12 @@ internal class BoardWrapper
     internal int EvaluateBoard() =>
         _board.EvaluateMaterial() + 
         _board.EvaluatePositioning(EnemyPieceCount);
+    
+    internal void GetOrderedMoves(ref Span<Move> moves, bool capturesOnly, Move pvMove)
+    {
+        _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
+        _board.OrderMoves(moves, pvMove, EnemyPieceCount);
+    }
     
     internal GameState EvaluateGameState(int plyFromRoot, out int endEvaluation)
     {
