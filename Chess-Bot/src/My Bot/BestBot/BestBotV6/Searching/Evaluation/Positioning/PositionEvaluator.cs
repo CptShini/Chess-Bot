@@ -27,7 +27,7 @@ internal static class PositionEvaluator
             
             bool whitePiece = piece.IsWhite;
             int perspectiveIndex = square.Index.FlipIndex(!whitePiece);
-            int positioning = piece.PieceType.EvaluateValueboardPositioning(perspectiveIndex, enemyPieceCount);
+            int positioning = piece.PieceType.EvaluateValueboardPosition(perspectiveIndex, enemyPieceCount);
             
             int value = positioning.Perspective(whitePiece);
             evaluation += value;

@@ -5,11 +5,11 @@ namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Material
 
 internal static class MaterialEvaluator
 {
-    internal static int MaterialDelta(this Move move)
+    internal static int CaptureMaterialDelta(this Move move)
     {
-        int captureValue = move.CapturePieceType.GetPieceValue();
-        int moveValue = move.MovePieceType.GetPieceValue();
-        return captureValue - moveValue;
+        int capturePieceValue = move.CapturePieceType.GetPieceValue();
+        int movePieceValue = move.MovePieceType.GetPieceValue();
+        return capturePieceValue - movePieceValue;
     }
     
     internal static int EvaluateMaterial(this Move move)

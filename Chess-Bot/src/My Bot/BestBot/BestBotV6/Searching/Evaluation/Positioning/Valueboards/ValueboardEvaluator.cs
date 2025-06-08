@@ -16,7 +16,7 @@ internal static class ValueboardEvaluator
         return targetValue - startValue;
     }
     
-    internal static int EvaluateValueboardPositioning(this PieceType pieceType, int positionIndex, int enemyPieceCount)
+    internal static int EvaluateValueboardPosition(this PieceType pieceType, int positionIndex, int enemyPieceCount)
     {
         Valueboard valueboard = pieceType.GetValueboard();
         return valueboard[enemyPieceCount, positionIndex];

@@ -45,7 +45,7 @@ internal static class MoveOrderer
     {
         int score = 0;
         
-        int captureMaterialDelta = move.MaterialDelta();
+        int captureMaterialDelta = move.CaptureMaterialDelta();
         score += captureMaterialDelta;
                 
         bool opponentCanRecapture = board.SquareIsAttackedByOpponent(move.TargetSquare);
