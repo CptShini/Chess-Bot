@@ -31,6 +31,8 @@ public class BestBotV6 : IChessBot
      * Add:
      *  - dynamic transposition table size?
      *  - reward for king approaching enemy king in endgame
+     *     * (14 - mHattDist(myKing, enemyKing)) * 4
+     *     * mHattDist(center, enemyKing) * 10
      *  - king safety
      *
      * Retry:

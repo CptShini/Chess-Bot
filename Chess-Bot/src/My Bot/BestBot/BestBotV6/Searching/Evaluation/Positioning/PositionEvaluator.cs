@@ -1,8 +1,8 @@
-﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Valueboards;
+﻿using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Positioning.Valueboards;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Positioning;
 
 internal static class PositionEvaluator
 {

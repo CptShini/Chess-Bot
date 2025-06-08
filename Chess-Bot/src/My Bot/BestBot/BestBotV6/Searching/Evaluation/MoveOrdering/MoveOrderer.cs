@@ -1,4 +1,6 @@
 ﻿using System;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Material;
+using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Positioning;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
@@ -43,7 +45,7 @@ internal static class MoveOrderer
     {
         int score = 0;
         
-        int captureMaterialDelta = move.CapturePieceType.GetPieceValue() - move.MovePieceType.GetPieceValue();
+        int captureMaterialDelta = move.MaterialDelta();
         score += captureMaterialDelta;
                 
         bool opponentCanRecapture = board.SquareIsAttackedByOpponent(move.TargetSquare);

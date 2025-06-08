@@ -1,10 +1,17 @@
 ﻿using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
 
-namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
+namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation.Material;
 
 internal static class MaterialEvaluator
 {
+    internal static int MaterialDelta(this Move move)
+    {
+        int captureValue = move.CapturePieceType.GetPieceValue();
+        int moveValue = move.MovePieceType.GetPieceValue();
+        return captureValue - moveValue;
+    }
+    
     internal static int EvaluateMaterial(this Move move)
     {
         int material = 0;
