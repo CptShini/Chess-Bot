@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching;
 using ChessChallenge.API;
 using static Chess_Challenge.My_Bot.BestBot.BestBotV6.BotSettings;
+using Timer = ChessChallenge.API.Timer;
 
 namespace Chess_Challenge.My_Bot.BestBot.BestBotV6.Thinking;
 
@@ -47,10 +49,13 @@ internal class Thinker
 
     private bool TryThink()
     {
-        Task thinkTask = Task.Factory.StartNew(Think);
+        CancellationTokenSource cts = new();
+        Task thinkTask = Task.Factory.StartNew(Think, cts.Token);
 
         TimeSpan maximumThinkTime = TimeSpan.FromTicks((long)(_maximumTurnThinkTime * MaxThinkTimeFactor));
-        thinkTask.Wait(maximumThinkTime);
+
+        bool finishedOnTime = thinkTask.Wait(maximumThinkTime);
+        if (!finishedOnTime) cts.Cancel();
         
         return thinkTask.IsCompleted;
         
@@ -59,6 +64,7 @@ internal class Thinker
             long previousTimeTaken = timeTaken;
             timeTaken = RunTakeTime(Search);
         
+            if (cts.IsCancellationRequested) return;
             _thinkTimeEstimator.AddBranch(depth, timeTaken, previousTimeTaken);
         
             return;
@@ -75,7 +81,9 @@ internal class Thinker
         
             void Search()
             {
-                int evaluation = _searcher.Search(depth);
+                int evaluation = _searcher.Search(depth, cts.Token);
+                if (cts.IsCancellationRequested) return;
+                
                 CurrentBest = new(_searcher.BestMove, evaluation, depth);
             }
         }

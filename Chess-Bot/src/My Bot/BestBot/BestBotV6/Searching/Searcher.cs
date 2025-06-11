@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Evaluation;
 using Chess_Challenge.My_Bot.BestBot.BestBotV6.Searching.Transpositions;
 using ChessChallenge.API;
@@ -13,6 +14,8 @@ internal class Searcher
     
     private readonly BoardEvaluation _boardEvaluation;
     private static readonly TranspositionTable _transpositionTable = new(TTSize);
+
+    private CancellationToken _ct;
     
     internal Move BestMove { get; private set; }
 
@@ -24,10 +27,16 @@ internal class Searcher
         BestMove = Move.NullMove;
     }
 
-    internal int Search(int depth, int alpha = -Infinity, int beta = Infinity) => Search(depth, 0, alpha, beta);
+    internal int Search(int depth, CancellationToken ct, int alpha = -Infinity, int beta = Infinity)
+    {
+        _ct = ct;
+        return Search(depth, 0, alpha, beta);
+    }
 
     private int Search(int plyRemaining, int plyFromRoot, int alpha, int beta, int numExtensions = 0)
     {
+        if (_ct.IsCancellationRequested) return 0;
+        
         if (plyFromRoot > 0)
         {
             GameState gameState = _boardEvaluation.EvaluateGameState(plyFromRoot, out int endEvaluation);
@@ -56,6 +65,8 @@ internal class Searcher
             int extension = GetExtension(numExtensions, move);
             int evaluation = -Search(plyRemaining - 1 + extension, plyFromRoot + 1, -beta, -alpha, numExtensions + extension);
             _boardEvaluation.UndoMove(move);
+            
+            if (_ct.IsCancellationRequested) return 0;
 
             if (FailHigh(evaluation, beta)) // Prune
             {
@@ -90,6 +101,8 @@ internal class Searcher
     
     private int QuiescentSearch(int alpha, int beta)
     {
+        if (_ct.IsCancellationRequested) return 0;
+        
         int evaluationCurrent = _boardEvaluation.Current;
         if (FailHigh(evaluationCurrent, beta)) return beta; // Prune
         if (!FailLow(evaluationCurrent, alpha)) alpha = evaluationCurrent;
