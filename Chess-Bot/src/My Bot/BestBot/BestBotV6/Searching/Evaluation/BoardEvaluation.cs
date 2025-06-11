@@ -37,7 +37,9 @@ internal class BoardEvaluation : BoardWrapper
     {
         var sb = new System.Text.StringBuilder();
 
-        sb.AppendLine($"Evaluation: {Current,6:+0;-0;0}");
+        sb.AppendLine("Evaluation:");
+        sb.AppendLine($"{Current,6:+0;-0;0}");
+        
         sb.Append(base.ToString());
         
         return sb.ToString();

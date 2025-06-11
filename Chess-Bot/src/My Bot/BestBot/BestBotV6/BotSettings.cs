@@ -18,7 +18,9 @@ public static class BotSettings
     internal const int
         CheckmateValue = -KingValue,
         ContemptValue = -0_50,
-        CastleValue = 0_50;
+        CastleValue = 0_50,
+        MopUpClosenessFactor = 5,
+        MaxExtensions = 16;
 
     // Move ordering
     private const int million = 1_000_000;

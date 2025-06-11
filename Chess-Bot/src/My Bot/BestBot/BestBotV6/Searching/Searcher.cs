@@ -26,7 +26,7 @@ internal class Searcher
 
     internal int Search(int depth, int alpha = -Infinity, int beta = Infinity) => Search(depth, 0, alpha, beta);
 
-    private int Search(int plyRemaining, int plyFromRoot, int alpha, int beta)
+    private int Search(int plyRemaining, int plyFromRoot, int alpha, int beta, int numExtensions = 0)
     {
         if (plyFromRoot > 0)
         {
@@ -52,7 +52,9 @@ internal class Searcher
             if (move.IsNull) break;
             
             _boardEvaluation.MakeMove(move);
-            int evaluation = -Search(plyRemaining - 1, plyFromRoot + 1, -beta, -alpha);
+
+            int extension = GetExtension(numExtensions, move);
+            int evaluation = -Search(plyRemaining - 1 + extension, plyFromRoot + 1, -beta, -alpha, numExtensions + extension);
             _boardEvaluation.UndoMove(move);
 
             if (FailHigh(evaluation, beta)) // Prune
@@ -72,6 +74,18 @@ internal class Searcher
         _transpositionTable.StoreEvaluation(plyRemaining, alpha, evaluationFlag, bestMoveThisPosition);
         
         return alpha;
+    }
+    
+    private int GetExtension(int numExtensions, Move move)
+    {
+        bool tooManyExtensions = numExtensions >= MaxExtensions;
+        if (tooManyExtensions) return 0;
+
+        bool moveIsCheck = _boardEvaluation.IsInCheck();
+        if (moveIsCheck) return 1;
+
+        bool closeToPromotion = move is { MovePieceType: PieceType.Pawn, TargetSquare.Rank: 1 or 6 };
+        return closeToPromotion ? 1 : 0;
     }
     
     private int QuiescentSearch(int alpha, int beta)

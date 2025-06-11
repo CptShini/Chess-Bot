@@ -17,6 +17,9 @@ internal class BoardWrapper
     private int EnemyPieceCount => IsWhiteToMove ? _blackPieceCount : _whitePieceCount;
     private int _whitePieceCount, _blackPieceCount;
     
+    /*private Square EnemyKingPos => IsWhiteToMove ? _blackKingPos : _whiteKingPos;
+    private Square _whiteKingPos, _blackKingPos;*/
+    
     private protected BoardWrapper(Board board)
     {
         _board = board;
@@ -24,6 +27,9 @@ internal class BoardWrapper
 
         _whitePieceCount = CountPieces(true);
         _blackPieceCount = CountPieces(false);
+        
+        /*_whiteKingPos = board.GetKingSquare(true);
+        _blackKingPos = board.GetKingSquare(false);*/
 
         return;
         
@@ -36,7 +42,8 @@ internal class BoardWrapper
     
     internal int EvaluateMove(Move move) =>
         move.EvaluateMaterial() +
-        move.EvaluatePositioning(IsWhiteToMove, EnemyPieceCount);
+        move.EvaluatePositioning(IsWhiteToMove, EnemyPieceCount)/* +
+        move.EvaluateMopUp(EnemyKingPos, EnemyPieceCount)*/;
 
     internal int EvaluateBoard() =>
         _board.EvaluateMaterial() + 
@@ -47,6 +54,8 @@ internal class BoardWrapper
         _board.GetLegalMovesNonAlloc(ref moves, capturesOnly);
         _board.OrderMoves(moves, pvMove, EnemyPieceCount);
     }
+
+    internal bool IsInCheck() => _board.IsInCheck();
     
     internal GameState EvaluateGameState(int plyFromRoot, out int endEvaluation)
     {
@@ -93,6 +102,12 @@ internal class BoardWrapper
             if (IsWhiteToMove) _blackPieceCount--;
             else _whitePieceCount--;
         }
+        
+        /*if (move.MovePieceType == PieceType.King)
+        {
+            if (IsWhiteToMove) _whiteKingPos = move.TargetSquare;
+            else _blackKingPos = move.TargetSquare;
+        }*/
     }
     
     private protected virtual void OnUndoMove(Move move)
@@ -102,19 +117,32 @@ internal class BoardWrapper
             if (IsWhiteToMove) _blackPieceCount++;
             else _whitePieceCount++;
         }
+        
+        /*if (move.MovePieceType == PieceType.King)
+        {
+            if (IsWhiteToMove) _whiteKingPos = move.StartSquare;
+            else _blackKingPos = move.StartSquare;
+        }*/
     }
     
     public override string ToString()
     {
         var sb = new System.Text.StringBuilder();
         
-        string side = IsWhiteToMove ? "White" : "Black";
-        sb.AppendLine($"{side} to move");
+        sb.AppendLine("Turn:");
+        sb.AppendLine($"{(IsWhiteToMove ? "White" : "Black")} to move");
         
-        sb.Append($"W:{_whitePieceCount,2} ");
-        sb.Append($"B:{_blackPieceCount,2} ");
+        sb.AppendLine("Piece counts:");
+        sb.Append($"W: {_whitePieceCount,2} ");
+        sb.Append($"B: {_blackPieceCount,2} ");
         sb.Append($"(Enemy: {EnemyPieceCount,2})");
         sb.AppendLine();
+        
+        /*sb.AppendLine("King positions:");
+        sb.Append($"W: {_whiteKingPos.Name,2} ");
+        sb.Append($"B: {_blackKingPos.Name,2} ");
+        sb.Append($"(Enemy: {EnemyKingPos.Name,2})");
+        sb.AppendLine();*/
 
         sb.Append(_board);
 
