@@ -10,6 +10,7 @@ public class BestBotV6 : IChessBot
      * TODO:
      * Add:
      *  - handle draw positions
+     *  - king safety
      *  - mop-up score (include in move ordering)
      * 
      * Improve/Rework:
@@ -22,7 +23,6 @@ public class BestBotV6 : IChessBot
      * ==================== V7 ====================
      * Add:
      *  - depth reduction
-     *  - king safety
      * 
      * Refactor:
      *  - Searcher
