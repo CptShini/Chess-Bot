@@ -9,20 +9,20 @@ public class BestBotV6 : IChessBot
     /*
      * TODO:
      * Add:
-     *  - Handle draw positions
-     *  - king safety
+     *  - handle draw positions
      *  - mop-up score (include in move ordering)
      * 
-     * Fiddle/tinker with:
-     *  - valueboards
-     *
      * Improve/Rework:
      *  - think time calculator (more fiddling, endgame factor, enemy time remaining, etc.)
      *  - move ordering (+Killer moves)
      *
+     * Fiddle/tinker with:
+     *  - valueboards
+     *
      * ==================== V7 ====================
      * Add:
-     *  - Depth reduction
+     *  - depth reduction
+     *  - king safety
      * 
      * Refactor:
      *  - Searcher
