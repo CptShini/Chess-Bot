@@ -72,6 +72,7 @@ namespace ChessChallenge.Application
             BotStatsB = new BotMatchStats("IBot");
             botMatchStartFens = FileHelper.ReadResourceFile("Fens.txt").Split('\n').Where(fen => fen.Length > 0).ToArray();
             Chess_Challenge.My_Bot.Random.Shuffle(botMatchStartFens);
+            botMatchStartFens = botMatchStartFens.Prepend("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").ToArray();
             botTaskWaitHandle = new AutoResetEvent(false);
 
             StartNewGame(PlayerType.Human, PlayerType.MyBot);
