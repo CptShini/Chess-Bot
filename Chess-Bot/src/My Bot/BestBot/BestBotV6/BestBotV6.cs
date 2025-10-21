@@ -37,7 +37,7 @@ public class BestBotV6 : IChessBot
      *  - Isolated Pawns
      *
      * Research:
-     *  - neural network evaluation (maybe)
+     *  - neural network evaluation
      */
     
     private Thinker _thinker;

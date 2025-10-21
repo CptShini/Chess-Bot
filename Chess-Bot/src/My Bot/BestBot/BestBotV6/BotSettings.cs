@@ -33,8 +33,7 @@ public static class BotSettings
 
     // Transposition table
     internal const bool TTEnabled = true;
-    internal const int
-        TTSize = 64;
+    internal const int TTSize = 64;
 
     // Thinker
     internal const int DepthLimit = 48;
