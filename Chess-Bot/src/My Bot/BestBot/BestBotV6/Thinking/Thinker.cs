@@ -26,8 +26,9 @@ internal class Thinker
         int timeSinceGameStart = timer.GameStartTimeMilliseconds - timer.MillisecondsRemaining;
         bool newGameStarted = timeSinceGameStart < 50;
         if (newGameStarted) _thinkTimeEstimator = new();
-        float incrementFactor = MathF.Max(0f, 1f - (float)timer.IncrementMilliseconds / timer.MillisecondsRemaining);
-        float thinkTimeMilliseconds = TurnThinkTime(timer.MillisecondsRemaining) + timer.IncrementMilliseconds * incrementFactor;
+        float increment = MathF.Max(0f, timer.IncrementMilliseconds);
+        float incrementFactor = MathF.Max(0f, 1f - increment / timer.MillisecondsRemaining);
+        float thinkTimeMilliseconds = TurnThinkTime(timer.MillisecondsRemaining) + increment * incrementFactor;
         long tickMsConversion = Stopwatch.Frequency / 1000;
         _maximumTurnThinkTime = (long)(thinkTimeMilliseconds * tickMsConversion);
         
